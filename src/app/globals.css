@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import "tailwindcss";
+
+@theme inline {
+  /* Dark purple/navy background */
+  --color-bg-primary: #0d0b1a;
+  --color-bg-secondary: #1a1635;
+  --color-bg-card: #241f42;
+  --color-bg-input: #1a1635;
+
+  /* Neon accent colors */
+  --color-neon-cyan: #00f5ff;
+  --color-neon-magenta: #ff00e5;
+  --color-neon-yellow: #ffe600;
+  --color-neon-green: #39ff14;
+
+  /* Text */
+  --color-text-primary: #f0eeff;
+  --color-text-secondary: #9b95c9;
+  --color-text-muted: #6b63a0;
+
+  /* UI */
+  --color-border-default: #3d3570;
+  --color-border-focus: #00f5ff;
+
+  /* Status */
+  --color-success: #39ff14;
+  --color-error: #ff3860;
+  --color-warning: #ffe600;
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: 'Press Start 2P', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Pixel-art button base */
+.pixel-btn {
+  position: relative;
+  padding: 1rem 2rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  border: 3px solid;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+}
+
+.pixel-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+}
+
+.pixel-btn-cyan {
+  background-color: var(--color-neon-cyan);
+  border-color: #00c4cc;
+  color: #0d0b1a;
+}
+
+.pixel-btn-magenta {
+  background-color: var(--color-neon-magenta);
+  border-color: #cc00b7;
+  color: #0d0b1a;
+}
+
+.pixel-btn-yellow {
+  background-color: var(--color-neon-yellow);
+  border-color: #ccb800;
+  color: #0d0b1a;
+}
+
+.pixel-btn-green {
+  background-color: var(--color-neon-green);
+  border-color: #2ecc11;
+  color: #0d0b1a;
+}
+
+/* Pixel input */
+.pixel-input {
+  background-color: var(--color-bg-input);
+  border: 3px solid var(--color-border-default);
+  color: var(--color-text-primary);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  text-align: center;
+  letter-spacing: 0.25em;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.pixel-input:focus {
+  border-color: var(--color-border-focus);
+}
+
+.pixel-input::placeholder {
+  color: var(--color-text-muted);
+  letter-spacing: 0.1em;
+}
+
+/* CRT scanline overlay (subtle) */
+.crt-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.03) 0px,
+    rgba(0, 0, 0, 0.03) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  z-index: 9999;
+}
+
+/* Glow effect for titles */
+.text-glow-cyan {
+  text-shadow: 0 0 10px var(--color-neon-cyan), 0 0 20px var(--color-neon-cyan),
+    0 0 40px var(--color-neon-cyan);
+}
+
+.text-glow-magenta {
+  text-shadow: 0 0 10px var(--color-neon-magenta), 0 0 20px var(--color-neon-magenta),
+    0 0 40px var(--color-neon-magenta);
+}
+
+.text-glow-yellow {
+  text-shadow: 0 0 10px var(--color-neon-yellow), 0 0 20px var(--color-neon-yellow),
+    0 0 40px var(--color-neon-yellow);
+}
+
+/* Pulse animation for waiting states */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
