@@ -163,8 +163,16 @@ interface GibberishQuestion extends BaseQuestion {
   type: 'gibberish';
   gibberishPhrase: string; // The garbled phrase
   audioUrl?: string;       // Pre-generated TTS of garbled phrase
-  answer: string;          // The real phrase it sounds like
+  choices: string[];       // 4 options (one is the real phrase)
+  correctIndex: number;    // Index of correct answer
   hint?: string;           // Optional hint after time passes
+}
+
+interface DisOrDatAnswer {
+  playerId: string;
+  itemIndex: number;
+  selected: 'A' | 'B';
+  timestamp: number;
 }
 
 interface ThreeWayQuestion extends BaseQuestion {
@@ -417,12 +425,44 @@ question_reveal   { correctAnswer, playerResults, hostScript, audioUrl }
 scores_update     { scores[], powerUpsGranted[] }
 round_transition  { round, hostScript, audioUrl }
 jack_attack_start { theme, clue }
-jack_attack_word  { word, isCorrect }  // server controls timing
+jack_attack_word  { wordId, word, expiresAt }  // server controls timing, never leaks isCorrect
+jack_attack_buzz_result { playerId, wordId, correct, moneyDelta }  // sent after buzz
 jack_attack_end   { results }
 game_over         { finalScores, hostScript, audioUrl, gameStats }
 power_up_used     { playerId, powerUpType, effect }
 error             { message }
 ```
+
+## Reconnection Protocol
+
+Players on mobile may lose connection (phone sleeps, bad signal, app switch). The server must handle this gracefully:
+
+```
+Player disconnects
+    │
+    ▼
+Server marks player.connected = false
+Server starts 30-second grace timer
+    │
+    ├── Player reconnects within 30s:
+    │     1. Client sends: reconnect { playerId, roomCode }
+    │     2. Server validates playerId matches a disconnected player
+    │     3. Server sends: reconnected { fullGameState }
+    │        (includes current phase, question, scores, timer remaining)
+    │     4. Client rebuilds UI from full state snapshot
+    │     5. Game continues uninterrupted for other players
+    │
+    └── 30s expires without reconnect:
+          1. Server removes player from room
+          2. Server broadcasts: player_left { playerId, reason: 'timeout' }
+          3. Host comments: "[Name] has left the building!"
+          4. Game continues with remaining players
+          5. If fewer than 2 players remain, game ends early
+```
+
+**Client-side:** Socket.io's built-in reconnection handles transport-level reconnects automatically. On reconnect, the client sends a `reconnect` event with its stored `playerId` (from localStorage) to rejoin the game state.
+
+**During QUESTION_ACTIVE:** If a player disconnects while a question is active, they simply miss it (scored as no answer / $0). The game does not pause.
 
 ## Alternative Architecture: Monorepo
 

@@ -394,13 +394,25 @@ Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4
 
 ## Task Count Summary
 
-| Phase | Tasks |
-|-------|-------|
-| Phase 1: Foundation | 28 |
-| Phase 2: Core Game | 27 |
-| Phase 3: The Host | 30 |
-| Phase 4: Question Variety | 22 |
-| Phase 5: Power-Ups & Easter Eggs | 24 |
-| Phase 6: Audio & Visual Polish | 33 |
-| Phase 7: Deployment & Testing | 22 |
-| **Total** | **186 tasks** |
+| Phase | Tasks | Critical Path? |
+|-------|-------|----------------|
+| Phase 1: Foundation | 28 | Yes |
+| Phase 2: Core Game | 27 | Yes |
+| Phase 3: The Host | 30 | Yes |
+| Phase 4: Question Variety | 22 | Yes (Jack Attack only for MVP) |
+| Phase 5: Power-Ups & Easter Eggs | 24 | No — can ship without |
+| Phase 6: Audio & Visual Polish | 33 | No — can ship basic |
+| Phase 7: Deployment & Testing | 22 | Yes (deploy subset) |
+| **Total** | **186 tasks** | |
+
+## MVP Shortcut
+
+If you want to play with friends ASAP, here's the fastest path (~4-6 weeks):
+
+1. **Phase 1** — Full (rooms, lobby, WebSocket)
+2. **Phase 2** — Full (multiple choice, scoring, game flow)
+3. **Phase 3** — Core only (Claude questions + ElevenLabs voice, skip Open Trivia DB integration)
+4. **Phase 4** — Jack Attack only (skip DisOrDat, Gibberish, ThreeWay for now)
+5. **Phase 7** — Deploy only (skip tests, skip hardening)
+
+This gets you: **AI-hosted multiple choice + Jack Attack with voice, for 10 players, deployed.** Then layer in the remaining question types, power-ups, pixel art, and audio iteratively.
