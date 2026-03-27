@@ -64,8 +64,60 @@ export function useSocket() {
       useGameStore.getState().removePlayer(playerId);
     });
 
-    socket.on('game_starting', () => {
-      useGameStore.getState().setGameState('game_starting');
+    socket.on('game_starting', ({ hostScript }) => {
+      const store = useGameStore.getState();
+      store.setGameState('game_starting');
+      if (hostScript) store.setHostDialogue(hostScript);
+    });
+
+    socket.on('question_intro', ({ question, hostScript }) => {
+      const store = useGameStore.getState();
+      store.setGameState('question_intro');
+      store.setCurrentQuestion(question as import('@/stores/gameStore').UIQuestion);
+      store.clearAnsweredPlayers();
+      store.setCorrectAnswerIndex(null);
+      store.setPlayerResults([]);
+      store.setQuestionEndsAt(null);
+      if (hostScript) store.setHostDialogue(hostScript);
+    });
+
+    socket.on('question_active', ({ question, timeLimit }) => {
+      const store = useGameStore.getState();
+      store.setGameState('question_active');
+      store.setCurrentQuestion(question as import('@/stores/gameStore').UIQuestion);
+      store.setQuestionEndsAt(Date.now() + timeLimit * 1000);
+    });
+
+    socket.on('answer_received', ({ playerId }) => {
+      useGameStore.getState().addAnsweredPlayer(playerId);
+    });
+
+    socket.on('question_reveal', ({ correctAnswer, playerResults, hostScript }) => {
+      const store = useGameStore.getState();
+      store.setGameState('question_reveal');
+      store.setCorrectAnswerIndex(correctAnswer);
+      store.setPlayerResults(playerResults as import('@/stores/gameStore').PlayerResult[]);
+      if (hostScript) store.setHostDialogue(hostScript);
+    });
+
+    socket.on('scores_update', ({ scores }) => {
+      const store = useGameStore.getState();
+      store.setGameState('scores_update');
+      store.setScores(scores);
+    });
+
+    socket.on('round_transition', ({ round, hostScript }) => {
+      const store = useGameStore.getState();
+      store.setGameState('round_transition');
+      store.setCurrentRound(round);
+      if (hostScript) store.setHostDialogue(hostScript);
+    });
+
+    socket.on('game_over', ({ finalScores, hostScript }) => {
+      const store = useGameStore.getState();
+      store.setGameState('game_over');
+      store.setFinalScores(finalScores);
+      if (hostScript) store.setGameOverHostScript(hostScript);
     });
 
     socket.on('error', ({ message }) => {
@@ -80,6 +132,13 @@ export function useSocket() {
       socket.off('player_joined');
       socket.off('player_left');
       socket.off('game_starting');
+      socket.off('question_intro');
+      socket.off('question_active');
+      socket.off('answer_received');
+      socket.off('question_reveal');
+      socket.off('scores_update');
+      socket.off('round_transition');
+      socket.off('game_over');
       socket.off('error');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,12 +161,27 @@ export function useSocket() {
     useGameStore.getState().reset();
   }, []);
 
+  const submitAnswer = useCallback((questionId: string, answerIndex: number) => {
+    socketRef.current?.emit('submit_answer', {
+      questionId,
+      answerIndex,
+      timestamp: Date.now(),
+    });
+    useGameStore.getState().setMyAnswerIndex(answerIndex);
+  }, []);
+
+  const playAgain = useCallback(() => {
+    socketRef.current?.emit('play_again');
+  }, []);
+
   return {
     socket: socketRef.current,
     createRoom,
     joinRoom,
     startGame,
     leaveRoom,
+    submitAnswer,
+    playAgain,
     connected,
   };
 }
