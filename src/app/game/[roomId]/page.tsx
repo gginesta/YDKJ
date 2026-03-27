@@ -4,6 +4,11 @@ import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useSocket } from '@/hooks/useSocket';
 import { useGameStore } from '@/stores/gameStore';
+import GameStarting from '@/components/game/GameStarting';
+import QuestionCard from '@/components/game/QuestionCard';
+import Scoreboard from '@/components/game/Scoreboard';
+import RoundTransition from '@/components/game/RoundTransition';
+import GameOver from '@/components/game/GameOver';
 
 export default function GamePage() {
   const params = useParams();
@@ -42,26 +47,35 @@ export default function GamePage() {
     router.push('/');
   };
 
-  // Game started - show placeholder screen
+  // ---- Phase-based routing ----
+
+  // GAME_STARTING: countdown + player names
   if (gameState === 'game_starting') {
-    return (
-      <main className="flex flex-1 flex-col items-center justify-center px-4 py-8">
-        <h1 className="text-xl sm:text-2xl text-glow-yellow mb-8 text-center animate-pulse-glow">
-          GAME STARTING
-        </h1>
-        <p className="text-text-secondary text-[10px] text-center leading-relaxed max-w-sm mb-8">
-          Welcome to You Don&apos;t Know Jack! Get ready for some trivia with
-          attitude...
-        </p>
-        <div className="flex flex-col gap-2 text-center">
-          {room?.players.map((p) => (
-            <span key={p.id} className="text-neon-cyan text-xs">
-              {p.name}
-            </span>
-          ))}
-        </div>
-      </main>
-    );
+    return <GameStarting />;
+  }
+
+  // QUESTION phases: intro, active, reveal
+  if (
+    gameState === 'question_intro' ||
+    gameState === 'question_active' ||
+    gameState === 'question_reveal'
+  ) {
+    return <QuestionCard />;
+  }
+
+  // SCORES_UPDATE: scoreboard between questions
+  if (gameState === 'scores_update') {
+    return <Scoreboard />;
+  }
+
+  // ROUND_TRANSITION: dramatic round announcement
+  if (gameState === 'round_transition' || gameState === 'round_intro') {
+    return <RoundTransition />;
+  }
+
+  // GAME_OVER / POST_GAME: final scores + play again
+  if (gameState === 'game_over' || gameState === 'post_game') {
+    return <GameOver />;
   }
 
   // Loading state
@@ -75,7 +89,7 @@ export default function GamePage() {
     );
   }
 
-  // Lobby view
+  // LOBBY view (default)
   return (
     <main className="flex flex-1 flex-col items-center px-4 py-8">
       {/* Room Code Display */}
