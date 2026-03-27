@@ -73,7 +73,7 @@ export function useSocket() {
     socket.on('question_intro', ({ question, hostScript }) => {
       const store = useGameStore.getState();
       store.setGameState('question_intro');
-      store.setCurrentQuestion(question as import('@/stores/gameStore').UIQuestion);
+      store.setCurrentQuestion(question as unknown as import('@/stores/gameStore').UIQuestion);
       store.clearAnsweredPlayers();
       store.setCorrectAnswerIndex(null);
       store.setPlayerResults([]);
@@ -84,7 +84,7 @@ export function useSocket() {
     socket.on('question_active', ({ question, timeLimit }) => {
       const store = useGameStore.getState();
       store.setGameState('question_active');
-      store.setCurrentQuestion(question as import('@/stores/gameStore').UIQuestion);
+      store.setCurrentQuestion(question as unknown as import('@/stores/gameStore').UIQuestion);
       store.setQuestionEndsAt(Date.now() + timeLimit * 1000);
     });
 
@@ -96,7 +96,7 @@ export function useSocket() {
       const store = useGameStore.getState();
       store.setGameState('question_reveal');
       store.setCorrectAnswerIndex(correctAnswer);
-      store.setPlayerResults(playerResults as import('@/stores/gameStore').PlayerResult[]);
+      store.setPlayerResults(playerResults as unknown as import('@/stores/gameStore').PlayerResult[]);
       if (hostScript) store.setHostDialogue(hostScript);
     });
 

@@ -6,12 +6,18 @@ import {
   joinRoom,
   leaveRoom,
   startGame,
+  getRoom,
+  getRoomBySocketId,
   toClientRoom,
 } from '../game-engine/room-manager';
+import { GameEngine } from '../game-engine/game-engine';
 
 export type AppSocket = SocketIOServer<ClientToServerEvents, ServerToClientEvents>;
 
 let io: AppSocket | null = null;
+
+// Active game engines, keyed by room code
+const activeGames = new Map<string, GameEngine>();
 
 /**
  * Initialize Socket.io on the given HTTP server.
@@ -46,7 +52,6 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
         const { room, player } = joinRoom(roomCode, playerName, socket.id);
         socket.join(room.id);
         socket.emit('room_joined', { room: toClientRoom(room), player });
-        // Notify others in the room
         socket.to(room.id).emit('player_joined', { player });
         console.log(`[Socket] ${playerName} joined room ${room.id}`);
       } catch (err) {
@@ -58,12 +63,47 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
     socket.on('start_game', ({ roomCode }) => {
       try {
         const room = startGame(roomCode, socket.id);
-        io!.to(room.id).emit('game_starting', {
-          hostScript: 'Welcome to You Don\'t Know Jack! Let\'s get this show on the road!',
-        });
+
+        // Create and start the game engine
+        const engine = new GameEngine(io!, room, room.id);
+        activeGames.set(room.id, engine);
+        engine.start();
+
         console.log(`[Socket] Game started in room ${room.id}`);
       } catch (err) {
         socket.emit('error', { message: (err as Error).message });
+      }
+    });
+
+    // ---- Submit Answer ----
+    socket.on('submit_answer', ({ questionId, answerIndex, timestamp }) => {
+      const result = getRoomBySocketId(socket.id);
+      if (!result) return;
+
+      const engine = activeGames.get(result.roomCode);
+      if (!engine) return;
+
+      engine.submitAnswer(socket.id, questionId, answerIndex, timestamp);
+    });
+
+    // ---- Play Again ----
+    socket.on('play_again', () => {
+      const result = getRoomBySocketId(socket.id);
+      if (!result) return;
+
+      const engine = activeGames.get(result.roomCode);
+      if (engine) {
+        engine.resetForPlayAgain();
+        activeGames.delete(result.roomCode);
+      }
+
+      // Broadcast return to lobby
+      const room = getRoom(result.roomCode);
+      if (room) {
+        io!.to(result.roomCode).emit('room_joined', {
+          room: toClientRoom(room),
+          player: room.players.find((p) => p.id === socket.id)!,
+        });
       }
     });
 
@@ -82,13 +122,22 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
   return io;
 }
 
-function handleLeave(socket: { id: string; to: (room: string) => { emit: (event: string, data: unknown) => void } }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function handleLeave(socket: any) {
   const result = leaveRoom(socket.id);
   if (result && result.room) {
     socket.to(result.roomCode).emit('player_left', {
       playerId: socket.id,
       reason: 'left',
     });
+  }
+  // Clean up game engine if room was deleted
+  if (result && !result.room) {
+    const engine = activeGames.get(result.roomCode);
+    if (engine) {
+      engine.destroy();
+      activeGames.delete(result.roomCode);
+    }
   }
 }
 
