@@ -424,6 +424,60 @@ power_up_used     { playerId, powerUpType, effect }
 error             { message }
 ```
 
+## Alternative Architecture: Monorepo
+
+An alternative to the single-Next.js approach is a Turborepo monorepo with separation of concerns. This is recommended if the project grows beyond MVP:
+
+```
+ydkj/
+├── apps/
+│   ├── web/                    # Next.js frontend (SPA for game, SSR for landing)
+│   └── server/                 # Fastify backend (WebSocket, AI pipeline, game engine)
+├── packages/
+│   ├── shared/                 # TypeScript types, message protocol, constants
+│   └── game-engine/            # Pure game logic (state machine, scoring) — zero I/O deps
+├── turbo.json
+└── package.json
+```
+
+**Benefits:**
+- `packages/game-engine` is fully unit-testable (no WebSocket or I/O deps)
+- `packages/shared` ensures client and server share the exact same types and message protocol
+- Fastify backend with raw `ws` is lighter than Socket.io for 10-player rooms
+- Separate deployments possible if scaling demands it later
+
+**Trade-off:** More setup complexity. For MVP, the single Next.js + Socket.io approach is faster to ship. Migrate to monorepo if complexity warrants it.
+
+## State Management (Client)
+
+Zustand is recommended for client-side game state:
+- Minimal boilerplate — perfect for game state arriving over WebSocket
+- Selective subscriptions (re-render only components that need to update)
+- Tiny bundle size (~1KB)
+
+```typescript
+// Example: game store
+const useGameStore = create<GameStore>((set) => ({
+  phase: 'LOBBY',
+  players: [],
+  currentQuestion: null,
+  myScore: 0,
+
+  // WebSocket message handler updates the store
+  handleServerMessage: (msg: ServerMessage) => {
+    switch (msg.type) {
+      case 'question_active':
+        set({ phase: 'QUESTION_ACTIVE', currentQuestion: msg.question });
+        break;
+      case 'scores_update':
+        set({ phase: 'SCORES_UPDATE', players: msg.scores });
+        break;
+      // ...
+    }
+  }
+}));
+```
+
 ## Security Considerations
 
 - Room codes are server-generated, not guessable (random 4-char alphanumeric, excluding ambiguous chars)
@@ -433,3 +487,14 @@ error             { message }
 - Socket connections authenticated by room membership
 - API keys (Claude, ElevenLabs) never exposed to client
 - No user data stored beyond display names and game scores
+
+## Key Technical Risks & Mitigations
+
+| Risk | Impact | Mitigation |
+|------|--------|-----------|
+| AI latency at game start | Players wait too long | Parallel question generation + entertaining loading screen. Start Q1-5 while Q6-11 still generating. |
+| ElevenLabs cost overrun | Budget blown in a month | Track character usage per game, implement character budget, fall back to text-only if exhausted. Cache common phrases. |
+| WebSocket disconnections | Player drops mid-game | Client auto-reconnects with exponential backoff. Server holds player slot for 30s. Player state survives disconnect. |
+| AI generates bad/offensive Qs | Bad player experience | Content guidelines in system prompt + lightweight output filter. Host personality prompt specifies "edgy but not offensive." |
+| SQLite on Railway/Fly.io | Data loss on redeploy | Use persistent volume. Single instance only (no horizontal scaling). Historical results are nice-to-have, not critical. |
+| iOS Safari audio restrictions | Voice doesn't play | Require user gesture in lobby ("Tap to start"). AudioContext created on first tap. |
