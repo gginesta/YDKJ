@@ -204,15 +204,123 @@ interface PowerUp {
 }
 ```
 
+### Answer Records
+```typescript
+interface AnswerRecord {
+  questionId: string;
+  questionType: QuestionType;
+  answeredAt: number;       // Timestamp of answer submission
+  timeToAnswer: number;     // Seconds taken to answer
+  isCorrect: boolean;
+  selectedIndex?: number;   // For multiple choice / three way
+  selectedCategory?: 'A' | 'B'; // For DisOrDat
+  moneyEarned: number;     // Net money from this question (can be negative)
+  speedBonus: number;      // Speed bonus portion
+  powerUpUsed?: PowerUpType; // If player used a power-up this question
+}
+```
+
+### Game State Enum
+```typescript
+enum GameState {
+  LOBBY = 'lobby',
+  GAME_STARTING = 'game_starting',
+  ROUND_INTRO = 'round_intro',
+  QUESTION_INTRO = 'question_intro',
+  QUESTION_ACTIVE = 'question_active',
+  QUESTION_REVEAL = 'question_reveal',
+  SCORES_UPDATE = 'scores_update',
+  ROUND_TRANSITION = 'round_transition',
+  JACK_ATTACK_INTRO = 'jack_attack_intro',
+  JACK_ATTACK_ACTIVE = 'jack_attack_active',
+  JACK_ATTACK_RESULTS = 'jack_attack_results',
+  GAME_OVER = 'game_over',
+  POST_GAME = 'post_game',
+}
+```
+
 ### Easter Eggs
 ```typescript
 interface EasterEgg {
-  type: 'wrong_answer_of_the_game' | 'hidden_sequence' | 'speed_demon' | 'category_sweep';
+  type:
+    | 'wrong_answer_of_the_game'
+    | 'speed_demon'
+    | 'category_sweep'
+    | 'last_to_first'
+    | 'the_contrarian';
   trigger: string;        // What activates it
   reward: number;         // Bonus money
   hostReaction: string;   // Special host line when triggered
 }
 ```
+
+### SQLite Schema
+```sql
+-- Game results (light tracking)
+CREATE TABLE game_results (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  room_code TEXT NOT NULL,
+  player_names TEXT NOT NULL,        -- JSON array of player names
+  final_scores TEXT NOT NULL,        -- JSON object { name: money }
+  winner_name TEXT NOT NULL,
+  question_count INTEGER NOT NULL,
+  duration_seconds INTEGER NOT NULL,
+  theme TEXT,
+  played_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Question cache (avoid regenerating)
+CREATE TABLE question_cache (
+  id TEXT PRIMARY KEY,
+  type TEXT NOT NULL,
+  category TEXT NOT NULL,
+  question_data TEXT NOT NULL,        -- Full JSON of question object
+  times_used INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  expires_at DATETIME NOT NULL
+);
+
+-- Player group tracking (dedup questions)
+CREATE TABLE player_groups (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  player_names_hash TEXT NOT NULL,   -- Hash of sorted player names
+  question_ids_seen TEXT NOT NULL,   -- JSON array of question IDs shown
+  last_played DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+## Audio Delivery Architecture
+
+Voice and audio are delivered to clients via two channels:
+
+```
+┌─────────────────────────────────────────────────┐
+│  Voice Audio (ElevenLabs TTS)                    │
+│                                                   │
+│  Server generates TTS → stores as buffer →        │
+│  sends audio URL or base64 via Socket.io event    │
+│                                                   │
+│  Client receives → decodes → plays via Web Audio  │
+│  API with AudioContext for precise timing          │
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│  Music & SFX (Static Assets)                      │
+│                                                   │
+│  Pre-loaded on client during lobby phase          │
+│  Stored in /public/audio/ as MP3/OGG files        │
+│  Managed by AudioManager singleton:               │
+│  - Music channel (looping, crossfade)             │
+│  - SFX channel (one-shot, overlapping OK)         │
+│  - Voice channel (queued, exclusive)              │
+│  Each channel has independent volume control      │
+└─────────────────────────────────────────────────┘
+```
+
+Key constraints:
+- iOS Safari requires a user gesture before any audio plays (handle in lobby with "tap to start")
+- Voice audio takes priority — SFX duck (reduce volume) when host is speaking
+- Music crossfades between states (e.g., thinking loop → tension loop at 5 seconds)
 
 ## Game State Machine
 

@@ -341,6 +341,77 @@ const dynamicContext = {
 };
 ```
 
+## Topical Question Strategy
+
+To keep questions feeling fresh and current, the AI pipeline mixes timeless trivia with topical content:
+
+### Question Mix Per Game
+| Type | Count | Source | Example |
+|------|-------|--------|---------|
+| Timeless trivia | 4-5 | Open Trivia DB seeds + Claude | History, science, geography facts |
+| Pop culture (evergreen) | 2-3 | Claude generation | Classic movies, music, TV shows |
+| Topical / current | 2-3 | Claude's training data + web search seeds | Recent events, trending topics, new releases |
+| Niche / surprising | 1 | Curated seed bank | Weird facts that make great YDKJ questions |
+
+### Keeping It Current
+- Claude's training data includes events up to its knowledge cutoff
+- For truly current events, optionally integrate a news API or web search to seed prompts
+- The `theme` parameter can bias toward current topics (e.g., "2026 Oscars")
+- Curated seed bank can be updated periodically with interesting recent facts
+
+### Themed Game Generation
+When a theme is set (e.g., "80s Night"):
+- All 10 questions relate to the theme
+- DisOrDat categories connect to the theme
+- Jack Attack clue ties to the theme
+- Host adopts theme-appropriate references and jokes
+- Prompt includes: `THEME: All questions must relate to [theme]. Be creative with connections — not every question needs to be obviously about the theme.`
+
+## Question Quality Validation
+
+Every AI-generated question goes through automated validation before entering the game:
+
+```typescript
+interface ValidationResult {
+  valid: boolean;
+  issues: string[];
+}
+
+function validateQuestion(q: Question): ValidationResult {
+  const issues: string[] = [];
+
+  // Structure checks
+  if (q.type === 'multiple_choice') {
+    if (q.choices.length !== 4) issues.push('Must have exactly 4 choices');
+    if (q.correctIndex < 0 || q.correctIndex > 3) issues.push('Invalid correct index');
+    if (new Set(q.choices).size !== 4) issues.push('Duplicate answer choices');
+    if (q.prompt.length < 20) issues.push('Question too short');
+    if (q.prompt.length > 500) issues.push('Question too long for voice');
+  }
+
+  if (q.type === 'dis_or_dat') {
+    if (q.items.length !== 7) issues.push('DisOrDat must have 7 items');
+    if (q.categoryA === q.categoryB) issues.push('Categories must be different');
+  }
+
+  if (q.type === 'gibberish') {
+    if (!q.gibberishPhrase) issues.push('Missing gibberish phrase');
+    if (q.gibberishPhrase.toLowerCase() === q.answer.toLowerCase())
+      issues.push('Gibberish phrase is same as answer');
+  }
+
+  // Host script checks
+  if (!q.hostIntro || q.hostIntro.length < 20) issues.push('Host intro too short');
+  if (q.hostIntro.length > 600) issues.push('Host intro too long (>30s of speech)');
+  if (!q.hostCorrect) issues.push('Missing host correct reaction');
+  if (!q.hostWrong) issues.push('Missing host wrong reaction');
+
+  return { valid: issues.length === 0, issues };
+}
+```
+
+If validation fails, the question is replaced with a backup from the pre-generated batch. If no backups are available, a question from the SQLite cache is used.
+
 ## Error Handling & Fallbacks
 
 | Failure | Fallback |

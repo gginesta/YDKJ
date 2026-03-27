@@ -76,8 +76,10 @@ The bread and butter. 4 options, 1 correct. But the question is never asked stra
 > - Manicotti → Pasta ✓
 > - Vinyasa → Yoga ✓
 > - Farfalle → Pasta ✓
+> - Warrior II → Yoga ✓
 > - Cavatappi → Pasta ✓
 > - Shavasana → Yoga ✓
+> - Orecchiette → Pasta ✓
 
 **Timing:** 5 seconds per item
 **Scoring:** Each correct = question value / 7 (rounded up)
@@ -97,8 +99,8 @@ A word or phrase is shown. Three possible associations appear. Players buzz in w
 
 **Example:**
 > Word: "Mercury"
-> - A) Greek God → ✗
-> - B) Planet → ✓ (if theme is "Solar System")
+> - A) Roman God → ✓ (if theme is "Ancient Mythology")
+> - B) Planet → ✗
 > - C) Car Brand → ✗
 
 **Timing:** Answers cycle every 3 seconds, 3 full cycles
@@ -133,6 +135,44 @@ Answer instantly = +50%. Answer at the last second = +0%.
 - 3 correct in a row: host acknowledges ("Someone's on fire!")
 - 5 correct in a row: +$1,000 bonus
 - All 10 correct: +$5,000 "Perfect Game" bonus (extremely rare)
+
+## Game Pacing & Flow
+
+The feel of each game should follow a dramatic arc:
+
+### Energy Curve
+```
+Energy
+  ▲
+  │                                          ████ Jack Attack
+  │                                       ███
+  │                    ██ Round 2 ramps  ██
+  │                  ██  up tension    ██
+  │     ██ Round 1 ██                ██
+  │   ██  builds  █                ██
+  │ ██  slowly                   ██
+  │█                           ██
+  │ Intro                    ██
+  └──────────────────────────────────────────▶ Time
+   0min    5min    10min    15min    20min
+```
+
+### Pacing Rules
+- **Question cadence:** ~90 seconds per question cycle (intro → active → reveal → scores)
+- **Breathing room:** Always have a host line between questions to break tension
+- **Escalation:** Round 2 questions are harder AND worth more — stakes feel real
+- **The dip:** After Round 2, a brief pause before Jack Attack lets players catch their breath
+- **The finale:** Jack Attack is the fastest, highest-energy part — no breaks, pure adrenaline
+- **The landing:** Game over has a long enough outro (15-20s) for the host to wrap up satisfyingly
+
+### "Don't Be a Wimp" Mechanic
+If nobody answers a question (all players let the timer expire):
+- The host calls out the **leading player** by name
+- "Hey [Leader], you're sitting on $[amount] and you can't even take a guess? Don't be a wimp!"
+- The question resets with **10 seconds** on the clock
+- Only the leading player is forced to answer (others can jump in too)
+- If they still don't answer, the host roasts them and moves on
+- This prevents boring games where players play it safe
 
 ## Power-Up System (Catch-Up Mechanic)
 
