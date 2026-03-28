@@ -17,18 +17,18 @@ export default function GameStarting() {
   return (
     <main className="flex flex-1 flex-col items-center justify-center px-4 py-8 min-h-screen">
       {/* Countdown */}
-      <div className="mb-8 text-center">
+      <div className="mb-10 text-center">
         {countdown > 0 ? (
           <>
-            <p className="text-text-secondary text-[10px] mb-4 animate-pulse-glow">
-              GAME STARTING IN
+            <p className="text-text-secondary text-sm font-medium uppercase tracking-wider mb-6 animate-pulse-glow">
+              Game Starting In
             </p>
-            <div className="text-6xl sm:text-8xl text-glow-yellow animate-pulse">
+            <div className="text-7xl sm:text-9xl font-extrabold text-accent-yellow animate-scale-in">
               {countdown}
             </div>
           </>
         ) : (
-          <h1 className="text-2xl sm:text-4xl text-glow-cyan animate-pulse-glow">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-accent-cyan animate-pulse-glow tracking-tight">
             GET READY!
           </h1>
         )}
@@ -36,22 +36,26 @@ export default function GameStarting() {
 
       {/* Host dialogue */}
       {hostDialogue && (
-        <p className="text-text-secondary text-[10px] sm:text-xs text-center leading-relaxed max-w-sm mb-8 px-4">
-          {hostDialogue}
-        </p>
+        <div className="w-full max-w-md px-5 py-4 rounded-lg bg-bg-card border border-border-default mb-8">
+          <p className="text-text-secondary text-sm leading-relaxed text-center italic">
+            &ldquo;{hostDialogue}&rdquo;
+          </p>
+        </div>
       )}
 
       {/* Player names */}
       <div className="flex flex-col gap-2 text-center">
-        <p className="text-text-muted text-[8px] mb-2">PLAYERS</p>
-        {room?.players.map((p) => (
-          <span
-            key={p.id}
-            className="text-neon-cyan text-xs"
-          >
-            {p.name}
-          </span>
-        ))}
+        <p className="text-text-muted text-xs uppercase tracking-wider mb-2">Players</p>
+        <div className="flex flex-wrap justify-center gap-2">
+          {room?.players.map((p) => (
+            <span
+              key={p.id}
+              className="text-accent-cyan text-sm font-bold px-3 py-1 rounded-full bg-accent-cyan/10"
+            >
+              {p.name}
+            </span>
+          ))}
+        </div>
       </div>
     </main>
   );

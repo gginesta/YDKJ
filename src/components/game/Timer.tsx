@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 
 interface TimerProps {
-  endsAt: number; // Unix timestamp in ms
-  totalDuration?: number; // Total seconds for the timer (for bar width calc)
+  endsAt: number;
+  totalDuration?: number;
 }
 
 export default function Timer({ endsAt, totalDuration }: TimerProps) {
@@ -34,38 +34,35 @@ export default function Timer({ endsAt, totalDuration }: TimerProps) {
     };
   }, [endsAt, totalDuration]);
 
-  // Color transitions: cyan -> yellow (at 10s) -> red (at 5s)
-  let barColor = 'bg-neon-cyan';
-  let glowColor = 'shadow-[0_0_10px_var(--color-neon-cyan)]';
+  // Color transitions
+  let barColor = 'bg-accent-cyan';
   if (secondsLeft <= 5) {
     barColor = 'bg-error';
-    glowColor = 'shadow-[0_0_10px_var(--color-error)]';
   } else if (secondsLeft <= 10) {
-    barColor = 'bg-neon-yellow';
-    glowColor = 'shadow-[0_0_10px_var(--color-neon-yellow)]';
+    barColor = 'bg-accent-yellow';
   }
 
   return (
     <div className="w-full">
-      {/* Timer bar container */}
-      <div className="w-full h-3 bg-bg-secondary border border-border-default overflow-hidden">
+      {/* Timer bar */}
+      <div className="w-full h-2 bg-bg-secondary rounded-full overflow-hidden">
         <div
-          className={`h-full ${barColor} ${glowColor} transition-colors duration-300`}
+          className={`h-full ${barColor} rounded-full transition-colors duration-300`}
           style={{
             width: `${Math.max(fraction * 100, 0)}%`,
-            transition: 'width 0.1s linear',
+            transition: 'width 0.1s linear, background-color 0.3s',
           }}
         />
       </div>
-      {/* Seconds text */}
-      <div className="text-center mt-1">
+      {/* Seconds */}
+      <div className="text-center mt-1.5">
         <span
-          className={`text-[10px] ${
+          className={`text-xs font-bold ${
             secondsLeft <= 5
               ? 'text-error animate-pulse'
               : secondsLeft <= 10
-                ? 'text-neon-yellow'
-                : 'text-neon-cyan'
+                ? 'text-accent-yellow'
+                : 'text-accent-cyan'
           }`}
         >
           {secondsLeft}s

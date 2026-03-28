@@ -25,63 +25,62 @@ export default function HomePage() {
     clearError();
     setIsCreating(true);
     createRoom(name.trim());
-    // Navigation happens via the room state watch above
     setTimeout(() => setIsCreating(false), 3000);
   };
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center px-4 py-8">
       {/* Title */}
-      <div className="text-center mb-12">
-        <h1 className="text-2xl sm:text-4xl text-glow-cyan mb-4 leading-relaxed">
-          YOU DON&apos;T
+      <div className="text-center mb-10">
+        <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight leading-none mb-1">
+          <span className="text-text-primary">YOU DON&apos;T</span>
         </h1>
-        <h1 className="text-3xl sm:text-5xl text-glow-magenta mb-4 leading-relaxed">
-          KNOW
+        <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight leading-none mb-1">
+          <span className="text-text-primary">KNOW</span>
         </h1>
-        <h1 className="text-4xl sm:text-6xl text-glow-yellow leading-relaxed">
-          JACK
+        <h1 className="text-6xl sm:text-8xl font-extrabold tracking-tight leading-none">
+          <span className="text-accent-yellow">JACK</span>
         </h1>
       </div>
 
-      <p className="text-text-secondary text-[10px] sm:text-xs text-center mb-12 max-w-sm leading-relaxed">
+      <p className="text-text-secondary text-sm sm:text-base text-center mb-10 max-w-sm">
         Where high culture and pop culture collide. Up to 10 players.
       </p>
 
       {!showNameInput ? (
-        <div className="flex flex-col gap-4 w-full max-w-sm">
+        <div className="flex flex-col gap-3 w-full max-w-xs">
           <button
             onClick={() => setShowNameInput(true)}
-            className="pixel-btn pixel-btn-cyan w-full text-sm"
+            className="btn-primary w-full"
           >
             Create Game
           </button>
           <button
             onClick={() => router.push('/join')}
-            className="pixel-btn pixel-btn-magenta w-full text-sm"
+            className="btn-secondary w-full"
           >
             Join Game
           </button>
         </div>
       ) : (
-        <div className="flex flex-col gap-4 w-full max-w-sm">
-          <label className="text-text-secondary text-[10px] text-center">
-            YOUR NAME
+        <div className="flex flex-col gap-4 w-full max-w-xs animate-fade-in-up">
+          <label className="text-text-secondary text-xs font-medium text-center uppercase tracking-wider">
+            Your Name
           </label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value.slice(0, 16))}
             onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
-            placeholder="ENTER NAME"
-            className="pixel-input"
+            placeholder="Enter name"
+            className="game-input"
             autoFocus
             maxLength={16}
           />
           <button
             onClick={handleCreate}
             disabled={!name.trim() || isCreating}
-            className="pixel-btn pixel-btn-green w-full text-sm disabled:opacity-50"
+            className="btn-primary w-full"
           >
             {isCreating ? 'Creating...' : "Let's Go!"}
           </button>
@@ -90,15 +89,15 @@ export default function HomePage() {
               setShowNameInput(false);
               clearError();
             }}
-            className="text-text-muted text-[10px] text-center mt-2 cursor-pointer hover:text-text-secondary"
+            className="text-text-muted text-sm text-center mt-1 cursor-pointer hover:text-text-secondary transition-colors"
           >
-            BACK
+            Back
           </button>
         </div>
       )}
 
       {error && (
-        <div className="mt-6 p-3 border-2 border-error text-error text-[10px] text-center max-w-sm">
+        <div className="mt-6 px-4 py-3 rounded-lg bg-error/10 border border-error/30 text-error text-sm text-center max-w-xs">
           {error}
         </div>
       )}

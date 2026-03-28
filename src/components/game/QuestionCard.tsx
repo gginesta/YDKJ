@@ -5,7 +5,8 @@ import { useSocket } from '@/hooks/useSocket';
 import Timer from './Timer';
 import HostDialogue from './HostDialogue';
 
-const ANSWER_LABELS = ['A', 'B', 'C', 'D', 'E', 'F'];
+const ANSWER_LABELS = ['1', '2', '3', '4'];
+const ANSWER_COLORS = ['text-accent-cyan', 'text-accent-yellow', 'text-accent-pink', 'text-accent-green'];
 
 export default function QuestionCard() {
   const gameState = useGameStore((s) => s.gameState);
@@ -28,8 +29,6 @@ export default function QuestionCard() {
   const isActive = gameState === 'question_active';
   const isReveal = gameState === 'question_reveal';
   const hasAnswered = myAnswerIndex !== null;
-  const totalPlayers = room?.players.length ?? 0;
-  const answeredCount = answeredPlayerIds.length;
 
   const handleAnswer = (index: number) => {
     if (hasAnswered || !isActive || !currentQuestion) return;
@@ -39,89 +38,73 @@ export default function QuestionCard() {
   const formatValue = (val: number) =>
     '$' + val.toLocaleString('en-US');
 
-  // Determine display question number (1-indexed)
   const displayQuestionNum = questionIndex + 1;
 
-  // Get answer button styles based on state
-  const getButtonStyle = (index: number) => {
-    const base =
-      'w-full min-h-[56px] p-4 text-left border-3 transition-all duration-200 flex items-center gap-3';
-
+  const getCardClass = (index: number) => {
     if (isReveal) {
       const isCorrect = index === correctAnswerIndex;
       const wasMyPick = index === myAnswerIndex;
-      if (isCorrect) {
-        return `${base} border-success bg-success/20 shadow-[0_0_15px_var(--color-success)]`;
-      }
-      if (wasMyPick && !isCorrect) {
-        return `${base} border-error bg-error/20 shadow-[0_0_15px_var(--color-error)]`;
-      }
-      return `${base} border-border-default bg-bg-card opacity-50`;
+      if (isCorrect) return 'answer-card correct';
+      if (wasMyPick && !isCorrect) return 'answer-card wrong';
+      return 'answer-card dimmed';
     }
 
     if (isActive) {
       if (hasAnswered) {
-        const isSelected = index === myAnswerIndex;
-        if (isSelected) {
-          return `${base} border-neon-cyan bg-neon-cyan/15 shadow-[0_0_10px_var(--color-neon-cyan)]`;
-        }
-        return `${base} border-border-default bg-bg-card opacity-50 cursor-not-allowed`;
+        if (index === myAnswerIndex) return 'answer-card selected';
+        return 'answer-card dimmed';
       }
-      return `${base} border-border-default bg-bg-card hover:border-neon-cyan hover:bg-neon-cyan/5 active:border-neon-cyan active:bg-neon-cyan/10 cursor-pointer`;
+      return 'answer-card';
     }
 
-    return `${base} border-border-default bg-bg-card opacity-40`;
+    return 'answer-card dimmed';
   };
-
-  // Find results for reveal phase
-  const getResultForPlayer = (playerId: string) =>
-    playerResults.find((r) => r.playerId === playerId);
 
   return (
     <main className="flex flex-1 flex-col min-h-screen">
-      {/* Host dialogue at top */}
+      {/* Host dialogue */}
       {(isIntro || isReveal) && <HostDialogue />}
 
       <div className="flex flex-col flex-1 items-center px-4 py-6 max-w-lg mx-auto w-full">
         {/* Question header */}
         <div className="text-center mb-4 w-full">
-          <p className="text-text-muted text-[8px] mb-1">
-            ROUND {currentRound}
+          <p className="text-text-muted text-xs mb-1 uppercase tracking-wider">
+            Round {currentRound}
           </p>
-          <p className="text-neon-yellow text-xs">
+          <p className="text-accent-yellow text-sm font-bold">
             Question {displayQuestionNum} &mdash; {formatValue(currentQuestion.value)}
           </p>
         </div>
 
-        {/* Timer (only during active) */}
+        {/* Timer */}
         {isActive && questionEndsAt && (
-          <div className="w-full mb-4">
+          <div className="w-full mb-5">
             <Timer endsAt={questionEndsAt} totalDuration={currentQuestion.timeLimit} />
           </div>
         )}
 
         {/* Question prompt */}
         {(isActive || isReveal) && currentQuestion.prompt && (
-          <div className="w-full mb-6 p-4 bg-bg-card border-2 border-border-default">
-            <p className="text-text-primary text-xs sm:text-sm leading-relaxed text-center">
+          <div className="w-full mb-6">
+            <p className="text-text-primary text-lg sm:text-xl font-bold leading-relaxed text-center">
               {currentQuestion.prompt}
             </p>
           </div>
         )}
 
-        {/* Intro state: show category or just host dialogue */}
+        {/* Intro: category reveal */}
         {isIntro && (
           <div className="flex flex-1 items-center justify-center">
-            <div className="text-center">
-              <p className="text-text-muted text-[8px] mb-2">CATEGORY</p>
-              <p className="text-neon-magenta text-sm sm:text-base text-glow-magenta">
+            <div className="text-center animate-scale-in">
+              <p className="text-text-muted text-xs uppercase tracking-wider mb-3">Category</p>
+              <p className="text-accent-purple text-2xl sm:text-3xl font-extrabold">
                 {currentQuestion.category}
               </p>
             </div>
           </div>
         )}
 
-        {/* Answer buttons (active + reveal) */}
+        {/* Answer cards */}
         {(isActive || isReveal) && currentQuestion.choices && (
           <div className="w-full flex flex-col gap-3 mb-6">
             {currentQuestion.choices.map((choice, index) => (
@@ -129,49 +112,47 @@ export default function QuestionCard() {
                 key={index}
                 onClick={() => handleAnswer(index)}
                 disabled={hasAnswered || !isActive}
-                className={getButtonStyle(index)}
+                className={getCardClass(index)}
               >
-                <span className="text-neon-yellow text-[10px] font-bold shrink-0 w-6">
+                <span className={`text-sm font-bold shrink-0 w-6 ${ANSWER_COLORS[index] || 'text-accent-cyan'}`}>
                   {ANSWER_LABELS[index]}
                 </span>
-                <span className="text-text-primary text-[10px] sm:text-xs leading-relaxed flex-1">
+                <span className="text-text-primary text-sm sm:text-base font-medium leading-relaxed flex-1">
                   {choice}
                 </span>
-                {/* Reveal indicators */}
                 {isReveal && index === correctAnswerIndex && (
-                  <span className="text-success text-sm shrink-0">&#10003;</span>
+                  <span className="text-success text-lg shrink-0">&#10003;</span>
                 )}
                 {isReveal && index === myAnswerIndex && index !== correctAnswerIndex && (
-                  <span className="text-error text-sm shrink-0">&#10007;</span>
+                  <span className="text-error text-lg shrink-0">&#10007;</span>
                 )}
               </button>
             ))}
           </div>
         )}
 
-        {/* Answer status during active phase */}
+        {/* Answer status */}
         {isActive && (
           <div className="w-full text-center">
             {hasAnswered ? (
-              <p className="text-neon-cyan text-[10px] animate-pulse-glow">
-                ANSWER LOCKED IN
+              <p className="text-accent-cyan text-sm font-bold animate-pulse-glow">
+                Answer Locked In
               </p>
             ) : (
-              <p className="text-text-muted text-[8px]">
+              <p className="text-text-muted text-sm">
                 Pick your answer!
               </p>
             )}
-            {/* Who has answered indicators */}
             <div className="flex justify-center gap-2 mt-3 flex-wrap">
               {room?.players.map((p) => {
                 const answered = answeredPlayerIds.includes(p.id);
                 return (
                   <div
                     key={p.id}
-                    className={`text-[8px] px-2 py-1 border ${
+                    className={`text-xs px-3 py-1 rounded-full font-medium ${
                       answered
-                        ? 'border-neon-cyan text-neon-cyan bg-neon-cyan/10'
-                        : 'border-border-default text-text-muted'
+                        ? 'bg-accent-cyan/15 text-accent-cyan'
+                        : 'bg-bg-card text-text-muted'
                     }`}
                   >
                     {p.name} {answered ? '\u2713' : '...'}
@@ -182,46 +163,46 @@ export default function QuestionCard() {
           </div>
         )}
 
-        {/* Reveal: show player results */}
+        {/* Reveal: player results */}
         {isReveal && playerResults.length > 0 && (
           <div className="w-full mt-2">
-            <p className="text-text-muted text-[8px] text-center mb-3">RESULTS</p>
+            <p className="text-text-muted text-xs uppercase tracking-wider text-center mb-3">Results</p>
             <div className="flex flex-col gap-2">
               {playerResults.map((result) => {
                 const isMe = result.playerId === myPlayer?.id;
                 return (
                   <div
                     key={result.playerId}
-                    className={`flex items-center justify-between p-2 border ${
+                    className={`flex items-center justify-between px-4 py-3 rounded-lg border ${
                       result.isCorrect
-                        ? 'border-success/50 bg-success/5'
-                        : 'border-error/50 bg-error/5'
-                    } ${isMe ? 'ring-1 ring-neon-cyan' : ''}`}
+                        ? 'border-success/30 bg-success/5'
+                        : 'border-error/30 bg-error/5'
+                    } ${isMe ? 'ring-1 ring-accent-cyan' : ''}`}
                   >
                     <div className="flex items-center gap-2">
                       <span
-                        className={`text-sm ${
+                        className={`text-base ${
                           result.isCorrect ? 'text-success' : 'text-error'
                         }`}
                       >
                         {result.isCorrect ? '\u2713' : '\u2717'}
                       </span>
-                      <span className="text-text-primary text-[10px]">
+                      <span className="text-text-primary text-sm font-medium">
                         {result.name}
                         {isMe && (
-                          <span className="text-neon-cyan ml-1">(you)</span>
+                          <span className="text-accent-cyan ml-1 text-xs">(you)</span>
                         )}
                       </span>
                     </div>
                     <span
-                      className={`text-[10px] ${
+                      className={`text-sm font-bold ${
                         result.moneyEarned >= 0 ? 'text-success' : 'text-error'
                       }`}
                     >
                       {result.moneyEarned >= 0 ? '+' : ''}
                       {formatValue(result.moneyEarned)}
                       {result.speedBonus > 0 && (
-                        <span className="text-neon-yellow ml-1">
+                        <span className="text-accent-yellow ml-1 text-xs">
                           (+{formatValue(result.speedBonus)} speed)
                         </span>
                       )}

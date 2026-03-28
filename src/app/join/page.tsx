@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSocket } from '@/hooks/useSocket';
 import { useGameStore } from '@/stores/gameStore';
 
-export default function JoinPage() {
+function JoinForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { joinRoom } = useSocket();
@@ -16,7 +16,6 @@ export default function JoinPage() {
   const room = useGameStore((s) => s.room);
   const clearError = useGameStore((s) => s.clearError);
 
-  // When room is joined, navigate to the game lobby
   useEffect(() => {
     if (room) {
       router.push(`/game/${room.id}`);
@@ -34,46 +33,39 @@ export default function JoinPage() {
   };
 
   const handleCodeChange = (val: string) => {
-    // Only allow letters, auto-uppercase, max 4
     const cleaned = val.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 4);
     setCode(cleaned);
   };
 
   return (
-    <main className="flex flex-1 flex-col items-center justify-center px-4 py-8">
-      <h1 className="text-xl sm:text-2xl text-glow-magenta mb-8 text-center">
-        JOIN GAME
-      </h1>
-
-      <div className="flex flex-col gap-6 w-full max-w-sm">
-        {/* Room Code */}
+    <>
+      <div className="flex flex-col gap-6 w-full max-w-xs">
         <div className="flex flex-col gap-2">
-          <label className="text-text-secondary text-[10px] text-center">
-            ROOM CODE
+          <label className="text-text-secondary text-xs font-medium text-center uppercase tracking-wider">
+            Room Code
           </label>
           <input
             type="text"
             value={code}
             onChange={(e) => handleCodeChange(e.target.value)}
             placeholder="ABCD"
-            className="pixel-input text-2xl tracking-[0.5em]"
+            className="game-input text-2xl tracking-[0.4em] font-bold"
             autoFocus
             maxLength={4}
           />
         </div>
 
-        {/* Player Name */}
         <div className="flex flex-col gap-2">
-          <label className="text-text-secondary text-[10px] text-center">
-            YOUR NAME
+          <label className="text-text-secondary text-xs font-medium text-center uppercase tracking-wider">
+            Your Name
           </label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value.slice(0, 16))}
             onKeyDown={(e) => e.key === 'Enter' && handleJoin()}
-            placeholder="ENTER NAME"
-            className="pixel-input"
+            placeholder="Enter name"
+            className="game-input"
             maxLength={16}
           />
         </div>
@@ -81,7 +73,7 @@ export default function JoinPage() {
         <button
           onClick={handleJoin}
           disabled={code.length !== 4 || !name.trim() || isJoining}
-          className="pixel-btn pixel-btn-cyan w-full text-sm disabled:opacity-50"
+          className="btn-primary w-full"
         >
           {isJoining ? 'Joining...' : 'Join Room'}
         </button>
@@ -91,17 +83,30 @@ export default function JoinPage() {
             clearError();
             router.push('/');
           }}
-          className="text-text-muted text-[10px] text-center mt-2 cursor-pointer hover:text-text-secondary"
+          className="text-text-muted text-sm text-center mt-1 cursor-pointer hover:text-text-secondary transition-colors"
         >
-          BACK
+          Back
         </button>
       </div>
 
       {error && (
-        <div className="mt-6 p-3 border-2 border-error text-error text-[10px] text-center max-w-sm">
+        <div className="mt-6 px-4 py-3 rounded-lg bg-error/10 border border-error/30 text-error text-sm text-center max-w-xs">
           {error}
         </div>
       )}
+    </>
+  );
+}
+
+export default function JoinPage() {
+  return (
+    <main className="flex flex-1 flex-col items-center justify-center px-4 py-8">
+      <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-8 text-center text-text-primary">
+        JOIN GAME
+      </h1>
+      <Suspense fallback={<p className="text-text-muted text-sm">Loading...</p>}>
+        <JoinForm />
+      </Suspense>
     </main>
   );
 }

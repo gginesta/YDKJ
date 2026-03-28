@@ -15,9 +15,7 @@ export default function GameOver() {
   const myPlayer = useGameStore((s) => s.myPlayer);
   const { playAgain, leaveRoom } = useSocket();
 
-  // Sort by money descending
   const ranked = [...finalScores].sort((a, b) => b.money - a.money);
-  const winner = ranked[0];
 
   const handlePlayAgain = () => {
     playAgain();
@@ -32,23 +30,23 @@ export default function GameOver() {
     <main className="flex flex-1 flex-col items-center px-4 py-8 min-h-screen">
       {/* Header */}
       <div className="text-center mb-8 mt-4">
-        <p className="text-text-muted text-[8px] mb-2">GAME OVER</p>
-        <h1 className="text-2xl sm:text-4xl text-glow-yellow mb-2">
+        <p className="text-text-muted text-xs uppercase tracking-wider mb-3">Game Over</p>
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-accent-yellow tracking-tight">
           FINAL SCORES
         </h1>
       </div>
 
       {/* Host outro */}
       {gameOverHostScript && (
-        <div className="w-full max-w-md px-4 py-3 bg-bg-primary/90 border-y border-border-default mb-6">
-          <p className="text-text-secondary text-[10px] sm:text-xs leading-relaxed text-center">
-            {gameOverHostScript}
+        <div className="w-full max-w-md px-5 py-4 rounded-lg bg-bg-card border border-border-default mb-8">
+          <p className="text-text-secondary text-sm leading-relaxed text-center italic">
+            &ldquo;{gameOverHostScript}&rdquo;
           </p>
         </div>
       )}
 
       {/* Rankings */}
-      <div className="w-full max-w-sm flex flex-col gap-3 mb-8">
+      <div className="w-full max-w-sm flex flex-col gap-3 mb-10">
         {ranked.map((entry, index) => {
           const isMe = entry.playerId === myPlayer?.id;
           const isWinner = index === 0;
@@ -57,41 +55,40 @@ export default function GameOver() {
           return (
             <div
               key={entry.playerId}
-              className={`relative flex items-center gap-3 p-4 border-2 transition-all ${
+              className={`relative flex items-center gap-3 px-4 py-4 rounded-lg border transition-all animate-fade-in-up ${
                 isWinner
-                  ? 'border-neon-yellow bg-neon-yellow/10 shadow-[0_0_20px_var(--color-neon-yellow)]'
+                  ? 'border-accent-yellow/50 bg-accent-yellow/5'
                   : isMe
-                    ? 'border-neon-cyan bg-neon-cyan/10'
+                    ? 'border-accent-cyan/50 bg-accent-cyan/5'
                     : 'border-border-default bg-bg-card'
               }`}
+              style={{ animationDelay: `${index * 150}ms` }}
             >
-              {/* Winner crown / rank */}
+              {/* Rank */}
               <div className="text-center w-10 shrink-0">
-                {isWinner ? (
-                  <div>
-                    <span className="text-2xl">{'\uD83D\uDC51'}</span>
-                  </div>
-                ) : (
-                  <span className="text-text-muted text-sm">#{rank}</span>
-                )}
+                <span className={`text-lg font-extrabold ${
+                  isWinner ? 'text-accent-yellow' : 'text-text-muted'
+                }`}>
+                  #{rank}
+                </span>
               </div>
 
-              {/* Name + winner label */}
+              {/* Name */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span
-                    className={`text-xs sm:text-sm truncate ${
-                      isWinner ? 'text-neon-yellow' : 'text-text-primary'
+                    className={`text-sm sm:text-base font-bold truncate ${
+                      isWinner ? 'text-accent-yellow' : 'text-text-primary'
                     }`}
                   >
                     {entry.name}
                   </span>
                   {isMe && (
-                    <span className="text-neon-cyan text-[8px] shrink-0">YOU</span>
+                    <span className="text-accent-cyan text-xs font-bold">YOU</span>
                   )}
                 </div>
                 {isWinner && (
-                  <p className="text-neon-yellow text-[8px] text-glow-yellow mt-1">
+                  <p className="text-accent-yellow text-xs font-bold mt-0.5">
                     WINNER
                   </p>
                 )}
@@ -99,11 +96,11 @@ export default function GameOver() {
 
               {/* Money */}
               <span
-                className={`text-sm sm:text-base font-bold shrink-0 ${
+                className={`text-base sm:text-lg font-extrabold shrink-0 ${
                   isWinner
-                    ? 'text-neon-yellow text-glow-yellow'
+                    ? 'text-accent-yellow'
                     : entry.money >= 0
-                      ? 'text-neon-green'
+                      ? 'text-success'
                       : 'text-error'
                 }`}
               >
@@ -115,16 +112,16 @@ export default function GameOver() {
       </div>
 
       {/* Action buttons */}
-      <div className="flex flex-col gap-3 w-full max-w-sm">
+      <div className="flex flex-col gap-3 w-full max-w-xs">
         <button
           onClick={handlePlayAgain}
-          className="pixel-btn pixel-btn-cyan w-full text-sm"
+          className="btn-primary w-full"
         >
           Play Again
         </button>
         <button
           onClick={handleLeave}
-          className="pixel-btn pixel-btn-magenta w-full text-sm"
+          className="btn-secondary w-full"
         >
           Leave Game
         </button>

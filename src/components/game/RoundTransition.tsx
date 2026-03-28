@@ -8,7 +8,6 @@ export default function RoundTransition() {
   const currentRound = useGameStore((s) => s.currentRound);
   const [visible, setVisible] = useState(false);
 
-  // Animate in on mount
   useEffect(() => {
     const timeout = setTimeout(() => setVisible(true), 100);
     return () => clearTimeout(timeout);
@@ -20,25 +19,22 @@ export default function RoundTransition() {
         className={`text-center transition-all duration-700 ${
           visible
             ? 'opacity-100 scale-100'
-            : 'opacity-0 scale-50'
+            : 'opacity-0 scale-75'
         }`}
       >
-        {/* Round number */}
-        <h1 className="text-4xl sm:text-6xl text-glow-cyan mb-6">
+        <h1 className="text-5xl sm:text-7xl font-extrabold text-accent-cyan mb-6 tracking-tight">
           ROUND {currentRound}
         </h1>
 
-        {/* Double values notice for round 2+ */}
         {currentRound >= 2 && (
           <div className="mb-8">
-            <p className="text-neon-yellow text-sm sm:text-base text-glow-yellow animate-pulse-glow">
+            <p className="text-accent-yellow text-lg sm:text-xl font-bold animate-pulse-glow">
               Values are DOUBLED!
             </p>
           </div>
         )}
       </div>
 
-      {/* Host dialogue */}
       <div className="mt-8 w-full max-w-md">
         <HostDialogue />
       </div>

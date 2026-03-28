@@ -15,8 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body className="min-h-full flex flex-col">
-        <div className="crt-overlay" />
-        {children}
+        <div className="halftone-bg" />
+        <div className="relative z-10 flex flex-col flex-1">
+          {children}
+        </div>
       </body>
     </html>
   );
