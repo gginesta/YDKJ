@@ -1,5 +1,6 @@
 import Database from 'better-sqlite3';
 import path from 'path';
+import { createHash } from 'crypto';
 
 let db: Database.Database | null = null;
 
@@ -128,6 +129,77 @@ export function getCachedQuestion(id: string): { question_data: string } | undef
   `);
   return stmt.get(id) as { question_data: string } | undefined;
 }
+
+// ============================================================
+// Player Group / Question Deduplication
+// ============================================================
+
+/**
+ * Get a hash for a group of player names (sorted, lowercased, joined).
+ */
+export function hashPlayerGroup(playerNames: string[]): string {
+  const normalized = playerNames.map((n) => n.toLowerCase().trim()).sort().join(',');
+  return createHash('sha256').update(normalized).digest('hex');
+}
+
+/**
+ * Record that a player group has seen specific question IDs.
+ * Appends to any existing seen list for this group.
+ */
+export function recordSeenQuestions(playerNamesHash: string, questionIds: string[]): void {
+  const database = getDb();
+  const existing = database.prepare(
+    `SELECT id, question_ids_seen FROM player_groups WHERE player_names_hash = ?`
+  ).get(playerNamesHash) as { id: number; question_ids_seen: string } | undefined;
+
+  if (existing) {
+    let seen: string[] = [];
+    try {
+      seen = JSON.parse(existing.question_ids_seen);
+    } catch {
+      seen = [];
+    }
+    const merged = Array.from(new Set([...seen, ...questionIds]));
+    database.prepare(
+      `UPDATE player_groups SET question_ids_seen = ?, last_played = CURRENT_TIMESTAMP WHERE id = ?`
+    ).run(JSON.stringify(merged), existing.id);
+  } else {
+    database.prepare(
+      `INSERT INTO player_groups (player_names_hash, question_ids_seen) VALUES (?, ?)`
+    ).run(playerNamesHash, JSON.stringify(questionIds));
+  }
+}
+
+/**
+ * Get all question IDs that a player group has already seen.
+ */
+export function getSeenQuestionIds(playerNamesHash: string): string[] {
+  const database = getDb();
+  const row = database.prepare(
+    `SELECT question_ids_seen FROM player_groups WHERE player_names_hash = ?`
+  ).get(playerNamesHash) as { question_ids_seen: string } | undefined;
+
+  if (!row) return [];
+
+  try {
+    const parsed = JSON.parse(row.question_ids_seen);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Reset the seen questions for a player group (when they've exhausted the pool).
+ */
+function resetSeenQuestions(playerNamesHash: string): void {
+  const database = getDb();
+  database.prepare(
+    `UPDATE player_groups SET question_ids_seen = '[]', last_played = CURRENT_TIMESTAMP WHERE player_names_hash = ?`
+  ).run(playerNamesHash);
+}
+
+export { resetSeenQuestions };
 
 /**
  * Close the database connection (for graceful shutdown).

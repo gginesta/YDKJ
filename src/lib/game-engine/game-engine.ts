@@ -3,7 +3,7 @@ import type { GameRoom, Player, MultipleChoiceQuestion } from '../../types/game'
 import type { ClientToServerEvents, ServerToClientEvents } from '../../types/socket';
 import { GameState } from '../../types/game';
 import { calculateScore, updateStreak, getStreakBonus, assignQuestionValues, getLeadingPlayer } from './scoring';
-import { saveGameResult } from '../db';
+import { saveGameResult, hashPlayerGroup, getSeenQuestionIds, recordSeenQuestions, resetSeenQuestions } from '../db';
 import seedQuestionsData from '../ai/seed-questions.json';
 
 type AppIO = SocketIOServer<ClientToServerEvents, ServerToClientEvents>;
@@ -141,9 +141,27 @@ export class GameEngine {
 
   private loadQuestions(): void {
     const seed = seedQuestionsData as SeedQuestion[];
+
+    // Deduplicate: filter out questions this player group has already seen
+    const playerNames = this.room.players.map((p) => p.name);
+    const groupHash = hashPlayerGroup(playerNames);
+    let seenIds = getSeenQuestionIds(groupHash);
+
+    let pool = seed.filter((q) => !seenIds.includes(q.id));
+
+    // If not enough unseen questions, reset and use full pool
+    if (pool.length < TOTAL_QUESTIONS) {
+      resetSeenQuestions(groupHash);
+      seenIds = [];
+      pool = [...seed];
+    }
+
     // Shuffle and pick TOTAL_QUESTIONS
-    const shuffled = [...seed].sort(() => Math.random() - 0.5);
+    const shuffled = pool.sort(() => Math.random() - 0.5);
     const selected = shuffled.slice(0, TOTAL_QUESTIONS);
+
+    // Record the selected questions as seen
+    recordSeenQuestions(groupHash, selected.map((q) => q.id));
 
     const round1Values = assignQuestionValues(1);
     const round2Values = assignQuestionValues(2);
