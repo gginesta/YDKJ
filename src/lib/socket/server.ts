@@ -16,6 +16,15 @@ export type AppSocket = SocketIOServer<ClientToServerEvents, ServerToClientEvent
 
 let io: AppSocket | null = null;
 
+/**
+ * Sanitize player name: trim, limit length, strip HTML tags.
+ */
+function sanitizePlayerName(name: unknown): string | null {
+  if (typeof name !== 'string') return null;
+  const cleaned = name.trim().replace(/<[^>]*>/g, '').slice(0, 16);
+  return cleaned.length > 0 ? cleaned : null;
+}
+
 // Active game engines, keyed by room code
 const activeGames = new Map<string, GameEngine>();
 
@@ -37,10 +46,15 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
     // ---- Create Room ----
     socket.on('create_room', ({ playerName }) => {
       try {
-        const { room, player } = createRoom(playerName, socket.id);
+        const sanitized = sanitizePlayerName(playerName);
+        if (!sanitized) {
+          socket.emit('error', { message: 'Invalid player name.' });
+          return;
+        }
+        const { room, player } = createRoom(sanitized, socket.id);
         socket.join(room.id);
         socket.emit('room_created', { room: toClientRoom(room), player });
-        console.log(`[Socket] Room ${room.id} created by ${playerName}`);
+        console.log(`[Socket] Room ${room.id} created by ${sanitized}`);
       } catch (err) {
         socket.emit('error', { message: (err as Error).message });
       }
@@ -49,11 +63,16 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
     // ---- Join Room ----
     socket.on('join_room', ({ roomCode, playerName }) => {
       try {
-        const { room, player } = joinRoom(roomCode, playerName, socket.id);
+        const sanitized = sanitizePlayerName(playerName);
+        if (!sanitized) {
+          socket.emit('error', { message: 'Invalid player name.' });
+          return;
+        }
+        const { room, player } = joinRoom(roomCode, sanitized, socket.id);
         socket.join(room.id);
         socket.emit('room_joined', { room: toClientRoom(room), player });
         socket.to(room.id).emit('player_joined', { player });
-        console.log(`[Socket] ${playerName} joined room ${room.id}`);
+        console.log(`[Socket] ${sanitized} joined room ${room.id}`);
       } catch (err) {
         socket.emit('error', { message: (err as Error).message });
       }
@@ -76,14 +95,21 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
     });
 
     // ---- Submit Answer ----
-    socket.on('submit_answer', ({ questionId, answerIndex, timestamp }) => {
+    socket.on('submit_answer', ({ questionId, answerIndex }) => {
       const result = getRoomBySocketId(socket.id);
       if (!result) return;
 
       const engine = activeGames.get(result.roomCode);
       if (!engine) return;
 
-      engine.submitAnswer(socket.id, questionId, answerIndex, timestamp);
+      // Validate answerIndex is a non-negative integer within bounds
+      if (typeof answerIndex !== 'number' || !Number.isInteger(answerIndex) || answerIndex < 0 || answerIndex > 3) {
+        socket.emit('error', { message: 'Invalid answer.' });
+        return;
+      }
+
+      // Use server timestamp to prevent client-side speed bonus manipulation
+      engine.submitAnswer(socket.id, questionId, answerIndex, Date.now());
     });
 
     // ---- Play Again ----

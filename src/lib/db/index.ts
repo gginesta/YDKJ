@@ -192,14 +192,12 @@ export function getSeenQuestionIds(playerNamesHash: string): string[] {
 /**
  * Reset the seen questions for a player group (when they've exhausted the pool).
  */
-function resetSeenQuestions(playerNamesHash: string): void {
+export function resetSeenQuestions(playerNamesHash: string): void {
   const database = getDb();
   database.prepare(
     `UPDATE player_groups SET question_ids_seen = '[]', last_played = CURRENT_TIMESTAMP WHERE player_names_hash = ?`
   ).run(playerNamesHash);
 }
-
-export { resetSeenQuestions };
 
 /**
  * Close the database connection (for graceful shutdown).

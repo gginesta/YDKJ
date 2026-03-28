@@ -165,7 +165,7 @@ export function useSocket() {
     socketRef.current?.emit('submit_answer', {
       questionId,
       answerIndex,
-      timestamp: Date.now(),
+      timestamp: 0, // Server uses its own timestamp for scoring fairness
     });
     useGameStore.getState().setMyAnswerIndex(answerIndex);
   }, []);

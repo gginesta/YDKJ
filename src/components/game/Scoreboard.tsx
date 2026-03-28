@@ -59,7 +59,7 @@ export default function Scoreboard() {
       <div className="text-center mb-8">
         <p className="text-text-muted text-xs uppercase tracking-wider mb-2">Scoreboard</p>
         <p className="text-accent-yellow text-sm font-bold">
-          Round {currentRound} of 2
+          Round {currentRound} of {Math.max(currentRound, 2)}
         </p>
       </div>
 

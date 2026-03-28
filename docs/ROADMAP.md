@@ -16,21 +16,21 @@
 
 ---
 
-## Phase 1: Foundation
+## Phase 1: Foundation ✅ COMPLETE
 
 **Goal:** Skeleton app running with real-time multiplayer connectivity.
 
 ### Deliverables
-- [ ] Next.js 14 project initialized with TypeScript
-- [ ] Tailwind CSS configured with pixel art theme basics
-- [ ] Socket.io server integrated with Next.js (custom server)
-- [ ] Room creation with 4-letter codes
-- [ ] Player join/leave flow
-- [ ] Lobby UI (mobile-first) showing connected players
-- [ ] Basic game state machine (lobby → playing → game over)
-- [ ] SQLite database setup with schema
-- [ ] Environment variable configuration (.env.example)
-- [ ] Development tooling (ESLint, Prettier)
+- [x] Next.js 14 project initialized with TypeScript
+- [x] Tailwind CSS configured with clean streaming-show theme
+- [x] Socket.io server integrated with Next.js (custom server)
+- [x] Room creation with 4-letter codes
+- [x] Player join/leave flow
+- [x] Lobby UI (mobile-first) showing connected players
+- [x] Basic game state machine (lobby → playing → game over)
+- [x] SQLite database setup with schema
+- [x] Environment variable configuration (.env.example)
+- [x] Development tooling (ESLint)
 
 ### Key Decisions
 - Custom Next.js server needed for Socket.io (can't use default serverless)
@@ -43,23 +43,23 @@
 
 ---
 
-## Phase 2: Core Game
+## Phase 2: Core Game ✅ ~90% COMPLETE
 
 **Goal:** Play a complete game of multiple choice trivia with scoring.
 
 ### Deliverables
-- [ ] Game state machine: full flow from lobby to game over
-- [ ] Multiple choice question display (mobile-optimized)
-- [ ] Answer submission with timing tracking
-- [ ] Server-side answer validation
-- [ ] Money-based scoring with speed bonuses
-- [ ] Score display with basic animations
-- [ ] Timer countdown UI (per question)
-- [ ] Round 1 → Round 2 transition (doubled values)
-- [ ] Game over screen with final standings
-- [ ] Hardcoded sample questions (for testing without AI)
-- [ ] Basic reconnection handling (player phone sleeps)
-- [ ] Play again flow
+- [x] Game state machine: full flow from lobby to game over
+- [x] Multiple choice question display (mobile-optimized)
+- [x] Answer submission with server-side timing
+- [x] Server-side answer validation
+- [x] Money-based scoring with speed bonuses
+- [x] Score display with animated counters
+- [x] Timer countdown UI (per question)
+- [x] Round 1 → Round 2 transition (doubled values)
+- [x] Game over screen with final standings
+- [x] 32 hardcoded sample questions with host scripts
+- [ ] Reconnection handling (player phone sleeps) — _partially scaffolded_
+- [x] Play again flow
 
 ### Key Decisions
 - Timer precision: server-authoritative timestamps to prevent cheating
@@ -258,23 +258,23 @@ Not scoped for initial release, but ideas for later:
 
 ## Milestones & Acceptance Criteria
 
-### M1: First Connection (End of Phase 1)
+### M1: First Connection (End of Phase 1) ✅ ACHIEVED
 **Demo:** Create a room on your laptop, join from your phone with a room code, see both players in the lobby.
-- [ ] Room code generation works and is displayed
-- [ ] 2+ players can join the same room from different devices
-- [ ] Player list updates in real-time when someone joins/leaves
-- [ ] "Start Game" button appears for the room creator
-- [ ] Mobile layout is usable (no horizontal scroll, readable text)
+- [x] Room code generation works and is displayed
+- [x] 2+ players can join the same room from different devices
+- [x] Player list updates in real-time when someone joins/leaves
+- [x] "Start Game" button appears for the room creator
+- [x] Mobile layout is usable (no horizontal scroll, readable text)
 
-### M2: First Game (End of Phase 2)
+### M2: First Game (End of Phase 2) ✅ ACHIEVED
 **Demo:** Play a full 10-question game with hardcoded questions and see final scores.
-- [ ] Game flows from lobby → round 1 (5 Qs) → round 2 (5 Qs) → game over
-- [ ] Answers are submitted and scored correctly (with speed bonus)
-- [ ] Timer counts down and auto-advances if nobody answers
-- [ ] Scores update after each question and are visible to all players
-- [ ] Round 2 values are doubled
-- [ ] Game over screen shows winner and final rankings
-- [ ] "Play Again" returns to lobby with same players
+- [x] Game flows from lobby → round 1 (5 Qs) → round 2 (5 Qs) → game over
+- [x] Answers are submitted and scored correctly (with speed bonus)
+- [x] Timer counts down and auto-advances if nobody answers
+- [x] Scores update after each question and are visible to all players
+- [x] Round 2 values are doubled
+- [x] Game over screen shows winner and final rankings
+- [x] "Play Again" returns to lobby with same players
 
 ### M3: The Host Lives (End of Phase 3)
 **Demo:** Play a game where the AI host generates unique questions and speaks them aloud.

@@ -2,108 +2,112 @@
 
 Granular tasks organized by phase. Each task is a single unit of work.
 
+**Last updated:** 2026-03-28 — Updated to reflect actual implementation progress.
+
 ---
 
-## Phase 1: Foundation
+## Phase 1: Foundation ✅ COMPLETE
 
 ### 1.1 Project Setup
-- [ ] Initialize Next.js 14 project with TypeScript (`npx create-next-app@latest`)
-- [ ] Configure `tsconfig.json` with strict mode and path aliases
-- [ ] Install and configure Tailwind CSS
-- [ ] Add ESLint + Prettier configuration
-- [ ] Create `.env.example` with all required variables
-- [ ] Create `.gitignore` (node_modules, .env, .next, *.db)
-- [ ] Set up folder structure (`src/app`, `src/components`, `src/lib`, `src/types`, `docs`)
+- [x] Initialize Next.js 14 project with TypeScript (`npx create-next-app@latest`)
+- [x] Configure `tsconfig.json` with strict mode and path aliases
+- [x] Install and configure Tailwind CSS
+- [x] Add ESLint configuration
+- [x] Create `.env.example` with all required variables
+- [x] Create `.gitignore` (node_modules, .env, .next, *.db)
+- [x] Set up folder structure (`src/app`, `src/components`, `src/lib`, `src/types`, `docs`)
 
 ### 1.2 Custom Server for Socket.io
-- [ ] Create `server.ts` — custom Node HTTP server wrapping Next.js
-- [ ] Install `socket.io` and `socket.io-client`
-- [ ] Attach Socket.io to the custom HTTP server
-- [ ] Configure CORS for local development
-- [ ] Update `package.json` scripts (`dev` uses custom server)
-- [ ] Verify WebSocket connection from browser to server
+- [x] Create `server.ts` — custom Node HTTP server wrapping Next.js
+- [x] Install `socket.io` and `socket.io-client`
+- [x] Attach Socket.io to the custom HTTP server
+- [x] Configure CORS for local development
+- [x] Update `package.json` scripts (`dev` uses custom server)
+- [x] Verify WebSocket connection from browser to server
 
 ### 1.3 Room System
-- [ ] Create `src/lib/game-engine/room-manager.ts`
-- [ ] Room code generator (4 uppercase letters, no ambiguous chars)
-- [ ] In-memory room store (`Map<string, GameRoom>`)
-- [ ] Create room endpoint / socket event
-- [ ] Join room by code (validate code exists, room not full, game not started)
-- [ ] Leave room / disconnect handling
-- [ ] Auto-cleanup rooms after 2 hours inactive
+- [x] Create `src/lib/game-engine/room-manager.ts`
+- [x] Room code generator (4 uppercase letters, no ambiguous chars)
+- [x] In-memory room store (`Map<string, GameRoom>`)
+- [x] Create room endpoint / socket event
+- [x] Join room by code (validate code exists, room not full, game not started)
+- [x] Leave room / disconnect handling
+- [x] Auto-cleanup rooms after 2 hours inactive
 
 ### 1.4 Lobby UI
-- [ ] Create landing page (`src/app/page.tsx`) — "Create Game" button
-- [ ] Create join page (`src/app/join/page.tsx`) — room code input
-- [ ] Create lobby view (`src/app/game/[roomId]/page.tsx`)
-- [ ] Display connected player list with names
-- [ ] "Start Game" button (visible to room creator only, requires 2+ players)
-- [ ] Mobile-first layout (full-width, large touch targets)
-- [ ] Socket.io client hook (`src/lib/socket/useSocket.ts`)
+- [x] Create landing page (`src/app/page.tsx`) — "Create Game" button
+- [x] Create join page (`src/app/join/page.tsx`) — room code input
+- [x] Create lobby view (`src/app/game/[roomId]/page.tsx`)
+- [x] Display connected player list with names
+- [x] "Start Game" button (visible to room creator only, requires 2+ players)
+- [x] Mobile-first layout (full-width, large touch targets)
+- [x] Socket.io client hook (`src/hooks/useSocket.ts`)
 
 ### 1.5 Database Setup
-- [ ] Install `better-sqlite3` and `@types/better-sqlite3`
-- [ ] Create `src/lib/db/schema.sql` (game_results, question_cache tables)
-- [ ] Create `src/lib/db/index.ts` — database initialization and connection
-- [ ] Auto-create tables on first run
-- [ ] Basic query helpers (insert game result, fetch recent results)
+- [x] Install `better-sqlite3` and `@types/better-sqlite3`
+- [x] Create `src/lib/db/index.ts` — database initialization and connection
+- [x] Auto-create tables on first run (game_results, question_cache, player_groups)
+- [x] Basic query helpers (insert game result, fetch recent results)
+- [x] Player group question deduplication (SHA256 hash, seen question tracking)
 
 ---
 
-## Phase 2: Core Game
+## Phase 2: Core Game ✅ MOSTLY COMPLETE
 
 ### 2.1 Game State Machine
-- [ ] Create `src/lib/game-engine/state-machine.ts`
-- [ ] Define all states as TypeScript enum
-- [ ] Implement state transition logic with validation
-- [ ] Timer management per state (auto-advance after duration)
-- [ ] Broadcast state changes to all players via Socket.io
-- [ ] Create `src/types/game.ts` — shared types for game state, questions, players
+- [x] Create `src/lib/game-engine/game-engine.ts`
+- [x] Define all states as TypeScript enum
+- [x] Implement state transition logic with validation
+- [x] Timer management per state (auto-advance after duration)
+- [x] Broadcast state changes to all players via Socket.io
+- [x] Create `src/types/game.ts` — shared types for game state, questions, players
 
 ### 2.2 Multiple Choice Questions (Hardcoded)
-- [ ] Create `src/lib/ai/seed-questions.json` — 30+ sample questions for testing
-- [ ] Question selection logic (pick 10, avoid repeats)
-- [ ] Assign values per round ($1k-$3k round 1, doubled round 2)
+- [x] Create `src/lib/ai/seed-questions.json` — 32 sample questions for testing
+- [x] Question selection logic (pick 10, avoid repeats via deduplication)
+- [x] Assign values per round ($1k-$3k round 1, doubled round 2)
 
 ### 2.3 Question Flow
-- [ ] Server sends question to clients (answers redacted during intro)
-- [ ] Server reveals answer options (timer starts)
-- [ ] Client answer submission (sends answer index + timestamp)
-- [ ] Server validates answer, calculates score with speed bonus
-- [ ] Server broadcasts results after all answered or timer expires
-- [ ] Track who has answered (show indicators, no answer reveal)
-- [ ] Handle timeout (no penalty, $0)
+- [x] Server sends question to clients (answers redacted during intro)
+- [x] Server reveals answer options (timer starts)
+- [x] Client answer submission (sends answer index)
+- [x] Server validates answer, calculates score with speed bonus
+- [x] Server broadcasts results after all answered or timer expires
+- [x] Track who has answered (show indicators, no answer reveal)
+- [x] Handle timeout (no penalty, $0)
+- [x] "Don't Be a Wimp" mode when nobody answers
 
 ### 2.4 Scoring System
-- [ ] Base score calculation per question type
-- [ ] Speed bonus formula: `baseValue * 0.5 * (timeRemaining / totalTime)`
-- [ ] Wrong answer penalty: -50% of base value
-- [ ] Streak tracking (consecutive correct answers)
-- [ ] Streak bonus at 5 correct: +$1,000
-- [ ] Round 2 value doubling
+- [x] Base score calculation per question type
+- [x] Speed bonus formula: `baseValue * 0.5 * (timeRemaining / totalTime)`
+- [x] Wrong answer penalty: -50% of base value
+- [x] Streak tracking (consecutive correct answers)
+- [x] Streak bonus at 5 correct: +$1,000
+- [x] Perfect game bonus (10 correct): +$5,000
+- [x] Round 2 value doubling
 
 ### 2.5 Game UI Components
-- [ ] Create `src/components/game/QuestionCard.tsx` — displays question + options
-- [ ] Create `src/components/game/Timer.tsx` — countdown bar
-- [ ] Create `src/components/game/Scoreboard.tsx` — player scores
-- [ ] Create `src/components/game/AnswerReveal.tsx` — correct/wrong feedback
-- [ ] Create `src/components/game/RoundTransition.tsx` — "Round 2! Values doubled!"
-- [ ] Create `src/components/game/GameOver.tsx` — final standings
+- [x] Create `src/components/game/QuestionCard.tsx` — displays question + options
+- [x] Create `src/components/game/Timer.tsx` — countdown bar
+- [x] Create `src/components/game/Scoreboard.tsx` — player scores with animated counters
+- [x] Create `src/components/game/RoundTransition.tsx` — "Round 2! Values doubled!"
+- [x] Create `src/components/game/GameOver.tsx` — final standings
+- [x] Create `src/components/game/GameStarting.tsx` — countdown with host intro
+- [x] Create `src/components/game/HostDialogue.tsx` — host text display
 
 ### 2.6 Reconnection
-- [ ] Detect player disconnect (socket close)
-- [ ] Mark player as disconnected (don't remove from game)
+- [ ] Detect player disconnect (socket close) — _partially done: markDisconnected exists but not used_
 - [ ] On reconnect: rejoin room, restore state, sync to current question
-- [ ] Timeout: if disconnected >60s during active game, auto-skip their answers
+- [ ] Timeout: if disconnected >30s during active game, remove from room
 
 ### 2.7 Play Again
-- [ ] Post-game: "Play Again" button returns to lobby with same players
-- [ ] Reset scores, keep player list
-- [ ] Save game result to SQLite
+- [x] Post-game: "Play Again" button returns to lobby with same players
+- [x] Reset scores, keep player list
+- [x] Save game result to SQLite
 
 ---
 
-## Phase 3: The Host
+## Phase 3: The Host — NOT STARTED
 
 ### 3.1 Claude API Integration
 - [ ] Install `@anthropic-ai/sdk`
@@ -169,7 +173,7 @@ Granular tasks organized by phase. Each task is a single unit of work.
 
 ---
 
-## Phase 4: Question Variety
+## Phase 4: Question Variety — NOT STARTED
 
 ### 4.1 DisOrDat
 - [ ] Create `src/components/questions/DisOrDat.tsx`
@@ -219,7 +223,7 @@ Granular tasks organized by phase. Each task is a single unit of work.
 
 ---
 
-## Phase 5: Power-Ups & Easter Eggs
+## Phase 5: Power-Ups & Easter Eggs — NOT STARTED
 
 ### 5.1 Power-Up Engine
 - [ ] Create `src/lib/game-engine/powerups.ts`
@@ -257,7 +261,7 @@ Granular tasks organized by phase. Each task is a single unit of work.
 
 ---
 
-## Phase 6: Audio & Visual Polish
+## Phase 6: Audio & Visual Polish — NOT STARTED
 
 ### 6.1 Pixel Art Theme
 - [ ] Install "Press Start 2P" font (Google Fonts)
@@ -326,7 +330,7 @@ Granular tasks organized by phase. Each task is a single unit of work.
 
 ---
 
-## Phase 7: Deployment & Testing
+## Phase 7: Deployment & Testing — NOT STARTED
 
 ### 7.1 Railway Deployment
 - [ ] Create `Dockerfile` (Node.js, build Next.js, run custom server)
@@ -342,7 +346,7 @@ Granular tasks organized by phase. Each task is a single unit of work.
 - [ ] Memory leak prevention (room/player cleanup on disconnect)
 - [ ] WebSocket connection limit per IP
 - [ ] Error logging to stdout (Railway captures this)
-- [ ] Graceful shutdown handling
+- [x] Graceful shutdown handling
 
 ### 7.3 Testing
 - [ ] Unit tests: game state machine transitions
@@ -394,25 +398,35 @@ Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4
 
 ## Task Count Summary
 
-| Phase | Tasks | Critical Path? |
-|-------|-------|----------------|
-| Phase 1: Foundation | 28 | Yes |
-| Phase 2: Core Game | 27 | Yes |
-| Phase 3: The Host | 30 | Yes |
-| Phase 4: Question Variety | 22 | Yes (Jack Attack only for MVP) |
-| Phase 5: Power-Ups & Easter Eggs | 24 | No — can ship without |
-| Phase 6: Audio & Visual Polish | 33 | No — can ship basic |
-| Phase 7: Deployment & Testing | 22 | Yes (deploy subset) |
-| **Total** | **186 tasks** | |
+| Phase | Tasks | Status |
+|-------|-------|--------|
+| Phase 1: Foundation | 28 | ✅ Complete |
+| Phase 2: Core Game | 27 | ✅ ~90% Complete (reconnection pending) |
+| Phase 3: The Host | 30 | ⬜ Not started |
+| Phase 4: Question Variety | 22 | ⬜ Not started |
+| Phase 5: Power-Ups & Easter Eggs | 24 | ⬜ Not started |
+| Phase 6: Audio & Visual Polish | 33 | ⬜ Not started |
+| Phase 7: Deployment & Testing | 22 | ⬜ 1 task done (graceful shutdown) |
+| **Total** | **186 tasks** | **~31% complete** |
 
 ## MVP Shortcut
 
-If you want to play with friends ASAP, here's the fastest path (~4-6 weeks):
+If you want to play with friends ASAP, here's the fastest path:
 
-1. **Phase 1** — Full (rooms, lobby, WebSocket)
-2. **Phase 2** — Full (multiple choice, scoring, game flow)
+1. **Phase 1** — ✅ Done
+2. **Phase 2** — ✅ Done (reconnection can be deferred)
 3. **Phase 3** — Core only (Claude questions + ElevenLabs voice, skip Open Trivia DB integration)
 4. **Phase 4** — Jack Attack only (skip DisOrDat, Gibberish, ThreeWay for now)
 5. **Phase 7** — Deploy only (skip tests, skip hardening)
 
 This gets you: **AI-hosted multiple choice + Jack Attack with voice, for 10 players, deployed.** Then layer in the remaining question types, power-ups, pixel art, and audio iteratively.
+
+## Known Bugs Fixed (2026-03-28)
+
+- ✅ Server now uses its own timestamp for speed bonus calculation (prevents client-side manipulation)
+- ✅ Answer index validated (must be 0-3 integer)
+- ✅ Player names sanitized (HTML stripped, length limited to 16 chars)
+- ✅ Graceful shutdown added (closes DB, stops cleanup interval)
+- ✅ Streak bonus now only counts current game answers
+- ✅ Scoreboard round count no longer hardcoded
+- ✅ `resetSeenQuestions` export cleaned up

@@ -1,5 +1,5 @@
 import type { Server as SocketIOServer } from 'socket.io';
-import type { GameRoom, Player, MultipleChoiceQuestion } from '../../types/game';
+import type { GameRoom, MultipleChoiceQuestion } from '../../types/game';
 import type { ClientToServerEvents, ServerToClientEvents } from '../../types/socket';
 import { GameState } from '../../types/game';
 import { calculateScore, updateStreak, getStreakBonus, assignQuestionValues, getLeadingPlayer } from './scoring';
@@ -333,8 +333,9 @@ export class GameEngine {
       player.money += moneyEarned;
       player.streak = updateStreak(player.streak, isCorrect);
 
-      // Streak bonus
-      const correctCount = player.answers.filter((a) => a.isCorrect).length + (isCorrect ? 1 : 0);
+      // Streak bonus — only count answers from current game (this.questions.length worth)
+      const currentGameAnswers = player.answers.slice(-(this.room.questionIndex));
+      const correctCount = currentGameAnswers.filter((a) => a.isCorrect).length + (isCorrect ? 1 : 0);
       const streakBonus = getStreakBonus(player.streak, correctCount);
       if (streakBonus > 0) {
         player.money += streakBonus;
