@@ -83,18 +83,19 @@ export class GameEngine {
     const staticIntro = this.getStartingScript();
     this.emit('game_starting', { hostScript: staticIntro });
 
-    // Load questions AND generate AI intro in parallel during GAME_STARTING phase
-    Promise.all([
-      this.loadQuestionsAsync(),
-      this.commentary.getGameIntro(this.room, staticIntro),
-    ]).then(([, aiIntro]) => {
+    // Always load seed questions immediately (instant, never fails)
+    this.loadSeedQuestions(this.room.players.map((p) => p.name));
+
+    // Try AI intro in background (non-blocking, best-effort)
+    this.commentary.getGameIntro(this.room, staticIntro).then((aiIntro) => {
       if (this.destroyed) return;
-      // If AI generated a different intro, send an update
       if (aiIntro !== staticIntro) {
         this.emit('game_starting', { hostScript: aiIntro });
       }
-      this.scheduleNext(DURATIONS.GAME_STARTING, () => this.startQuestionIntro());
-    });
+    }).catch(() => {});
+
+    // Start the game after the countdown — questions are already loaded
+    this.scheduleNext(DURATIONS.GAME_STARTING, () => this.startQuestionIntro());
   }
 
   /**

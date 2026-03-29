@@ -39,7 +39,7 @@ export async function generateText(
   try {
     const response = await api.messages.create({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 1024,
+      max_tokens: 256,
       system: systemPrompt,
       messages: [{ role: 'user', content: userMessage }],
     });
