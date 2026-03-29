@@ -5,6 +5,7 @@ import { GameState } from '../../types/game';
 import { calculateScore, updateStreak, getStreakBonus, assignQuestionValues, getLeadingPlayer } from './scoring';
 import { saveGameResult, hashPlayerGroup, getSeenQuestionIds, recordSeenQuestions, resetSeenQuestions } from '../db';
 import { generateGameQuestions } from '../ai/question-pipeline';
+import { HostCommentaryService } from '../ai/host-commentary-service';
 import seedQuestionsData from '../ai/seed-questions.json';
 
 type AppIO = SocketIOServer<ClientToServerEvents, ServerToClientEvents>;
@@ -54,11 +55,13 @@ export class GameEngine {
   private questionTimeLimit: number = DURATIONS.QUESTION_ACTIVE;
   private destroyed: boolean = false;
   private wimpMode: boolean = false;
+  private commentary: HostCommentaryService;
 
   constructor(io: AppIO, room: GameRoom, roomCode: string) {
     this.io = io;
     this.room = room;
     this.roomCode = roomCode;
+    this.commentary = new HostCommentaryService();
   }
 
   /**
@@ -77,15 +80,20 @@ export class GameEngine {
       player.answers = [];
     }
 
-    this.emit('game_starting', {
-      hostScript: this.getStartingScript(),
-    });
+    const staticIntro = this.getStartingScript();
+    this.emit('game_starting', { hostScript: staticIntro });
 
-    // Load questions (try AI, fall back to seeds) during the GAME_STARTING phase
-    this.loadQuestionsAsync().then(() => {
-      if (!this.destroyed) {
-        this.scheduleNext(DURATIONS.GAME_STARTING, () => this.startQuestionIntro());
+    // Load questions AND generate AI intro in parallel during GAME_STARTING phase
+    Promise.all([
+      this.loadQuestionsAsync(),
+      this.commentary.getGameIntro(this.room, staticIntro),
+    ]).then(([, aiIntro]) => {
+      if (this.destroyed) return;
+      // If AI generated a different intro, send an update
+      if (aiIntro !== staticIntro) {
+        this.emit('game_starting', { hostScript: aiIntro });
       }
+      this.scheduleNext(DURATIONS.GAME_STARTING, () => this.startQuestionIntro());
     });
   }
 
@@ -132,6 +140,7 @@ export class GameEngine {
     this.room.questions = [];
     this.room.startedAt = undefined;
     this.currentAnswers.clear();
+    this.commentary.reset();
 
     for (const player of this.room.players) {
       player.money = 0;
@@ -218,7 +227,7 @@ export class GameEngine {
     this.room.questions = this.questions;
   }
 
-  private startQuestionIntro(): void {
+  private async startQuestionIntro(): Promise<void> {
     if (this.destroyed) return;
 
     const q = this.questions[this.room.questionIndex];
@@ -230,6 +239,11 @@ export class GameEngine {
     this.room.state = GameState.QUESTION_INTRO;
     this.currentAnswers.clear();
     this.wimpMode = false;
+
+    // Get AI host intro (races against timeout, falls back to static)
+    const hostScript = await this.commentary.getQuestionIntro(this.room, q, q.hostIntro);
+
+    if (this.destroyed) return;
 
     // Send question WITHOUT answers (redacted)
     this.emit('question_intro', {
@@ -243,7 +257,7 @@ export class GameEngine {
         totalQuestions: TOTAL_QUESTIONS,
         round: this.room.round,
       },
-      hostScript: q.hostIntro,
+      hostScript,
     });
 
     this.scheduleNext(DURATIONS.QUESTION_INTRO, () => this.startQuestionActive());
@@ -324,7 +338,7 @@ export class GameEngine {
     this.scheduleNext(DURATIONS.WIMP_TIMER, () => this.revealAnswer());
   }
 
-  private revealAnswer(): void {
+  private async revealAnswer(): Promise<void> {
     if (this.destroyed) return;
 
     const q = this.questions[this.room.questionIndex];
@@ -390,18 +404,23 @@ export class GameEngine {
       });
     }
 
-    // Build host script for reveal
+    // Build static fallback for reveal
     const correctPlayers = playerResults.filter((r) => r.isCorrect);
     const wrongPlayers = playerResults.filter((r) => !r.isCorrect && r.selectedIndex !== undefined);
-    let hostScript: string;
+    let staticScript: string;
 
     if (correctPlayers.length === 0) {
-      hostScript = q.hostTimeout;
+      staticScript = q.hostTimeout;
     } else if (wrongPlayers.length === 0) {
-      hostScript = q.hostCorrect + " Everyone got it!";
+      staticScript = q.hostCorrect + " Everyone got it!";
     } else {
-      hostScript = correctPlayers.length > wrongPlayers.length ? q.hostCorrect : q.hostWrong;
+      staticScript = correctPlayers.length > wrongPlayers.length ? q.hostCorrect : q.hostWrong;
     }
+
+    // Get AI commentary (races against timeout, falls back to static)
+    const hostScript = await this.commentary.getQuestionReveal(this.room, q, playerResults, staticScript);
+
+    if (this.destroyed) return;
 
     this.emit('question_reveal', {
       correctAnswer: q.correctIndex,
@@ -426,7 +445,7 @@ export class GameEngine {
     this.scheduleNext(DURATIONS.SCORES_UPDATE, () => this.advanceToNextQuestion());
   }
 
-  private advanceToNextQuestion(): void {
+  private async advanceToNextQuestion(): Promise<void> {
     if (this.destroyed) return;
 
     this.room.questionIndex++;
@@ -436,9 +455,14 @@ export class GameEngine {
       this.room.round = 2;
       this.room.state = GameState.ROUND_TRANSITION;
 
+      const staticScript = "Round 2! All values are DOUBLED! Things are about to get serious.";
+      const hostScript = await this.commentary.getRoundTransition(this.room, staticScript);
+
+      if (this.destroyed) return;
+
       this.emit('round_transition', {
         round: 2,
-        hostScript: "Round 2! All values are DOUBLED! Things are about to get serious.",
+        hostScript,
       });
 
       this.scheduleNext(DURATIONS.ROUND_TRANSITION, () => this.startQuestionIntro());
@@ -455,7 +479,7 @@ export class GameEngine {
     this.startQuestionIntro();
   }
 
-  private endGame(): void {
+  private async endGame(): Promise<void> {
     if (this.destroyed) return;
 
     this.room.state = GameState.GAME_OVER;
@@ -467,17 +491,23 @@ export class GameEngine {
     const winner = finalScores[0];
     const loser = finalScores[finalScores.length - 1];
 
-    let hostScript = `And that's the game! `;
+    // Build static fallback
+    let staticScript = `And that's the game! `;
     if (winner && loser && finalScores.length > 1) {
-      hostScript += `${winner.name} takes it home with $${winner.money.toLocaleString()}! `;
+      staticScript += `${winner.name} takes it home with $${winner.money.toLocaleString()}! `;
       if (loser.money < 0) {
-        hostScript += `And ${loser.name}... you owe us $${Math.abs(loser.money).toLocaleString()}. We accept cash and tears.`;
+        staticScript += `And ${loser.name}... you owe us $${Math.abs(loser.money).toLocaleString()}. We accept cash and tears.`;
       } else {
-        hostScript += `Better luck next time, ${loser.name}.`;
+        staticScript += `Better luck next time, ${loser.name}.`;
       }
     } else if (winner) {
-      hostScript += `${winner.name} wins with $${winner.money.toLocaleString()}!`;
+      staticScript += `${winner.name} wins with $${winner.money.toLocaleString()}!`;
     }
+
+    // Get AI outro (15s phase — plenty of time)
+    const hostScript = await this.commentary.getGameOutro(this.room, staticScript);
+
+    if (this.destroyed) return;
 
     this.emit('game_over', {
       finalScores,
