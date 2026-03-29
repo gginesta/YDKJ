@@ -4,8 +4,13 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "Oxford University is older than which of these?",
-    "choices": ["The English language", "The Aztec Empire", "The compass", "Christianity"],
-    "correctIndex": 1,
+    "choices": [
+      "The English language",
+      "Christianity",
+      "The compass",
+      "The Aztec Empire"
+    ],
+    "correctIndex": 3,
     "hostIntro": "Here's one that's going to make you question everything you learned in history class.",
     "hostCorrect": "The Aztec Empire! Oxford was teaching since 1096. The Aztecs didn't show up until 1325. Let that sink in.",
     "hostWrong": "Nope! Oxford has been making people feel inadequate since 1096. The Aztecs? 1325. Oxford is ANCIENT.",
@@ -16,7 +21,12 @@
     "type": "multiple_choice",
     "category": "Animals",
     "prompt": "Which of these is a REAL animal that actually exists in nature?",
-    "choices": ["The Sparklemuffin Peacock Spider", "The Candycane Lobster", "The Bubblegum Gecko", "The Marshmallow Crab"],
+    "choices": [
+      "The Sparklemuffin Peacock Spider",
+      "The Candycane Lobster",
+      "The Bubblegum Gecko",
+      "The Marshmallow Crab"
+    ],
     "correctIndex": 0,
     "hostIntro": "Nature is weird. Like, REALLY weird. One of these ridiculous-sounding creatures is completely real.",
     "hostCorrect": "The Sparklemuffin Peacock Spider! An Australian spider that looks like a tiny disco ball. Of course it's Australian.",
@@ -28,7 +38,12 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "If Cleopatra had a time machine and traveled forward the same number of years she lived after the Great Pyramid was built, she'd be closest to what era?",
-    "choices": ["The Roman Empire's peak", "The Moon Landing", "The invention of the iPhone", "Right about now"],
+    "choices": [
+      "The Roman Empire's peak",
+      "The Moon Landing",
+      "The invention of the iPhone",
+      "Right about now"
+    ],
     "correctIndex": 2,
     "hostIntro": "Time is a flat circle. Or at least it's going to feel that way after this question.",
     "hostCorrect": "The iPhone era! Cleopatra lived closer to the iPhone than to the building of the Great Pyramid. History is broken.",
@@ -40,7 +55,12 @@
     "type": "multiple_choice",
     "category": "Food & Drink",
     "prompt": "Which of these fruits was NOT named after the thing it resembles, but the other way around — the thing was named after the fruit?",
-    "choices": ["Kiwi fruit", "Starfruit", "Orange", "Coconut"],
+    "choices": [
+      "Kiwi fruit",
+      "Starfruit",
+      "Orange",
+      "Coconut"
+    ],
     "correctIndex": 2,
     "hostIntro": "A chicken-or-the-egg situation, but fruitier.",
     "hostCorrect": "Orange! The color was named after the fruit, not the other way around. Before oranges arrived in Europe, English speakers just called that color 'red-yellow.'",
@@ -52,7 +72,12 @@
     "type": "multiple_choice",
     "category": "Geography",
     "prompt": "If you dug a hole straight through the center of the Earth starting from the United States, where would you come out?",
-    "choices": ["China", "Australia", "The Indian Ocean", "Somewhere in Russia"],
+    "choices": [
+      "China",
+      "Australia",
+      "The Indian Ocean",
+      "Somewhere in Russia"
+    ],
     "correctIndex": 2,
     "hostIntro": "Every kid has tried to dig to China. Every kid was wrong. Let's find out why.",
     "hostCorrect": "The Indian Ocean! Not China, not Australia. You'd drown. The 'dig to China' thing is a complete lie your parents told you.",
@@ -64,7 +89,12 @@
     "type": "multiple_choice",
     "category": "Music",
     "prompt": "The song 'Happy Birthday to You' was under copyright until 2016, and the company claiming ownership collected roughly how much per year in licensing fees?",
-    "choices": ["About $500", "About $50,000", "About $2 million", "About $50 million"],
+    "choices": [
+      "About $500",
+      "About $50,000",
+      "About $2 million",
+      "About $50 million"
+    ],
     "correctIndex": 2,
     "hostIntro": "You've sung this song at every birthday party. Someone was getting paid every single time.",
     "hostCorrect": "About $2 million a YEAR! For a song everyone assumed was free. Warner Music was living the dream until a judge shut it down in 2016.",
@@ -76,7 +106,12 @@
     "type": "multiple_choice",
     "category": "Language",
     "prompt": "All of these English words came from Japanese EXCEPT which one?",
-    "choices": ["Tycoon", "Tsunami", "Ketchup", "Skosh"],
+    "choices": [
+      "Tycoon",
+      "Tsunami",
+      "Ketchup",
+      "Skosh"
+    ],
     "correctIndex": 2,
     "hostIntro": "English is basically a language that mugs other languages in dark alleys. Let's see what it stole from Japanese.",
     "hostCorrect": "Ketchup! It comes from a Chinese dialect word 'kê-tsiap.' Tycoon, tsunami, and skosh are all Japanese. Yes, 'skosh' — from 'sukoshi' meaning 'a little.'",
@@ -88,7 +123,12 @@
     "type": "multiple_choice",
     "category": "Pop Culture",
     "prompt": "If a McDonald's Big Mac costs $5.69 in the US, how much does the same Big Mac cost in Switzerland, according to The Economist's Big Mac Index?",
-    "choices": ["About $4.50", "About $5.70", "About $8.20", "About $12.00"],
+    "choices": [
+      "About $4.50",
+      "About $5.70",
+      "About $8.20",
+      "About $12.00"
+    ],
     "correctIndex": 2,
     "hostIntro": "Economists literally use burger prices to measure global currencies. This is real economics.",
     "hostCorrect": "About $8.20! Switzerland is absurdly expensive. A combo meal there costs more than a nice dinner in most countries.",
@@ -100,7 +140,12 @@
     "type": "multiple_choice",
     "category": "Technology",
     "prompt": "Nintendo, the company that makes Mario and Zelda, was founded in which year?",
-    "choices": ["1889", "1945", "1968", "1981"],
+    "choices": [
+      "1889",
+      "1945",
+      "1968",
+      "1981"
+    ],
     "correctIndex": 0,
     "hostIntro": "You think you know Nintendo? You don't know Nintendo.",
     "hostCorrect": "1889! Nintendo was founded in 1889 making handmade playing cards. They've been in the game — literally — for over 130 years.",
@@ -112,7 +157,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "If you could fold a standard piece of paper in half 42 times, how thick would it be?",
-    "choices": ["About the height of a skyscraper", "About the height of Mount Everest", "About the distance to the Moon", "About the distance to Mars"],
+    "choices": [
+      "About the height of a skyscraper",
+      "About the height of Mount Everest",
+      "About the distance to the Moon",
+      "About the distance to Mars"
+    ],
     "correctIndex": 2,
     "hostIntro": "Math is about to ruin your concept of reality. Brace yourself.",
     "hostCorrect": "The Moon! Exponential growth is terrifying. Each fold doubles the thickness. By fold 42, you've got about 440,000 kilometers. That's the Moon.",
@@ -124,7 +174,12 @@
     "type": "multiple_choice",
     "category": "Movies",
     "prompt": "The movie 'Titanic' cost more to make than the actual Titanic cost to build. How much more, adjusted for inflation?",
-    "choices": ["About the same", "The movie cost about 50% more", "The ship actually cost more", "The movie cost about double"],
+    "choices": [
+      "About the same",
+      "The movie cost about 50% more",
+      "The ship actually cost more",
+      "The movie cost about double"
+    ],
     "correctIndex": 0,
     "hostIntro": "Hollywood accounting meets maritime history. This one's a doozy.",
     "hostCorrect": "About the same! The Titanic cost $7.5 million in 1912 (roughly $200 million today). The film cost $200 million. James Cameron essentially rebuilt the thing.",
@@ -136,7 +191,12 @@
     "type": "multiple_choice",
     "category": "Biology",
     "prompt": "Honey never spoils. Archaeologists have found edible honey in Egyptian tombs that was how old?",
-    "choices": ["About 500 years old", "About 1,000 years old", "About 3,000 years old", "About 5,000 years old"],
+    "choices": [
+      "About 500 years old",
+      "About 1,000 years old",
+      "About 3,000 years old",
+      "About 5,000 years old"
+    ],
     "correctIndex": 2,
     "hostIntro": "Check the expiration date on this one. Oh wait — there isn't one.",
     "hostCorrect": "3,000 years! Honey from Egyptian tombs, still perfectly edible. Your leftovers can't survive a week but honey is apparently immortal.",
@@ -148,7 +208,12 @@
     "type": "multiple_choice",
     "category": "Sports",
     "prompt": "Which sport was originally called 'Mintonette' when it was invented in 1895?",
-    "choices": ["Basketball", "Badminton", "Table Tennis", "Volleyball"],
+    "choices": [
+      "Basketball",
+      "Badminton",
+      "Table Tennis",
+      "Volleyball"
+    ],
     "correctIndex": 3,
     "hostIntro": "Some sports had terrible names before they got famous. This one dodged a bullet.",
     "hostCorrect": "Volleyball! Originally 'Mintonette.' Thankfully someone watched people volleying a ball over a net and said 'I have a better name.'",
@@ -160,7 +225,12 @@
     "type": "multiple_choice",
     "category": "Psychology",
     "prompt": "The 'IKEA Effect' is a real cognitive bias. What does it describe?",
-    "choices": ["Getting lost in large stores", "Overvaluing things you built yourself", "Buying things you don't need because they're cheap", "Feeling accomplished after following confusing instructions"],
+    "choices": [
+      "Getting lost in large stores",
+      "Overvaluing things you built yourself",
+      "Buying things you don't need because they're cheap",
+      "Feeling accomplished after following confusing instructions"
+    ],
     "correctIndex": 1,
     "hostIntro": "Psychologists named a cognitive bias after a furniture store. That's either brilliant or deeply depressing.",
     "hostCorrect": "Overvaluing things you built yourself! You think that wobbly bookshelf is priceless because YOU built it. Psychologists see right through you.",
@@ -172,7 +242,12 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "Which of these was invented first?",
-    "choices": ["The fax machine", "The telephone", "The light bulb", "The car"],
+    "choices": [
+      "The fax machine",
+      "The telephone",
+      "The light bulb",
+      "The car"
+    ],
     "correctIndex": 0,
     "hostIntro": "I'm about to blow your mind with the order things were actually invented. Ready? You're not ready.",
     "hostCorrect": "The fax machine! Invented in 1843. The telephone didn't come until 1876. The fax predates the phone by over 30 years. Technology is chaos.",
@@ -184,7 +259,12 @@
     "type": "multiple_choice",
     "category": "Art",
     "prompt": "The Mona Lisa has no eyebrows. Why?",
-    "choices": ["Leonardo da Vinci never finished the painting", "It was fashionable to shave them off in Renaissance Italy", "They faded over centuries of restoration", "She was painted during an illness that caused hair loss"],
+    "choices": [
+      "Leonardo da Vinci never finished the painting",
+      "It was fashionable to shave them off in Renaissance Italy",
+      "They faded over centuries of restoration",
+      "She was painted during an illness that caused hair loss"
+    ],
     "correctIndex": 2,
     "hostIntro": "Look at the Mona Lisa closely. Notice anything missing from her face? Besides the smile sometimes.",
     "hostCorrect": "They faded! High-resolution scans show Leonardo originally painted eyebrows, but centuries of cleaning and restoration wore them away.",
@@ -196,7 +276,12 @@
     "type": "multiple_choice",
     "category": "Space",
     "prompt": "If the Sun were the size of a typical front door, how big would Earth be?",
-    "choices": ["A basketball", "A golf ball", "A nickel", "A pinhead"],
+    "choices": [
+      "A basketball",
+      "A golf ball",
+      "A nickel",
+      "A pinhead"
+    ],
     "correctIndex": 2,
     "hostIntro": "Let's talk about how insignificant we all are. Astronomically speaking.",
     "hostCorrect": "A nickel! The Sun is THAT much bigger than Earth. We're basically a coin orbiting a door. Feel small yet?",
@@ -208,8 +293,13 @@
     "type": "multiple_choice",
     "category": "Literature",
     "prompt": "Dr. Seuss wrote 'Green Eggs and Ham' on a bet. What was the bet?",
-    "choices": ["That he couldn't write a bestseller in one weekend", "That he couldn't write a book using only 50 different words", "That he couldn't write a book without using the letter 'E'", "That he couldn't write a book a 3-year-old could read aloud"],
-    "correctIndex": 1,
+    "choices": [
+      "That he couldn't write a bestseller in one weekend",
+      "That he couldn't write a book without using the letter 'E'",
+      "That he couldn't write a book using only 50 different words",
+      "That he couldn't write a book a 3-year-old could read aloud"
+    ],
+    "correctIndex": 2,
     "hostIntro": "One of the most beloved children's books ever written exists because of a wager. Literature is wild.",
     "hostCorrect": "50 words! His publisher bet him he couldn't write a book with only 50 unique words. Dr. Seuss won that bet and created a classic.",
     "hostWrong": "50 different words. That's it. Count them — the entire book uses exactly 50 unique words. And it's a masterpiece.",
@@ -220,8 +310,13 @@
     "type": "multiple_choice",
     "category": "Business",
     "prompt": "What was Amazon's original name before Jeff Bezos changed it?",
-    "choices": ["Booktopia", "Relentless.com", "EverythingStore", "Browse.com"],
-    "correctIndex": 1,
+    "choices": [
+      "Relentless.com",
+      "Booktopia",
+      "EverythingStore",
+      "Browse.com"
+    ],
+    "correctIndex": 0,
     "hostIntro": "The biggest company in the world almost had a very different — and slightly terrifying — name.",
     "hostCorrect": "Relentless.com! And if you type relentless.com into your browser today, it STILL redirects to Amazon. Bezos kept the domain.",
     "hostWrong": "Relentless.com! Try it — it still redirects to Amazon.com. Bezos is nothing if not... well, relentless.",
@@ -232,8 +327,13 @@
     "type": "multiple_choice",
     "category": "Geography",
     "prompt": "There's a town in Norway called Hell. What happens there every winter?",
-    "choices": ["It hosts a heavy metal festival", "It freezes over", "The sun doesn't rise for 6 weeks", "Absolutely nothing — it has a population of 4"],
-    "correctIndex": 1,
+    "choices": [
+      "It freezes over",
+      "It hosts a heavy metal festival",
+      "The sun doesn't rise for 6 weeks",
+      "Absolutely nothing — it has a population of 4"
+    ],
+    "correctIndex": 0,
     "hostIntro": "You know that expression 'when Hell freezes over'? Well...",
     "hostCorrect": "It freezes over! Hell, Norway freezes every winter. So next time someone says 'when Hell freezes over,' the answer is 'every January.'",
     "hostWrong": "It freezes! Hell literally freezes over every year. The expression is useless now. You're welcome.",
@@ -244,7 +344,12 @@
     "type": "multiple_choice",
     "category": "Medicine",
     "prompt": "Heroin was once sold as a cough suppressant by which major pharmaceutical company?",
-    "choices": ["Pfizer", "Johnson & Johnson", "Bayer", "Merck"],
+    "choices": [
+      "Pfizer",
+      "Johnson & Johnson",
+      "Bayer",
+      "Merck"
+    ],
     "correctIndex": 2,
     "hostIntro": "Pharmaceutical history is absolutely unhinged. You've been warned.",
     "hostCorrect": "Bayer! The aspirin company. They marketed heroin as a 'non-addictive' cough remedy in 1898. Spoiler: it was addictive.",
@@ -256,7 +361,12 @@
     "type": "multiple_choice",
     "category": "Animals",
     "prompt": "A group of flamingos is called a 'flamboyance.' What is a group of pugs called?",
-    "choices": ["A grumble", "A puddle", "A snort", "A wobble"],
+    "choices": [
+      "A grumble",
+      "A puddle",
+      "A snort",
+      "A wobble"
+    ],
     "correctIndex": 0,
     "hostIntro": "Collective nouns for animals were clearly invented by someone having way too much fun.",
     "hostCorrect": "A grumble! A group of pugs is a grumble. And honestly, have you ever seen a group of pugs? They DO look grumbly.",
@@ -268,7 +378,12 @@
     "type": "multiple_choice",
     "category": "Law",
     "prompt": "Which of these is a REAL law that is still technically on the books somewhere in the United States?",
-    "choices": ["It's illegal to collect rainwater in Colorado without a permit", "It's illegal to own more than 6 dildos in Texas", "It's illegal to sing off-key in North Carolina", "All of the above"],
+    "choices": [
+      "It's illegal to collect rainwater in Colorado without a permit",
+      "It's illegal to own more than 6 dildos in Texas",
+      "It's illegal to sing off-key in North Carolina",
+      "All of the above"
+    ],
     "correctIndex": 3,
     "hostIntro": "American laws are... creative. ALL of these sound fake. But are they?",
     "hostCorrect": "ALL of them! Every single one is technically real. Colorado rain, Texas dildos, North Carolina singing. America is a wild place.",
@@ -280,8 +395,13 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "What does a 'jiffy' actually measure?",
-    "choices": ["1/100th of a second", "The time it takes light to travel one centimeter", "The snap of a finger", "Nothing — it's not a real unit"],
-    "correctIndex": 1,
+    "choices": [
+      "1/100th of a second",
+      "Nothing — it's not a real unit",
+      "The snap of a finger",
+      "The time it takes light to travel one centimeter"
+    ],
+    "correctIndex": 3,
     "hostIntro": "You say 'I'll be there in a jiffy' all the time. But do you know what you're actually promising?",
     "hostCorrect": "The time light travels one centimeter! About 33.3 picoseconds. So when you say 'I'll be there in a jiffy,' you're lying. You won't.",
     "hostWrong": "It's a real physics unit — the time light takes to travel one centimeter. About 33 picoseconds. You are never anywhere in a jiffy.",
@@ -292,8 +412,13 @@
     "type": "multiple_choice",
     "category": "Movies",
     "prompt": "In the original 'Wizard of Oz,' what was used to create the snow falling on Dorothy in the poppy field?",
-    "choices": ["Shaved coconut", "Chrysotile asbestos", "Powdered sugar", "Crushed mothballs"],
-    "correctIndex": 1,
+    "choices": [
+      "Shaved coconut",
+      "Crushed mothballs",
+      "Powdered sugar",
+      "Chrysotile asbestos"
+    ],
+    "correctIndex": 3,
     "hostIntro": "Classic Hollywood was beautiful. Also deeply unsafe. This is about the unsafe part.",
     "hostCorrect": "Asbestos! They dumped 100% pure chrysotile asbestos on Judy Garland. 1939 filmmaking was basically a health violation with cameras.",
     "hostWrong": "Asbestos! Real, actual asbestos. Falling on real, actual actors. Old Hollywood didn't believe in safety.",
@@ -304,7 +429,12 @@
     "type": "multiple_choice",
     "category": "Math",
     "prompt": "In a room of just 23 people, what are the odds that two of them share a birthday?",
-    "choices": ["About 6%", "About 23%", "About 50%", "About 75%"],
+    "choices": [
+      "About 6%",
+      "About 23%",
+      "About 50%",
+      "About 75%"
+    ],
     "correctIndex": 2,
     "hostIntro": "Math is about to make you feel dumb. Don't worry, it does that to everyone.",
     "hostCorrect": "About 50%! It's called the Birthday Paradox. With just 23 people, there's a coin-flip chance two share a birthday. With 70 people it's 99.9%.",
@@ -316,7 +446,12 @@
     "type": "multiple_choice",
     "category": "Food & Drink",
     "prompt": "Which of these popular foods was accidentally invented?",
-    "choices": ["Potato chips — made out of spite by an angry chef", "Chocolate chip cookies — when chocolate didn't melt as expected", "Popsicles — left outside by an 11-year-old kid overnight", "All of the above"],
+    "choices": [
+      "Potato chips — made out of spite by an angry chef",
+      "Chocolate chip cookies — when chocolate didn't melt as expected",
+      "Popsicles — left outside by an 11-year-old kid overnight",
+      "All of the above"
+    ],
     "correctIndex": 3,
     "hostIntro": "Some of the best foods exist purely because someone messed up. Thank goodness for failure.",
     "hostCorrect": "All of them! Chips were spite-food, cookies were a melting mistake, and popsicles were made by a literal child. Accidents run the food industry.",
@@ -328,7 +463,12 @@
     "type": "multiple_choice",
     "category": "Mythology",
     "prompt": "In Norse mythology, the world is held together by a giant tree called Yggdrasil. What kind of tree is it?",
-    "choices": ["An oak", "An ash", "A yew", "A birch"],
+    "choices": [
+      "An oak",
+      "An ash",
+      "A yew",
+      "A birch"
+    ],
     "correctIndex": 1,
     "hostIntro": "Norse mythology: where everything is epic, dramatic, and involves a really big tree.",
     "hostCorrect": "An ash tree! Yggdrasil, the World Tree, is an immense ash tree. It connects nine worlds. Your houseplant could never.",
@@ -340,7 +480,12 @@
     "type": "multiple_choice",
     "category": "Technology",
     "prompt": "The first computer programmer in history was:",
-    "choices": ["Alan Turing", "Charles Babbage", "Ada Lovelace", "Nikola Tesla"],
+    "choices": [
+      "Alan Turing",
+      "Charles Babbage",
+      "Ada Lovelace",
+      "Nikola Tesla"
+    ],
     "correctIndex": 2,
     "hostIntro": "Before Silicon Valley bros, before Steve Jobs, before even electricity was common — someone wrote the first program.",
     "hostCorrect": "Ada Lovelace! In the 1840s, she wrote algorithms for Charles Babbage's Analytical Engine. A woman invented programming. Deal with it.",
@@ -352,7 +497,12 @@
     "type": "multiple_choice",
     "category": "World Records",
     "prompt": "The world record for the longest hiccupping spree belongs to Charles Osborne. How long did his hiccups last?",
-    "choices": ["3 months", "2 years", "28 years", "68 years"],
+    "choices": [
+      "3 months",
+      "2 years",
+      "28 years",
+      "68 years"
+    ],
     "correctIndex": 3,
     "hostIntro": "You think YOUR hiccups are bad? You have NO idea.",
     "hostCorrect": "68 YEARS! From 1922 to 1990. Charles Osborne hiccupped approximately 430 million times. He lived to 97. With hiccups.",
@@ -364,7 +514,12 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "During WWII, the US military tried to train what animal to guide bombs to their targets?",
-    "choices": ["Dogs", "Pigeons", "Dolphins", "Cats"],
+    "choices": [
+      "Dogs",
+      "Pigeons",
+      "Dolphins",
+      "Cats"
+    ],
     "correctIndex": 1,
     "hostIntro": "The military has had some... creative ideas over the years. This is one of the more creative ones.",
     "hostCorrect": "Pigeons! Project Pigeon — B.F. Skinner trained pigeons to peck at a screen to guide missiles. It actually worked. The military killed the project anyway.",
@@ -376,7 +531,12 @@
     "type": "multiple_choice",
     "category": "Fashion",
     "prompt": "High heels were originally designed for and worn by whom?",
-    "choices": ["French aristocratic women", "Persian male cavalry soldiers", "Italian stage actors", "Egyptian pharaohs"],
+    "choices": [
+      "French aristocratic women",
+      "Persian male cavalry soldiers",
+      "Italian stage actors",
+      "Egyptian pharaohs"
+    ],
     "correctIndex": 1,
     "hostIntro": "Fashion history is full of surprises. This one's a real heel turn. Pun absolutely intended.",
     "hostCorrect": "Persian male cavalry! Heels helped them stand in stirrups while shooting arrows. European men then adopted them as a status symbol. Women came last.",
@@ -388,7 +548,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "Banging your head against a wall for one hour burns approximately how many calories?",
-    "choices": ["About 10", "About 50", "About 150", "About 400"],
+    "choices": [
+      "About 10",
+      "About 50",
+      "About 150",
+      "About 400"
+    ],
     "correctIndex": 2,
     "hostIntro": "I'm not recommending this as a workout plan, but the science is the science.",
     "hostCorrect": "About 150 calories! For reference, that's roughly the same as walking for 30 minutes. But with more concussions.",
@@ -400,7 +565,12 @@
     "type": "multiple_choice",
     "category": "Geography",
     "prompt": "Which of these capital cities is FURTHER north than you probably think?",
-    "choices": ["Tokyo is further north than Cairo", "London is further north than every Canadian capital except one", "Moscow is further north than Anchorage, Alaska", "All of the above"],
+    "choices": [
+      "Tokyo is further north than Cairo",
+      "London is further north than every Canadian capital except one",
+      "Moscow is further north than Anchorage, Alaska",
+      "All of the above"
+    ],
     "correctIndex": 3,
     "hostIntro": "Your mental map of the world is wrong. Let me prove it.",
     "hostCorrect": "All of them! Tokyo is north of Cairo, London is further north than Ottawa, and Moscow is above Anchorage. Maps lie to you every day.",
@@ -412,7 +582,12 @@
     "type": "multiple_choice",
     "category": "Video Games",
     "prompt": "The iconic Pac-Man was originally designed to look like what common object with a slice missing?",
-    "choices": ["A basketball", "A pizza", "An orange", "A clock face"],
+    "choices": [
+      "A basketball",
+      "A pizza",
+      "An orange",
+      "A clock face"
+    ],
     "correctIndex": 1,
     "hostIntro": "One of the most famous characters in gaming history was inspired by lunch.",
     "hostCorrect": "A pizza! Creator Toru Iwatani looked at a pizza with a slice removed and saw a character. The greatest creative leap in gaming history came from being hungry.",
@@ -424,8 +599,13 @@
     "type": "multiple_choice",
     "category": "Music",
     "prompt": "The song 'Jingle Bells' was originally written for which holiday — and it definitely wasn't Christmas?",
-    "choices": ["Easter", "Thanksgiving", "Fourth of July", "Halloween"],
-    "correctIndex": 1,
+    "choices": [
+      "Thanksgiving",
+      "Easter",
+      "Fourth of July",
+      "Halloween"
+    ],
+    "correctIndex": 0,
     "hostIntro": "Everything you know about this song is wrong. Starting with which holiday it belongs to.",
     "hostCorrect": "Thanksgiving! James Lord Pierpont wrote it for a Thanksgiving church service in 1857. It was so popular that people just... moved it to Christmas.",
     "hostWrong": "Thanksgiving! 'Jingle Bells' is a Thanksgiving song that Christmas stole. The greatest holiday heist in history.",
@@ -436,7 +616,12 @@
     "type": "multiple_choice",
     "category": "Pop Culture",
     "prompt": "LEGO bricks are so precisely manufactured that the company boasts a defect rate of only:",
-    "choices": ["1 in 1,000", "1 in 10,000", "1 in 1 million", "1 in 50 million"],
+    "choices": [
+      "1 in 1,000",
+      "1 in 10,000",
+      "1 in 1 million",
+      "1 in 50 million"
+    ],
     "correctIndex": 2,
     "hostIntro": "You know what stepping on a LEGO feels like. But do you know how perfect they are?",
     "hostCorrect": "1 in a million! LEGO's manufacturing tolerance is 0.002 millimeters. They're more precise than most surgical instruments. And more painful.",
@@ -448,7 +633,12 @@
     "type": "multiple_choice",
     "category": "Language",
     "prompt": "What five-letter English word becomes shorter when you add two letters to it?",
-    "choices": ["Short", "Small", "Brief", "Light"],
+    "choices": [
+      "Short",
+      "Small",
+      "Brief",
+      "Light"
+    ],
     "correctIndex": 0,
     "hostIntro": "A riddle wrapped in a word game wrapped in a trivia question. Triple threat.",
     "hostCorrect": "Short! Add 'E-R' and it becomes 'shorter.' It's literally shorter when it's longer. English is a paradox.",
@@ -460,7 +650,12 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "In 1932, Australia fought and lost a war against what enemy?",
-    "choices": ["New Zealand", "A swarm of locusts", "Emus", "Feral camels"],
+    "choices": [
+      "New Zealand",
+      "A swarm of locusts",
+      "Emus",
+      "Feral camels"
+    ],
     "correctIndex": 2,
     "hostIntro": "Australia has lost a war. Not to another country. To something much, much worse.",
     "hostCorrect": "Emus! The Great Emu War of 1932. The Australian military deployed soldiers with machine guns against emus. The emus won.",
@@ -472,7 +667,12 @@
     "type": "multiple_choice",
     "category": "Space",
     "prompt": "What does space smell like, according to astronauts who have been on spacewalks?",
-    "choices": ["Nothing — it's a vacuum", "Seared steak and gunpowder", "Ozone and bleach", "Rotten eggs"],
+    "choices": [
+      "Nothing — it's a vacuum",
+      "Seared steak and gunpowder",
+      "Ozone and bleach",
+      "Rotten eggs"
+    ],
     "correctIndex": 1,
     "hostIntro": "You can't breathe in space, but apparently you CAN smell it. And it smells... interesting.",
     "hostCorrect": "Seared steak and gunpowder! Astronauts consistently describe the smell that clings to spacesuits as a mix of charred meat and spent ammunition. Space smells like a BBQ at a shooting range.",
@@ -484,7 +684,12 @@
     "type": "multiple_choice",
     "category": "TV Shows",
     "prompt": "The 'Friends' apartment in Manhattan would realistically cost approximately how much per month in today's market?",
-    "choices": ["About $2,500", "About $4,800", "About $8,000", "About $12,000"],
+    "choices": [
+      "About $2,500",
+      "About $4,800",
+      "About $8,000",
+      "About $12,000"
+    ],
     "correctIndex": 2,
     "hostIntro": "TV characters always live in apartments they could never actually afford. Let's put a number on the delusion.",
     "hostCorrect": "About $8,000 a month! A two-bedroom in the West Village that size? Monica's rent-controlled apartment was the most unrealistic part of that show. Not the monkey.",
@@ -496,7 +701,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "Which of these animals has been proven to recognize itself in a mirror?",
-    "choices": ["Dogs", "Cats", "Ants", "Goldfish"],
+    "choices": [
+      "Dogs",
+      "Cats",
+      "Ants",
+      "Goldfish"
+    ],
     "correctIndex": 2,
     "hostIntro": "The mirror test: can an animal look at its own reflection and say 'hey, that's me'? You'd be surprised who passes.",
     "hostCorrect": "Ants! Certain ant species pass the mirror test — they'll try to clean marks placed on their bodies that they can only see in a mirror. Ants have self-awareness. Let that sink in.",
@@ -508,8 +718,13 @@
     "type": "multiple_choice",
     "category": "Food & Drink",
     "prompt": "Peanuts are NOT actually nuts. What are they?",
-    "choices": ["Seeds", "Legumes", "Tubers", "Grains"],
-    "correctIndex": 1,
+    "choices": [
+      "Legumes",
+      "Seeds",
+      "Tubers",
+      "Grains"
+    ],
+    "correctIndex": 0,
     "hostIntro": "Everything is a lie. Including the name of one of America's favorite snacks.",
     "hostCorrect": "Legumes! Peanuts are in the same family as beans and lentils. They grow underground. They're not nuts. Pea-NUTS are pea-LIES.",
     "hostWrong": "Legumes! Related to beans, not to almonds or cashews. The peanut has been lying to you its entire life.",
@@ -520,8 +735,13 @@
     "type": "multiple_choice",
     "category": "Inventions",
     "prompt": "Play-Doh was originally invented as a product for what purpose?",
-    "choices": ["Children's sculpting toy", "Wallpaper cleaner", "Dental mold material", "Industrial putty"],
-    "correctIndex": 1,
+    "choices": [
+      "Wallpaper cleaner",
+      "Children's sculpting toy",
+      "Dental mold material",
+      "Industrial putty"
+    ],
+    "correctIndex": 0,
     "hostIntro": "Sometimes a failed product in one industry becomes a beloved product in another. This is one of those times.",
     "hostCorrect": "Wallpaper cleaner! It was made to clean coal soot off wallpaper. When homes switched from coal heating, sales tanked — until someone noticed kids loved playing with it.",
     "hostWrong": "Wallpaper cleaner! Play-Doh cleaned walls before it became a toy. A failing cleaning product became a billion-dollar children's brand. Reinvention at its finest.",
@@ -532,7 +752,12 @@
     "type": "multiple_choice",
     "category": "Geography",
     "prompt": "Which of these countries has MORE pyramids than Egypt?",
-    "choices": ["Mexico", "Sudan", "China", "Peru"],
+    "choices": [
+      "Mexico",
+      "Sudan",
+      "China",
+      "Peru"
+    ],
     "correctIndex": 1,
     "hostIntro": "Everyone associates pyramids with Egypt. Everyone is wrong. Well, partially wrong.",
     "hostCorrect": "Sudan! Sudan has over 200 pyramids compared to Egypt's roughly 130. Egypt has the famous ones, but Sudan has the numbers.",
@@ -544,7 +769,12 @@
     "type": "multiple_choice",
     "category": "Psychology",
     "prompt": "The 'Dunning-Kruger Effect' describes a cognitive bias where:",
-    "choices": ["Intelligent people underestimate their abilities", "Incompetent people overestimate their abilities", "People perform better when being watched", "Both A and B are correct"],
+    "choices": [
+      "Intelligent people underestimate their abilities",
+      "Incompetent people overestimate their abilities",
+      "People perform better when being watched",
+      "Both A and B are correct"
+    ],
     "correctIndex": 3,
     "hostIntro": "There's a scientific name for that person at every party who thinks they know everything. And for the genius who thinks they don't.",
     "hostCorrect": "Both! The Dunning-Kruger Effect works both ways — the unskilled think they're experts AND the highly skilled doubt themselves. The universe has a cruel sense of humor.",
@@ -556,8 +786,13 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "Abraham Lincoln, Charles Darwin, and Edgar Allan Poe all share what bizarre coincidence?",
-    "choices": ["They were all left-handed", "They were all born on the same day", "They all died on a Friday", "They all had the middle name 'Robert'"],
-    "correctIndex": 1,
+    "choices": [
+      "They were all left-handed",
+      "They all died on a Friday",
+      "They were all born on the same day",
+      "They all had the middle name 'Robert'"
+    ],
+    "correctIndex": 2,
     "hostIntro": "History loves a good coincidence. This one is chef's kiss.",
     "hostCorrect": "Same birthday! February 12, 1809. All three. A president, a scientist, and a horror writer walked into 1809 on the exact same day.",
     "hostWrong": "February 12, 1809! Lincoln, Darwin, and Poe — all born the same day. The universe was really productive that Tuesday.",
@@ -568,7 +803,12 @@
     "type": "multiple_choice",
     "category": "Music",
     "prompt": "The 'D' in D-Day does NOT stand for anything. But what does the 'M' in Eminem's name stand for?",
-    "choices": ["His real name Marshall Mathers — M and M", "Motor City Music — a Detroit reference", "Mega MC — his first rap name", "Nothing — it was randomly chosen"],
+    "choices": [
+      "His real name Marshall Mathers — M and M",
+      "Motor City Music — a Detroit reference",
+      "Mega MC — his first rap name",
+      "Nothing — it was randomly chosen"
+    ],
     "correctIndex": 0,
     "hostIntro": "A two-part misdirection! I told you about D-Day for free. The question is about something else entirely.",
     "hostCorrect": "Marshall Mathers! M and M — his initials. He just spelled it out. Sometimes the simplest explanation is the right one.",
@@ -580,8 +820,13 @@
     "type": "multiple_choice",
     "category": "Business",
     "prompt": "Coca-Cola only sells about 25 cans per year in Cuba. In the entire country. But which country drinks the MOST Coke per capita?",
-    "choices": ["The United States", "Mexico", "Iceland", "Australia"],
-    "correctIndex": 1,
+    "choices": [
+      "Mexico",
+      "The United States",
+      "Iceland",
+      "Australia"
+    ],
+    "correctIndex": 0,
     "hostIntro": "The world runs on Coca-Cola. But some parts of the world run on a LOT more of it.",
     "hostCorrect": "Mexico! Mexicans drink more Coke per person than any country on Earth — an average of over 700 servings per year. That's almost two a day.",
     "hostWrong": "Mexico! Not the US. Mexico drinks more Coca-Cola per person than anywhere else. Nearly 2 servings per person per day.",
@@ -592,7 +837,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "If you removed all the empty space from the atoms in every human on Earth, the entire human race would fit inside:",
-    "choices": ["A football stadium", "A house", "A sugar cube", "A marble"],
+    "choices": [
+      "A football stadium",
+      "A house",
+      "A sugar cube",
+      "A marble"
+    ],
     "correctIndex": 2,
     "hostIntro": "Atoms are mostly empty space. YOU are mostly empty space. Let's find out how much.",
     "hostCorrect": "A sugar cube! All 8 billion humans compressed to pure atomic matter would fit in a sugar cube. That's how empty atoms are. That's how empty YOU are.",
@@ -604,7 +854,12 @@
     "type": "multiple_choice",
     "category": "Animals",
     "prompt": "A mantis shrimp can punch with the force of a .22 caliber bullet. What else can it do that's remarkable?",
-    "choices": ["Breathe on land for up to 3 days", "See 16 types of color receptors (humans have 3)", "Regrow its entire body from just its head", "Communicate using Morse-code-like clicks"],
+    "choices": [
+      "Breathe on land for up to 3 days",
+      "See 16 types of color receptors (humans have 3)",
+      "Regrow its entire body from just its head",
+      "Communicate using Morse-code-like clicks"
+    ],
     "correctIndex": 1,
     "hostIntro": "This creature is basically a tiny superhero with anger issues.",
     "hostCorrect": "16 color receptors! Humans have 3 — red, green, blue. A mantis shrimp has 16. It sees colors we can't even imagine. And then it punches them.",
@@ -616,8 +871,13 @@
     "type": "multiple_choice",
     "category": "Movies",
     "prompt": "The famous 'I am your father' line from Star Wars is actually misquoted. What does Darth Vader really say?",
-    "choices": ["Luke, I am your father", "No, I am your father", "I am your father, Luke", "The truth is, I am your father"],
-    "correctIndex": 1,
+    "choices": [
+      "Luke, I am your father",
+      "The truth is, I am your father",
+      "I am your father, Luke",
+      "No, I am your father"
+    ],
+    "correctIndex": 3,
     "hostIntro": "One of the most quoted movie lines in history. And almost everyone gets it wrong.",
     "hostCorrect": "No, I am your father! He never says 'Luke' first. Luke says 'He told me you killed my father!' and Vader replies 'No, I am your father.' The Mandela Effect strikes again.",
     "hostWrong": "It's 'No, I am your father.' No 'Luke' at the start. You've been misquoting this for decades and I'm not sorry for correcting you.",
@@ -628,7 +888,12 @@
     "type": "multiple_choice",
     "category": "Medicine",
     "prompt": "Which of these common medical practices was only proven to be beneficial (not just tradition) in the last 50 years?",
-    "choices": ["Washing hands before surgery", "Using sterile bandages", "Putting patients under anesthesia", "Elevating a sprained ankle"],
+    "choices": [
+      "Washing hands before surgery",
+      "Using sterile bandages",
+      "Putting patients under anesthesia",
+      "Elevating a sprained ankle"
+    ],
     "correctIndex": 0,
     "hostIntro": "Medicine has been winging it for longer than you'd like to know.",
     "hostCorrect": "Handwashing! Ignaz Semmelweis proposed it in 1847 and was mocked. It wasn't widely accepted as evidence-based until surprisingly recently. Doctors resisted washing their hands. For decades.",
@@ -640,7 +905,12 @@
     "type": "multiple_choice",
     "category": "Art",
     "prompt": "Which famous artist cut off part of his own ear?",
-    "choices": ["Pablo Picasso", "Claude Monet", "Vincent van Gogh", "Salvador Dalí"],
+    "choices": [
+      "Pablo Picasso",
+      "Claude Monet",
+      "Vincent van Gogh",
+      "Salvador Dalí"
+    ],
     "correctIndex": 2,
     "hostIntro": "Art history's most famous act of self-harm. A freebie for those paying attention in school.",
     "hostCorrect": "Van Gogh! Though historians debate whether he cut it off himself or lost it in a fight with Gauguin. Either way — ouch.",
@@ -652,7 +922,12 @@
     "type": "multiple_choice",
     "category": "Technology",
     "prompt": "The first text message ever sent, in 1992, said what?",
-    "choices": ["Hello", "Testing 1 2 3", "Merry Christmas", "Call me"],
+    "choices": [
+      "Hello",
+      "Testing 1 2 3",
+      "Merry Christmas",
+      "Call me"
+    ],
     "correctIndex": 2,
     "hostIntro": "The message that launched a trillion texts, typos, and regrettable 2 AM confessions.",
     "hostCorrect": "Merry Christmas! Neil Papworth sent it on December 3rd, 1992. The most wholesome first text ever. It's been downhill since.",
@@ -664,8 +939,13 @@
     "type": "multiple_choice",
     "category": "Sports",
     "prompt": "In the 1904 Olympic marathon, the 'winner' was disqualified because he did most of the race in what unusual way?",
-    "choices": ["Riding a horse", "In a car", "On a bicycle", "Being carried by spectators"],
-    "correctIndex": 1,
+    "choices": [
+      "Riding a horse",
+      "Being carried by spectators",
+      "On a bicycle",
+      "In a car"
+    ],
+    "correctIndex": 3,
     "hostIntro": "The 1904 Olympics were absolutely chaotic. This marathon was a complete disaster. And it's hilarious.",
     "hostCorrect": "A car! Fred Lorz rode in a car for 11 miles, then got out and jogged across the finish line. He was caught, obviously. The 1904 Olympics were pure chaos.",
     "hostWrong": "A car! He hitched a ride for 11 miles of a 26-mile race. The audacity. The 1904 Olympics were basically unsupervised recess.",
@@ -676,7 +956,12 @@
     "type": "multiple_choice",
     "category": "Literature",
     "prompt": "Mary Shelley wrote 'Frankenstein' when she was how old?",
-    "choices": ["18 years old", "25 years old", "33 years old", "41 years old"],
+    "choices": [
+      "18 years old",
+      "25 years old",
+      "33 years old",
+      "41 years old"
+    ],
     "correctIndex": 0,
     "hostIntro": "One of the most important novels in English literature was written by someone who couldn't legally drink.",
     "hostCorrect": "18! Mary Shelley was a teenager when she wrote one of the foundational works of science fiction. What were YOU doing at 18?",
@@ -688,7 +973,12 @@
     "type": "multiple_choice",
     "category": "Geography",
     "prompt": "Which African country has a city called Batman?",
-    "choices": ["There isn't one — Batman is a city in Turkey", "Nigeria", "South Africa", "Egypt"],
+    "choices": [
+      "There isn't one — Batman is a city in Turkey",
+      "Nigeria",
+      "South Africa",
+      "Egypt"
+    ],
     "correctIndex": 0,
     "hostIntro": "Quick geography quiz. Where in Africa is the city of Batman?",
     "hostCorrect": "Trick question! Batman is in Turkey, not Africa. The province of Batman, Turkey. They once tried to sue Warner Bros over the name. Really.",
@@ -700,8 +990,13 @@
     "type": "multiple_choice",
     "category": "Food & Drink",
     "prompt": "What was the original flavor of Froot Loops cereal?",
-    "choices": ["Each color was a different fruit flavor", "All loops are the same flavor regardless of color", "The original was only orange-flavored", "They were unflavored — just sugar and food coloring"],
-    "correctIndex": 1,
+    "choices": [
+      "Each color was a different fruit flavor",
+      "They were unflavored — just sugar and food coloring",
+      "The original was only orange-flavored",
+      "All loops are the same flavor regardless of color"
+    ],
+    "correctIndex": 3,
     "hostIntro": "Your entire childhood was a lie. I'm sorry to be the one to tell you.",
     "hostCorrect": "They're ALL the same flavor! Every color of Froot Loop tastes identical. Your brain invented different flavors based on color. You've been bamboozled by cereal.",
     "hostWrong": "All the same! Red, green, yellow, purple — same flavor. Kellogg's has been gaslighting children for decades.",
@@ -712,8 +1007,13 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "Cleopatra was NOT Egyptian. What was her actual ethnicity?",
-    "choices": ["Roman", "Greek", "Persian", "Nubian"],
-    "correctIndex": 1,
+    "choices": [
+      "Roman",
+      "Nubian",
+      "Persian",
+      "Greek"
+    ],
+    "correctIndex": 3,
     "hostIntro": "The most famous Egyptian queen... wasn't Egyptian. History loves irony.",
     "hostCorrect": "Greek! She was a descendant of Ptolemy, one of Alexander the Great's generals. The Ptolemaic dynasty was Macedonian Greek. She was the first in her family to even learn Egyptian.",
     "hostWrong": "Greek! Macedonian Greek, specifically. Cleopatra's family ruled Egypt but they were about as Egyptian as fish and chips.",
@@ -724,7 +1024,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "How long does it take for sunlight to reach Earth?",
-    "choices": ["Instantly", "About 8 seconds", "About 8 minutes", "About 8 hours"],
+    "choices": [
+      "Instantly",
+      "About 8 seconds",
+      "About 8 minutes",
+      "About 8 hours"
+    ],
     "correctIndex": 2,
     "hostIntro": "Look outside. That sunshine? It's not as fresh as you think.",
     "hostCorrect": "About 8 minutes! The sunlight hitting your face right now left the Sun 8 minutes ago. You're literally living in the past.",
@@ -736,7 +1041,12 @@
     "type": "multiple_choice",
     "category": "Pop Culture",
     "prompt": "Mr. Rogers — the gentle children's TV host — did what before his career in television?",
-    "choices": ["Was a Navy SEAL sniper", "Was an ordained Presbyterian minister", "Was a competitive wrestler", "Was a CIA analyst"],
+    "choices": [
+      "Was a Navy SEAL sniper",
+      "Was an ordained Presbyterian minister",
+      "Was a competitive wrestler",
+      "Was a CIA analyst"
+    ],
     "correctIndex": 1,
     "hostIntro": "There are wild rumors about Mr. Rogers. Only one of these is actually true.",
     "hostCorrect": "Ordained minister! He was a real Presbyterian minister who saw TV as a way to minister to children. The Navy SEAL rumor is completely fake. He was exactly as gentle as he seemed.",
@@ -748,7 +1058,12 @@
     "type": "multiple_choice",
     "category": "Animals",
     "prompt": "A single elephant is pregnant for how long before giving birth?",
-    "choices": ["About 6 months", "About 12 months", "About 16 months", "About 22 months"],
+    "choices": [
+      "About 6 months",
+      "About 12 months",
+      "About 16 months",
+      "About 22 months"
+    ],
     "correctIndex": 3,
     "hostIntro": "You think nine months of pregnancy is a lot? Hold my peanuts.",
     "hostCorrect": "22 months! Almost two years pregnant. Elephants have the longest gestation period of any land animal. Imagine being pregnant for nearly two years.",
@@ -760,8 +1075,13 @@
     "type": "multiple_choice",
     "category": "Business",
     "prompt": "Which company was originally named 'BackRub' before becoming one of the most valuable companies in human history?",
-    "choices": ["Facebook", "Google", "Apple", "Netflix"],
-    "correctIndex": 1,
+    "choices": [
+      "Facebook",
+      "Netflix",
+      "Apple",
+      "Google"
+    ],
+    "correctIndex": 3,
     "hostIntro": "Some companies had... questionable early names. This one sounds like a spa, not a tech giant.",
     "hostCorrect": "Google! It was called BackRub because it analyzed 'back links.' Larry Page and Sergey Brin eventually renamed it. Thank goodness.",
     "hostWrong": "Google! Imagine saying 'just BackRub it.' The rebrand was the best decision they ever made. Well, second best after the search engine.",
@@ -772,8 +1092,13 @@
     "type": "multiple_choice",
     "category": "Law",
     "prompt": "In the US Constitution, the only crime specifically defined is:",
-    "choices": ["Murder", "Treason", "Theft", "Perjury"],
-    "correctIndex": 1,
+    "choices": [
+      "Murder",
+      "Perjury",
+      "Theft",
+      "Treason"
+    ],
+    "correctIndex": 3,
     "hostIntro": "The entire US Constitution defines exactly ONE crime. Just one. Everything else was left to Congress.",
     "hostCorrect": "Treason! Article III, Section 3. It's the only crime the Founders cared enough to define themselves. 'Levying war against the United States or giving aid and comfort to its enemies.'",
     "hostWrong": "Treason! The Founders wanted to make sure nobody could twist the definition of treason for political purposes. So they wrote it down themselves. Smart move.",
@@ -784,7 +1109,12 @@
     "type": "multiple_choice",
     "category": "Music",
     "prompt": "Which of these famous musicians CANNOT read music?",
-    "choices": ["Hans Zimmer", "The Beatles (all four of them)", "Jimi Hendrix", "All of the above"],
+    "choices": [
+      "Hans Zimmer",
+      "The Beatles (all four of them)",
+      "Jimi Hendrix",
+      "All of the above"
+    ],
     "correctIndex": 3,
     "hostIntro": "You'd think the greatest musicians in history would know how to read music. You'd think wrong.",
     "hostCorrect": "All of them! Hans Zimmer, all four Beatles, and Jimi Hendrix — none of them could read sheet music. They composed entirely by ear. Genius doesn't need instructions.",
@@ -796,7 +1126,12 @@
     "type": "multiple_choice",
     "category": "Mythology",
     "prompt": "In Greek mythology, what punishment did Prometheus receive for giving fire to humanity?",
-    "choices": ["Turned to stone for eternity", "An eagle ate his liver every day, and it regrew every night", "Forced to hold up the sky forever", "Trapped in a labyrinth with the Minotaur"],
+    "choices": [
+      "Turned to stone for eternity",
+      "An eagle ate his liver every day, and it regrew every night",
+      "Forced to hold up the sky forever",
+      "Trapped in a labyrinth with the Minotaur"
+    ],
     "correctIndex": 1,
     "hostIntro": "The Greek gods did NOT appreciate gift-giving. Especially when the gift was fire. And the recipient was humanity.",
     "hostCorrect": "Eagle eats liver daily, liver regrows nightly! An eternal cycle of organ consumption. Zeus was not subtle about punishments.",
@@ -808,7 +1143,12 @@
     "type": "multiple_choice",
     "category": "Technology",
     "prompt": "How much storage did the hard drive that IBM introduced in 1956 hold, and how much did it weigh?",
-    "choices": ["5 MB, weighed over a ton", "50 MB, weighed about 500 lbs", "500 MB, weighed about 50 lbs", "1 GB, weighed about 10 lbs"],
+    "choices": [
+      "5 MB, weighed over a ton",
+      "50 MB, weighed about 500 lbs",
+      "500 MB, weighed about 50 lbs",
+      "1 GB, weighed about 10 lbs"
+    ],
     "correctIndex": 0,
     "hostIntro": "Your phone has millions of times more storage than this thing. And this thing needed a forklift.",
     "hostCorrect": "5 megabytes and over a ton! The IBM 350 Disk Storage Unit. Five megabytes. One ton. That's one photo on your phone, delivered by freight truck.",
@@ -820,8 +1160,13 @@
     "type": "multiple_choice",
     "category": "Food & Drink",
     "prompt": "Carrots were originally what color before the Dutch bred them orange in the 17th century?",
-    "choices": ["White", "Purple", "Red", "Yellow"],
-    "correctIndex": 1,
+    "choices": [
+      "Purple",
+      "White",
+      "Red",
+      "Yellow"
+    ],
+    "correctIndex": 0,
     "hostIntro": "Everything you know about carrots is a lie. Including what color they should be.",
     "hostCorrect": "Purple! Carrots were purple for thousands of years. The Dutch bred orange ones in the 1600s as a tribute to William of Orange. A root vegetable was used for political messaging.",
     "hostWrong": "Purple! The orange carrot is a Dutch marketing campaign from the 1600s. Original carrots were purple. Your entire salad is a lie.",
@@ -832,8 +1177,13 @@
     "type": "multiple_choice",
     "category": "World Records",
     "prompt": "The longest word in the English language that uses no repeated letters is 'subdermatoglyphic.' What does it mean?",
-    "choices": ["The study of underground cave formations", "The patterns of lines beneath the skin (like fingerprints)", "A type of ancient Greek writing system", "It's not a real word — it was invented for word games"],
-    "correctIndex": 1,
+    "choices": [
+      "The patterns of lines beneath the skin (like fingerprints)",
+      "The study of underground cave formations",
+      "A type of ancient Greek writing system",
+      "It's not a real word — it was invented for word games"
+    ],
+    "correctIndex": 0,
     "hostIntro": "S-U-B-D-E-R-M-A-T-O-G-L-Y-P-H-I-C. Fifteen letters. Zero repeats. One meaning.",
     "hostCorrect": "Fingerprint patterns! The study of the ridge patterns beneath the skin that form fingerprints. 15 unique letters, one very specific meaning.",
     "hostWrong": "It's about fingerprint patterns! Sub (under) + derma (skin) + glyphic (carved patterns). 15 letters, no repeats. English is showing off.",
@@ -844,8 +1194,13 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "Which US president installed the first White House bowling alley?",
-    "choices": ["Richard Nixon", "Harry Truman", "Dwight Eisenhower", "John F. Kennedy"],
-    "correctIndex": 1,
+    "choices": [
+      "Harry Truman",
+      "Richard Nixon",
+      "Dwight Eisenhower",
+      "John F. Kennedy"
+    ],
+    "correctIndex": 0,
     "hostIntro": "The White House has a bowling alley. Because of course it does. But who put it there?",
     "hostCorrect": "Truman! In 1947. Nixon later moved it, which is why people think it was his. Truman bowled first.",
     "hostWrong": "Truman! 1947. Nixon gets the credit because he relocated it, but Truman was the original White House bowler.",
@@ -856,7 +1211,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "Venus is the only planet in our solar system that does what?",
-    "choices": ["Has no moons", "Spins clockwise (opposite to most planets)", "Has a surface hotter than Mercury despite being further from the Sun", "All of the above"],
+    "choices": [
+      "Has no moons",
+      "Spins clockwise (opposite to most planets)",
+      "Has a surface hotter than Mercury despite being further from the Sun",
+      "All of the above"
+    ],
     "correctIndex": 3,
     "hostIntro": "Venus is the rebel of the solar system. It does basically everything wrong.",
     "hostCorrect": "All of them! No moons, spins backward, and hotter than Mercury thanks to a runaway greenhouse effect. Venus is the planet that said 'rules are for other planets.'",
@@ -868,7 +1228,12 @@
     "type": "multiple_choice",
     "category": "TV Shows",
     "prompt": "The TV show 'The Office' almost cast which actor as Michael Scott before Steve Carell?",
-    "choices": ["Will Ferrell", "Bob Odenkirk", "Paul Rudd", "Hank Azaria"],
+    "choices": [
+      "Will Ferrell",
+      "Bob Odenkirk",
+      "Paul Rudd",
+      "Hank Azaria"
+    ],
     "correctIndex": 1,
     "hostIntro": "Imagine an alternate universe where Michael Scott was played by someone else. Terrifying.",
     "hostCorrect": "Bob Odenkirk! He was the network's first choice. He was apparently very good. But Carell got the role and the rest is 'that's what she said' history.",
@@ -880,7 +1245,12 @@
     "type": "multiple_choice",
     "category": "Geography",
     "prompt": "What percentage of the world's fresh water is locked in Antarctica's ice sheet?",
-    "choices": ["About 20%", "About 40%", "About 60%", "About 90%"],
+    "choices": [
+      "About 20%",
+      "About 40%",
+      "About 60%",
+      "About 90%"
+    ],
     "correctIndex": 2,
     "hostIntro": "Antarctica: the continent with no permanent residents but most of the world's most precious resource.",
     "hostCorrect": "About 60%! Antarctica holds roughly 60% of all fresh water on Earth. If it melted, sea levels would rise about 200 feet. Don't let it melt.",
@@ -892,7 +1262,12 @@
     "type": "multiple_choice",
     "category": "Psychology",
     "prompt": "The 'Tetris Effect' is a real psychological phenomenon where:",
-    "choices": ["People see falling blocks when they close their eyes after playing too much Tetris", "People compulsively organize objects into neat rows", "People become unable to stop playing a repetitive game", "People dream in pixel graphics after prolonged screen time"],
+    "choices": [
+      "People see falling blocks when they close their eyes after playing too much Tetris",
+      "People compulsively organize objects into neat rows",
+      "People become unable to stop playing a repetitive game",
+      "People dream in pixel graphics after prolonged screen time"
+    ],
     "correctIndex": 0,
     "hostIntro": "Psychologists named a phenomenon after a video game. And it's not about gaming addiction.",
     "hostCorrect": "Seeing falling blocks! Play enough Tetris and you'll literally hallucinate Tetris shapes when you close your eyes or try to sleep. Your brain keeps playing without you.",
@@ -904,8 +1279,13 @@
     "type": "multiple_choice",
     "category": "Sports",
     "prompt": "What sport has been played on the Moon?",
-    "choices": ["Baseball", "Golf", "Soccer", "No sport has been played on the Moon"],
-    "correctIndex": 1,
+    "choices": [
+      "Golf",
+      "Baseball",
+      "Soccer",
+      "No sport has been played on the Moon"
+    ],
+    "correctIndex": 0,
     "hostIntro": "One small step for man. One giant... shot for mankind?",
     "hostCorrect": "Golf! Alan Shepard smuggled a golf club head onto Apollo 14 in 1971 and hit two balls on the lunar surface. He said the second one went 'miles and miles.' It went about 40 yards.",
     "hostWrong": "Golf! Alan Shepard hit golf balls on the Moon. In a spacesuit. With a makeshift club. And lied about how far they went. Peak golfer behavior.",
@@ -916,7 +1296,12 @@
     "type": "multiple_choice",
     "category": "Language",
     "prompt": "The word 'muscle' comes from the Latin word 'musculus,' which literally translates to:",
-    "choices": ["Little power", "Body rope", "Little mouse", "Tight rope"],
+    "choices": [
+      "Little power",
+      "Body rope",
+      "Little mouse",
+      "Tight rope"
+    ],
     "correctIndex": 2,
     "hostIntro": "Etymology time! The Romans named a body part after something adorable. It stuck.",
     "hostCorrect": "Little mouse! The Romans thought flexing muscles looked like mice running under the skin. You can never unsee that now.",
@@ -928,7 +1313,12 @@
     "type": "multiple_choice",
     "category": "Movies",
     "prompt": "In the original 'Psycho' (1960), Alfred Hitchcock used what as blood in the famous shower scene?",
-    "choices": ["Ketchup", "Chocolate syrup", "Red paint diluted with water", "Actual pig's blood"],
+    "choices": [
+      "Ketchup",
+      "Chocolate syrup",
+      "Red paint diluted with water",
+      "Actual pig's blood"
+    ],
     "correctIndex": 1,
     "hostIntro": "One of the most iconic horror scenes ever filmed was made with something from your dessert menu.",
     "hostCorrect": "Chocolate syrup! The film was in black and white, so the color didn't matter — only the consistency. Hershey's finest, splattered everywhere.",
@@ -940,7 +1330,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "What is the only letter that does NOT appear in any US state name?",
-    "choices": ["Q", "X", "Z", "B"],
+    "choices": [
+      "Q",
+      "X",
+      "Z",
+      "B"
+    ],
     "correctIndex": 0,
     "hostIntro": "26 letters, 50 states. One letter got completely shut out.",
     "hostCorrect": "Q! No state has the letter Q anywhere in its name. X has Texas and New Mexico. Z has Arizona. But Q? Nothing. Rejected.",
@@ -952,7 +1347,12 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "Ancient Romans used what as mouthwash?",
-    "choices": ["Olive oil", "Wine mixed with herbs", "Urine", "Crushed seashells in water"],
+    "choices": [
+      "Olive oil",
+      "Wine mixed with herbs",
+      "Urine",
+      "Crushed seashells in water"
+    ],
     "correctIndex": 2,
     "hostIntro": "Ancient Romans were sophisticated, cultured, and absolutely disgusting.",
     "hostCorrect": "Urine! Specifically, they preferred Portuguese urine, which was imported for this purpose. The ammonia in urine actually does whiten teeth. But still. No.",
@@ -964,7 +1364,12 @@
     "type": "multiple_choice",
     "category": "Animals",
     "prompt": "Which animal can survive being frozen solid and then thawed back to life?",
-    "choices": ["The Arctic fox", "The wood frog", "The Antarctic penguin", "The polar bear"],
+    "choices": [
+      "The Arctic fox",
+      "The wood frog",
+      "The Antarctic penguin",
+      "The polar bear"
+    ],
     "correctIndex": 1,
     "hostIntro": "Some animals laugh in the face of death. This one laughs in the face of being a literal ice cube.",
     "hostCorrect": "The wood frog! It freezes solid in winter — no heartbeat, no breathing, no brain activity — then thaws in spring and hops away like nothing happened.",
@@ -976,7 +1381,12 @@
     "type": "multiple_choice",
     "category": "Video Games",
     "prompt": "What was Mario's original name when he first appeared in Donkey Kong in 1981?",
-    "choices": ["Mr. Video", "Jumpman", "Little Italian", "Mario — it was always Mario"],
+    "choices": [
+      "Mr. Video",
+      "Jumpman",
+      "Little Italian",
+      "Mario — it was always Mario"
+    ],
     "correctIndex": 1,
     "hostIntro": "Before he was a cultural icon, Nintendo's mascot had a much less iconic name.",
     "hostCorrect": "Jumpman! Because he jumps. That's literally it. He was renamed Mario after Mario Segale, Nintendo of America's landlord, who once confronted them about late rent.",
@@ -988,8 +1398,13 @@
     "type": "multiple_choice",
     "category": "Space",
     "prompt": "If two pieces of metal touch in space, they permanently bond together. What is this called?",
-    "choices": ["Space welding", "Cold welding", "Vacuum fusion", "Molecular bonding"],
-    "correctIndex": 1,
+    "choices": [
+      "Cold welding",
+      "Space welding",
+      "Vacuum fusion",
+      "Molecular bonding"
+    ],
+    "correctIndex": 0,
     "hostIntro": "Space is trying to glue everything together. No heat required.",
     "hostCorrect": "Cold welding! In a vacuum, there's no oxide layer to keep metals apart, so they just... fuse. NASA has to coat everything to prevent spacecraft from welding itself together.",
     "hostWrong": "Cold welding! Metal atoms in a vacuum don't know they're separate pieces. They just bond. Space is basically a giant welding shop.",
@@ -1000,7 +1415,12 @@
     "type": "multiple_choice",
     "category": "Food & Drink",
     "prompt": "Which 'nut' is actually a drupe (a fruit with a stone), not a true nut?",
-    "choices": ["Hazelnuts", "Almonds", "Macadamia nuts", "Chestnuts"],
+    "choices": [
+      "Hazelnuts",
+      "Almonds",
+      "Macadamia nuts",
+      "Chestnuts"
+    ],
     "correctIndex": 1,
     "hostIntro": "Botany ruining snack time again. Because apparently nothing in the nut aisle is what it claims to be.",
     "hostCorrect": "Almonds! They're drupes — in the same family as peaches and cherries. The 'nut' you eat is actually the pit of a fruit. Almond milk is technically stone fruit juice.",
@@ -1012,7 +1432,12 @@
     "type": "multiple_choice",
     "category": "Art",
     "prompt": "Which famous painting was stolen from the Louvre in 1911, and the theft actually made it MORE famous?",
-    "choices": ["The Mona Lisa", "The Birth of Venus", "Girl with a Pearl Earring", "Starry Night"],
+    "choices": [
+      "The Mona Lisa",
+      "The Birth of Venus",
+      "Girl with a Pearl Earring",
+      "Starry Night"
+    ],
     "correctIndex": 0,
     "hostIntro": "Sometimes the best marketing campaign is a felony.",
     "hostCorrect": "The Mona Lisa! Before the theft, it was just another painting. The two-year manhunt turned it into the most famous painting on Earth. Crime pays... in publicity.",
@@ -1024,7 +1449,12 @@
     "type": "multiple_choice",
     "category": "Medicine",
     "prompt": "What common kitchen spice has been shown in studies to be as effective as some anti-inflammatory drugs?",
-    "choices": ["Cinnamon", "Turmeric", "Oregano", "Black pepper"],
+    "choices": [
+      "Cinnamon",
+      "Turmeric",
+      "Oregano",
+      "Black pepper"
+    ],
     "correctIndex": 1,
     "hostIntro": "Your spice rack might be a medicine cabinet. One spice in particular punches above its weight.",
     "hostCorrect": "Turmeric! Curcumin, the active compound, has anti-inflammatory properties comparable to some medications. Your curry is basically medicine.",
@@ -1036,7 +1466,12 @@
     "type": "multiple_choice",
     "category": "Literature",
     "prompt": "Which famous novel was rejected by publishers over 30 times before finally being published?",
-    "choices": ["Harry Potter and the Philosopher's Stone", "Carrie by Stephen King", "Lord of the Flies", "All of the above"],
+    "choices": [
+      "Harry Potter and the Philosopher's Stone",
+      "Carrie by Stephen King",
+      "Lord of the Flies",
+      "All of the above"
+    ],
     "correctIndex": 3,
     "hostIntro": "If you've ever been rejected, take comfort: so were some of the greatest books ever written. Repeatedly.",
     "hostCorrect": "All of them! Harry Potter: rejected 12 times. Carrie: rejected 30 times (King threw it in the trash; his wife rescued it). Lord of the Flies: rejected 20+ times. Publishers are terrible at their jobs.",
@@ -1048,7 +1483,12 @@
     "type": "multiple_choice",
     "category": "Geography",
     "prompt": "Russia spans how many time zones?",
-    "choices": ["6", "9", "11", "14"],
+    "choices": [
+      "6",
+      "9",
+      "11",
+      "14"
+    ],
     "correctIndex": 2,
     "hostIntro": "Russia is big. You know it's big. But do you know HOW big?",
     "hostCorrect": "11 time zones! When it's midnight in western Russia, it's 11 AM the next day on the eastern coast. One country, half a day apart.",
@@ -1060,8 +1500,13 @@
     "type": "multiple_choice",
     "category": "Technology",
     "prompt": "What was the original purpose of bubble wrap when it was invented in 1957?",
-    "choices": ["Packing material", "Textured wallpaper", "Greenhouse insulation", "Pool covers"],
-    "correctIndex": 1,
+    "choices": [
+      "Packing material",
+      "Pool covers",
+      "Greenhouse insulation",
+      "Textured wallpaper"
+    ],
+    "correctIndex": 3,
     "hostIntro": "Humanity's greatest stress relief toy wasn't designed for stress relief. Or for packing.",
     "hostCorrect": "Wallpaper! Marc Chavannes and Al Fielding sealed two shower curtains together to create textured wallpaper. Nobody wanted it. Then IBM used it to ship computers, and the rest is popping history.",
     "hostWrong": "Wallpaper! Bubble wrap was a failed home decor product that became the world's most satisfying packing material. Happy accidents again.",
@@ -1072,7 +1517,12 @@
     "type": "multiple_choice",
     "category": "Music",
     "prompt": "Which instrument was banned by the Vatican for being 'too emotional and sensual' for church music?",
-    "choices": ["The electric guitar", "The saxophone", "The theremin", "The harmonica"],
+    "choices": [
+      "The electric guitar",
+      "The saxophone",
+      "The theremin",
+      "The harmonica"
+    ],
     "correctIndex": 1,
     "hostIntro": "The Vatican once declared war on an instrument. Not a weapon. An instrument.",
     "hostCorrect": "The saxophone! Invented in the 1840s, the Vatican banned it from religious music for being too provocative. The sax was literally too sexy for church.",
@@ -1084,7 +1534,12 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "Which president of the United States was once a licensed bartender?",
-    "choices": ["Ulysses S. Grant", "Abraham Lincoln", "Theodore Roosevelt", "Andrew Johnson"],
+    "choices": [
+      "Ulysses S. Grant",
+      "Abraham Lincoln",
+      "Theodore Roosevelt",
+      "Andrew Johnson"
+    ],
     "correctIndex": 1,
     "hostIntro": "Before leading a nation, this president was pouring drinks. Honest work for an Honest Abe.",
     "hostCorrect": "Lincoln! He co-owned a bar called Berry and Lincoln in New Salem, Illinois. The man who freed the slaves also served whiskey. Range.",
@@ -1096,7 +1551,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "Octopuses have three hearts, blue blood, and how many brains?",
-    "choices": ["One very large brain", "Three — one per heart", "Nine — one central and one in each arm", "Two — one for thinking and one for movement"],
+    "choices": [
+      "One very large brain",
+      "Three — one per heart",
+      "Nine — one central and one in each arm",
+      "Two — one for thinking and one for movement"
+    ],
     "correctIndex": 2,
     "hostIntro": "Octopuses are basically aliens that happen to live on Earth. Here's more proof.",
     "hostCorrect": "Nine! A central brain plus a mini-brain in each of its eight arms. Each arm can taste, touch, and make decisions independently. They're biological supercomputers with tentacles.",
@@ -1108,7 +1568,12 @@
     "type": "multiple_choice",
     "category": "Pop Culture",
     "prompt": "The 'Barbie' doll's full name is:",
-    "choices": ["Barbara Rose Roberts", "Barbara Millicent Roberts", "Barbara Ann Handler", "Just Barbie — she has no last name"],
+    "choices": [
+      "Barbara Rose Roberts",
+      "Barbara Millicent Roberts",
+      "Barbara Ann Handler",
+      "Just Barbie — she has no last name"
+    ],
     "correctIndex": 1,
     "hostIntro": "You've known Barbie your whole life. But do you know her REAL name?",
     "hostCorrect": "Barbara Millicent Roberts! Barbie has a full legal name. She was 'born' March 9, 1959, in the fictional town of Willows, Wisconsin. She has more backstory than most movie characters.",
@@ -1120,7 +1585,12 @@
     "type": "multiple_choice",
     "category": "Animals",
     "prompt": "A blue whale's heart is roughly the size of:",
-    "choices": ["A basketball", "A bathtub", "A small car", "A king-size bed"],
+    "choices": [
+      "A basketball",
+      "A bathtub",
+      "A small car",
+      "A king-size bed"
+    ],
     "correctIndex": 2,
     "hostIntro": "The largest animal ever to exist on Earth has a heart to match. And it's bigger than you think.",
     "hostCorrect": "A small car! About 5 feet long and 400 pounds. A child could crawl through its arteries. Nature does not do things halfway.",
@@ -1132,7 +1602,12 @@
     "type": "multiple_choice",
     "category": "Inventions",
     "prompt": "The microwave oven was invented accidentally when an engineer noticed that radar equipment had melted what in his pocket?",
-    "choices": ["A chocolate bar", "A stick of butter", "A cheese sandwich", "A candy bar"],
+    "choices": [
+      "A chocolate bar",
+      "A stick of butter",
+      "A cheese sandwich",
+      "A candy bar"
+    ],
     "correctIndex": 0,
     "hostIntro": "One of the most important kitchen appliances was born from a very messy accident.",
     "hostCorrect": "A chocolate bar! Percy Spencer was testing magnetrons for Raytheon when the chocolate bar in his pocket melted. He then tested popcorn. Then an egg (which exploded in a colleague's face). Science!",
@@ -1144,7 +1619,12 @@
     "type": "multiple_choice",
     "category": "Law",
     "prompt": "In international law, which of these is NOT classified as a 'country' by the United Nations?",
-    "choices": ["Vatican City", "Taiwan", "Monaco", "Liechtenstein"],
+    "choices": [
+      "Vatican City",
+      "Taiwan",
+      "Monaco",
+      "Liechtenstein"
+    ],
     "correctIndex": 1,
     "hostIntro": "What makes a country a country? The UN has opinions. Controversial ones.",
     "hostCorrect": "Taiwan! Despite having its own government, military, currency, and 24 million people, the UN does not recognize Taiwan as a sovereign state. Geopolitics is complicated.",
@@ -1156,8 +1636,13 @@
     "type": "multiple_choice",
     "category": "Sports",
     "prompt": "The Olympic gold medal is actually made mostly of what?",
-    "choices": ["Gold", "Silver", "Bronze", "Platinum"],
-    "correctIndex": 1,
+    "choices": [
+      "Gold",
+      "Platinum",
+      "Bronze",
+      "Silver"
+    ],
+    "correctIndex": 3,
     "hostIntro": "The highest honor in sports... might not be what you think it is.",
     "hostCorrect": "Silver! Olympic gold medals are at least 92.5% silver with about 6 grams of gold plating. The last solid gold medals were awarded in 1912.",
     "hostWrong": "Silver! The 'gold' medal is mostly silver with gold plating. The Olympics have been catfishing athletes for over a century.",
@@ -1168,7 +1653,12 @@
     "type": "multiple_choice",
     "category": "Language",
     "prompt": "What is the dot over the letters 'i' and 'j' called?",
-    "choices": ["A pip", "A tittle", "A diacrit", "A speck"],
+    "choices": [
+      "A pip",
+      "A tittle",
+      "A diacrit",
+      "A speck"
+    ],
     "correctIndex": 1,
     "hostIntro": "You've seen this every single day of your literate life and never once wondered what it's called.",
     "hostCorrect": "A tittle! That tiny dot is called a tittle. And 'jot and tittle' is where the expression comes from — the smallest details matter.",
@@ -1180,7 +1670,12 @@
     "type": "multiple_choice",
     "category": "Geography",
     "prompt": "The shortest commercial flight in the world connects two Scottish islands and takes how long?",
-    "choices": ["57 seconds", "4 minutes", "12 minutes", "25 minutes"],
+    "choices": [
+      "57 seconds",
+      "4 minutes",
+      "12 minutes",
+      "25 minutes"
+    ],
     "correctIndex": 0,
     "hostIntro": "You spend more time waiting to board than this flight actually lasts.",
     "hostCorrect": "57 seconds! Westray to Papa Westray in Scotland's Orkney Islands. The flight is 1.7 miles. You haven't even found your seat and you've already landed.",
@@ -1192,7 +1687,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "Which of these everyday substances is technically harder than steel?",
-    "choices": ["Human tooth enamel", "Spider silk", "Dry spaghetti", "Tempered glass"],
+    "choices": [
+      "Human tooth enamel",
+      "Spider silk",
+      "Dry spaghetti",
+      "Tempered glass"
+    ],
     "correctIndex": 0,
     "hostIntro": "You have something harder than steel. Right now. In your mouth.",
     "hostCorrect": "Tooth enamel! It scores 5 on the Mohs hardness scale, while steel is only 4-4.5. Your teeth are harder than steel. Please stop opening bottles with them anyway.",
@@ -1204,7 +1704,12 @@
     "type": "multiple_choice",
     "category": "Movies",
     "prompt": "The highest-grossing film NOT based on pre-existing material (not a sequel, remake, or adaptation) is:",
-    "choices": ["Avatar", "Inception", "The Lion King (1994)", "Titanic"],
+    "choices": [
+      "Avatar",
+      "Inception",
+      "The Lion King (1994)",
+      "Titanic"
+    ],
     "correctIndex": 0,
     "hostIntro": "In a world of sequels, remakes, and reboots — which original movie made the most money?",
     "hostCorrect": "Avatar! Nearly $3 billion worldwide. The most successful original movie ever, and the plot is basically Pocahontas with blue aliens. Originality is... relative.",
@@ -1216,7 +1721,12 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "Which ancient civilization invented concrete that is STILL stronger than modern concrete 2,000 years later?",
-    "choices": ["The Greeks", "The Romans", "The Egyptians", "The Chinese"],
+    "choices": [
+      "The Greeks",
+      "The Romans",
+      "The Egyptians",
+      "The Chinese"
+    ],
     "correctIndex": 1,
     "hostIntro": "Modern engineering can't beat an ancient recipe. That's either impressive or embarrassing. Maybe both.",
     "hostCorrect": "The Romans! Roman concrete used volcanic ash and actually gets STRONGER over time due to seawater interaction. The Pantheon's dome — unreinforced, 2,000 years old — still stands.",
@@ -1228,7 +1738,12 @@
     "type": "multiple_choice",
     "category": "Psychology",
     "prompt": "The 'Baader-Meinhof Phenomenon' describes the experience of:",
-    "choices": ["Learning a new word and then suddenly seeing it everywhere", "Feeling like you've lived a moment before (déjà vu)", "Thinking everyone is looking at you when they're not", "Believing a false memory is real"],
+    "choices": [
+      "Learning a new word and then suddenly seeing it everywhere",
+      "Feeling like you've lived a moment before (déjà vu)",
+      "Thinking everyone is looking at you when they're not",
+      "Believing a false memory is real"
+    ],
     "correctIndex": 0,
     "hostIntro": "You've experienced this. You just didn't know it had a name. After this question, you'll start noticing it everywhere. Which is kind of the point.",
     "hostCorrect": "Learning something new and then seeing it everywhere! Also called 'frequency illusion.' It was always there — your brain just started noticing. And now you'll notice THIS phenomenon constantly.",
@@ -1240,7 +1755,12 @@
     "type": "multiple_choice",
     "category": "Food & Drink",
     "prompt": "Coffee is technically a:",
-    "choices": ["Bean", "Seed", "Nut", "Berry pit"],
+    "choices": [
+      "Bean",
+      "Seed",
+      "Nut",
+      "Berry pit"
+    ],
     "correctIndex": 3,
     "hostIntro": "Your morning caffeine fix comes from something you'd never guess by looking at it in your cup.",
     "hostCorrect": "A berry pit! Coffee 'beans' are the pits of coffee cherries — small red berries. You've been drinking fruit pit extract every morning. Fancy.",
@@ -1252,7 +1772,12 @@
     "type": "multiple_choice",
     "category": "Space",
     "prompt": "There are more trees on Earth than stars in the Milky Way. Roughly how many trees are there?",
-    "choices": ["About 400 million", "About 3 billion", "About 3 trillion", "About 3 quadrillion"],
+    "choices": [
+      "About 400 million",
+      "About 3 billion",
+      "About 3 trillion",
+      "About 3 quadrillion"
+    ],
     "correctIndex": 2,
     "hostIntro": "Space seems bigger than Earth. In terms of countable things, that's not always true.",
     "hostCorrect": "About 3 trillion! There are roughly 3 trillion trees on Earth versus about 100-400 billion stars in the Milky Way. Trees win by an order of magnitude.",
@@ -1264,7 +1789,12 @@
     "type": "multiple_choice",
     "category": "Business",
     "prompt": "Samsung — the tech giant — started as a company that sold what?",
-    "choices": ["Rice cookers", "Dried fish and noodles", "Clothing", "Bicycles"],
+    "choices": [
+      "Rice cookers",
+      "Dried fish and noodles",
+      "Clothing",
+      "Bicycles"
+    ],
     "correctIndex": 1,
     "hostIntro": "Before smartphones, before TVs, before chips — Samsung had a very different business.",
     "hostCorrect": "Dried fish and noodles! Founded in 1938 as a grocery trading company. From fish to phones in 85 years. That's a pivot.",
@@ -1276,7 +1806,12 @@
     "type": "multiple_choice",
     "category": "Animals",
     "prompt": "Which animal has the strongest bite force of any living creature?",
-    "choices": ["Great white shark", "Hippopotamus", "Saltwater crocodile", "Grizzly bear"],
+    "choices": [
+      "Great white shark",
+      "Hippopotamus",
+      "Saltwater crocodile",
+      "Grizzly bear"
+    ],
     "correctIndex": 2,
     "hostIntro": "Chomp. One of these animals has the most terrifying jaw on the planet.",
     "hostCorrect": "Saltwater crocodile! 3,700 PSI of bite force. For reference, humans bite at about 162 PSI. A croc bites with the force of a small car landing on you.",
@@ -1288,7 +1823,12 @@
     "type": "multiple_choice",
     "category": "Music",
     "prompt": "What instrument does the President of North Korea reportedly play?",
-    "choices": ["Piano", "Guitar", "Accordion", "Drums"],
+    "choices": [
+      "Piano",
+      "Guitar",
+      "Accordion",
+      "Drums"
+    ],
     "correctIndex": 1,
     "hostIntro": "World leaders have hobbies too. This one's musical taste is... unexpected.",
     "hostCorrect": "Guitar! Kim Jong-un has been photographed playing guitar. Whether he's any good is something nobody in North Korea is allowed to comment on.",
@@ -1300,7 +1840,12 @@
     "type": "multiple_choice",
     "category": "Math",
     "prompt": "If you shuffled a deck of cards perfectly randomly, the chances of getting the exact same order twice in the history of the universe are:",
-    "choices": ["About 1 in a million", "About 1 in a billion", "Essentially zero — the number of possible orders exceeds atoms in the universe", "Pretty good actually — about 1 in 10,000"],
+    "choices": [
+      "About 1 in a million",
+      "About 1 in a billion",
+      "Essentially zero — the number of possible orders exceeds atoms in the universe",
+      "Pretty good actually — about 1 in 10,000"
+    ],
     "correctIndex": 2,
     "hostIntro": "52 cards. How many ways can you arrange them? The answer will melt your brain.",
     "hostCorrect": "Essentially zero! 52 factorial is 8×10^67 — more possible arrangements than atoms in the observable universe. Every shuffle you've ever done created a unique order that has never existed before.",
@@ -1312,7 +1857,12 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "During Prohibition in the US, the government poisoned industrial alcohol to discourage drinking. Approximately how many Americans died as a result?",
-    "choices": ["About 50", "About 500", "About 10,000", "About 100,000"],
+    "choices": [
+      "About 50",
+      "About 500",
+      "About 10,000",
+      "About 100,000"
+    ],
     "correctIndex": 2,
     "hostIntro": "The US government's approach to Prohibition was, uh, aggressive. Fatally so.",
     "hostCorrect": "About 10,000! The government added methanol and other poisons to industrial alcohol, knowing people would drink it. An estimated 10,000 people died. Your government, ladies and gentlemen.",
@@ -1324,7 +1874,12 @@
     "type": "multiple_choice",
     "category": "Pop Culture",
     "prompt": "What color were Coca-Cola cans before they were red?",
-    "choices": ["Green", "Blue", "White", "They were always red"],
+    "choices": [
+      "Green",
+      "Blue",
+      "White",
+      "They were always red"
+    ],
     "correctIndex": 3,
     "hostIntro": "A trick question? Or a straight question? Only one way to find out.",
     "hostCorrect": "Always red! Coca-Cola has used red since the 1890s. It was painted on barrels to distinguish them from alcohol during transport. Some lies are just too good to die.",
@@ -1336,8 +1891,13 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "Hot water freezes faster than cold water under certain conditions. What is this counterintuitive phenomenon called?",
-    "choices": ["The Bernoulli Effect", "The Mpemba Effect", "Thermal Paradox", "The Kelvin Reversal"],
-    "correctIndex": 1,
+    "choices": [
+      "The Bernoulli Effect",
+      "The Kelvin Reversal",
+      "Thermal Paradox",
+      "The Mpemba Effect"
+    ],
+    "correctIndex": 3,
     "hostIntro": "Physics doesn't always make sense. This is one of those times.",
     "hostCorrect": "The Mpemba Effect! Named after Erasto Mpemba, a Tanzanian student who noticed it while making ice cream in 1963. His teacher didn't believe him. Science eventually did.",
     "hostWrong": "The Mpemba Effect! A student noticed hot ice cream mix froze faster. His teacher laughed. A physicist confirmed it. The student had the last laugh.",
@@ -1348,7 +1908,12 @@
     "type": "multiple_choice",
     "category": "TV Shows",
     "prompt": "The longest-running primetime scripted TV show in the US is:",
-    "choices": ["Law & Order: SVU", "Grey's Anatomy", "The Simpsons", "NCIS"],
+    "choices": [
+      "Law & Order: SVU",
+      "Grey's Anatomy",
+      "The Simpsons",
+      "NCIS"
+    ],
     "correctIndex": 2,
     "hostIntro": "Some shows just refuse to end. One in particular has been going since before some of you were born.",
     "hostCorrect": "The Simpsons! On the air since 1989, with over 750 episodes. It's been on longer than many countries have existed.",
@@ -1360,7 +1925,12 @@
     "type": "multiple_choice",
     "category": "Geography",
     "prompt": "Which country is the only one in the world that doesn't have a rectangular flag?",
-    "choices": ["Switzerland", "Nepal", "Japan", "Bhutan"],
+    "choices": [
+      "Switzerland",
+      "Nepal",
+      "Japan",
+      "Bhutan"
+    ],
     "correctIndex": 1,
     "hostIntro": "Flags are rectangles. Except when they're not. And there's exactly one rebel.",
     "hostCorrect": "Nepal! Its flag is two stacked triangles — the only non-rectangular national flag in the world. Switzerland's flag is square, but a square is still a rectangle.",
@@ -1372,7 +1942,12 @@
     "type": "multiple_choice",
     "category": "Food & Drink",
     "prompt": "Wasabi served at most restaurants outside Japan is actually:",
-    "choices": ["Horseradish dyed green", "A completely synthetic compound", "Mustard mixed with food coloring", "Real wasabi — it's just grown outside Japan"],
+    "choices": [
+      "Horseradish dyed green",
+      "A completely synthetic compound",
+      "Mustard mixed with food coloring",
+      "Real wasabi — it's just grown outside Japan"
+    ],
     "correctIndex": 0,
     "hostIntro": "You've probably never eaten real wasabi. I'm sorry to be the one to tell you.",
     "hostCorrect": "Horseradish dyed green! Real wasabi is extremely expensive and loses its flavor within 15 minutes of grating. That green paste? Horseradish and green dye. You've been lied to at every sushi restaurant.",
@@ -1384,7 +1959,12 @@
     "type": "multiple_choice",
     "category": "Animals",
     "prompt": "Cows have best friends and become stressed when separated from them. What other surprisingly emotional thing do they do?",
-    "choices": ["They hold grudges for years", "They cry visible tears when sad", "They produce more milk when listening to slow music", "They mourn their dead for up to a week"],
+    "choices": [
+      "They hold grudges for years",
+      "They cry visible tears when sad",
+      "They produce more milk when listening to slow music",
+      "They mourn their dead for up to a week"
+    ],
     "correctIndex": 2,
     "hostIntro": "Cows are more emotionally complex than you give them credit for. This might make you feel guilty.",
     "hostCorrect": "More milk with slow music! Studies show cows produce 3% more milk listening to slow songs like 'Everybody Hurts' by R.E.M. Cows have music taste. It's better than yours.",
@@ -1396,7 +1976,12 @@
     "type": "multiple_choice",
     "category": "Technology",
     "prompt": "The first iPhone in 2007 couldn't do which of these things that seems basic today?",
-    "choices": ["Send text messages", "Copy and paste text", "Connect to Wi-Fi", "All of the above"],
+    "choices": [
+      "Send text messages",
+      "Copy and paste text",
+      "Connect to Wi-Fi",
+      "All of the above"
+    ],
     "correctIndex": 1,
     "hostIntro": "The device that changed the world... launched without some pretty basic features.",
     "hostCorrect": "Copy and paste! The original iPhone had no copy-paste function. It wasn't added until 2009 with iPhone OS 3.0. People survived for two years without copying and pasting on their phones.",
@@ -1408,7 +1993,12 @@
     "type": "multiple_choice",
     "category": "Literature",
     "prompt": "The longest sentence ever published in a novel contains how many words?",
-    "choices": ["823 words", "4,391 words", "13,955 words", "Over 100,000 words"],
+    "choices": [
+      "823 words",
+      "4,391 words",
+      "13,955 words",
+      "Over 100,000 words"
+    ],
     "correctIndex": 2,
     "hostIntro": "Some authors never met a period they liked. One in particular REALLY didn't.",
     "hostCorrect": "13,955 words! Jonathan Coe's 'The Rotters' Club' contains a single sentence that goes on for nearly 14,000 words. That's about 33 pages without a period. Commitment.",
@@ -1420,7 +2010,12 @@
     "type": "multiple_choice",
     "category": "Sports",
     "prompt": "What is the only sport to have been played on every continent, including Antarctica?",
-    "choices": ["Soccer", "Cricket", "Rugby", "Chess"],
+    "choices": [
+      "Soccer",
+      "Cricket",
+      "Rugby",
+      "Chess"
+    ],
     "correctIndex": 1,
     "hostIntro": "Seven continents. One sport has conquered them all. Including the frozen one.",
     "hostCorrect": "Cricket! There have been cricket matches played in Antarctica. It's freezing, the pitch is ice, and nobody can feel their fingers, but cricket persists everywhere.",
@@ -1432,7 +2027,12 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "The Great Wall of China is NOT visible from space with the naked eye. What IS visible?",
-    "choices": ["The Pyramids of Giza", "City lights at night", "The Grand Canyon", "Literally nothing man-made is visible"],
+    "choices": [
+      "The Pyramids of Giza",
+      "City lights at night",
+      "The Grand Canyon",
+      "Literally nothing man-made is visible"
+    ],
     "correctIndex": 1,
     "hostIntro": "The Great Wall from space thing is a myth. But SOMETHING human is visible up there.",
     "hostCorrect": "City lights at night! The Great Wall is too narrow to see, but city lights — especially from megacities — are clearly visible from orbit at night.",
@@ -1444,7 +2044,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "What percentage of the universe is made up of 'dark matter' and 'dark energy' — stuff scientists can't see, touch, or explain?",
-    "choices": ["About 25%", "About 50%", "About 75%", "About 95%"],
+    "choices": [
+      "About 25%",
+      "About 50%",
+      "About 75%",
+      "About 95%"
+    ],
     "correctIndex": 3,
     "hostIntro": "Scientists understand about... well, almost none of the universe. This number is humbling.",
     "hostCorrect": "About 95%! Only about 5% of the universe is normal matter — everything you can see, touch, and measure. The other 95% is... something. We don't know what.",
@@ -1456,8 +2061,13 @@
     "type": "multiple_choice",
     "category": "Pop Culture",
     "prompt": "What was the first toy to be advertised on television?",
-    "choices": ["Barbie", "Mr. Potato Head", "Slinky", "Etch A Sketch"],
-    "correctIndex": 1,
+    "choices": [
+      "Barbie",
+      "Etch A Sketch",
+      "Slinky",
+      "Mr. Potato Head"
+    ],
+    "correctIndex": 3,
     "hostIntro": "One toy changed marketing forever by being the first to appear in a TV commercial.",
     "hostCorrect": "Mr. Potato Head! In 1952, he became the first toy advertised on TV. Originally, you had to supply your own actual potato. The plastic body came later.",
     "hostWrong": "Mr. Potato Head! First toy on TV, 1952. And fun fact: the original required a REAL potato. Hasbro didn't include a plastic body until 1964.",
@@ -1468,8 +2078,13 @@
     "type": "multiple_choice",
     "category": "Mythology",
     "prompt": "In Japanese mythology, what creature supposedly lives in toilets and grabs people from below?",
-    "choices": ["Kappa", "Aka Manto", "Hanako-san", "Akaname"],
-    "correctIndex": 1,
+    "choices": [
+      "Aka Manto",
+      "Kappa",
+      "Hanako-san",
+      "Akaname"
+    ],
+    "correctIndex": 0,
     "hostIntro": "Japanese folklore has some absolutely terrifying bathroom-related creatures. You'll never sit comfortably again.",
     "hostCorrect": "Aka Manto! A masked spirit in bathrooms who asks 'red paper or blue paper?' Red paper: you're sliced until covered in blood. Blue paper: you're strangled until blue. Correct answer: leave immediately.",
     "hostWrong": "Aka Manto! The bathroom ghost. Asks you to choose a color. Both choices are fatal. Japanese mythology doesn't mess around.",
@@ -1480,7 +2095,12 @@
     "type": "multiple_choice",
     "category": "Business",
     "prompt": "Which company has the most employees in the world?",
-    "choices": ["Amazon", "Walmart", "The US Department of Defense", "Foxconn"],
+    "choices": [
+      "Amazon",
+      "Walmart",
+      "The US Department of Defense",
+      "Foxconn"
+    ],
     "correctIndex": 1,
     "hostIntro": "One organization employs more humans than most countries have soldiers.",
     "hostCorrect": "Walmart! About 2.1 million employees worldwide. More people work at Walmart than live in some countries. It's basically a nation with a smiley face logo.",
@@ -1492,7 +2112,12 @@
     "type": "multiple_choice",
     "category": "Medicine",
     "prompt": "Which body part can you live without and still function relatively normally? All of these can be removed EXCEPT:",
-    "choices": ["Your spleen", "Your appendix", "Your gallbladder", "Your hypothalamus"],
+    "choices": [
+      "Your spleen",
+      "Your appendix",
+      "Your gallbladder",
+      "Your hypothalamus"
+    ],
     "correctIndex": 3,
     "hostIntro": "The human body has a surprising number of 'optional' parts. But not all of them.",
     "hostCorrect": "The hypothalamus! You can live without your spleen, appendix, or gallbladder — millions do. But the hypothalamus controls temperature, hunger, thirst, sleep, and hormones. Lose it and nothing works.",
@@ -1504,7 +2129,12 @@
     "type": "multiple_choice",
     "category": "Art",
     "prompt": "Michelangelo painted the Sistine Chapel ceiling. How did he feel about the job?",
-    "choices": ["He was thrilled — it was his dream project", "He hated it — he considered himself a sculptor, not a painter", "He was indifferent — it was just another commission", "He loved painting but hated the Vatican politics"],
+    "choices": [
+      "He was thrilled — it was his dream project",
+      "He hated it — he considered himself a sculptor, not a painter",
+      "He was indifferent — it was just another commission",
+      "He loved painting but hated the Vatican politics"
+    ],
     "correctIndex": 1,
     "hostIntro": "One of the greatest artworks in human history was made by someone who didn't want to make it.",
     "hostCorrect": "He hated it! Michelangelo was a sculptor. He thought painting was beneath him. He even wrote a poem about how miserable the project made him. The ceiling that took his breath away also took his will to live.",
@@ -1516,8 +2146,13 @@
     "type": "multiple_choice",
     "category": "Animals",
     "prompt": "Which animal has been observed using tools, planning for the future, and holding grudges against specific humans for years?",
-    "choices": ["Dolphins", "Crows", "Elephants", "Chimpanzees"],
-    "correctIndex": 1,
+    "choices": [
+      "Dolphins",
+      "Chimpanzees",
+      "Elephants",
+      "Crows"
+    ],
+    "correctIndex": 3,
     "hostIntro": "One animal remembers if you wronged it. And it WILL get revenge. Be nice to this one.",
     "hostCorrect": "Crows! They use tools, plan ahead, and recognize individual human faces. Cross a crow and it will remember you — and tell its friends. Crows hold generational grudges.",
     "hostWrong": "Crows! They use tools, hold grudges, and teach their children which humans to hate. Crows are essentially tiny, flying, vengeful geniuses.",
@@ -1528,7 +2163,12 @@
     "type": "multiple_choice",
     "category": "Geography",
     "prompt": "What is the least visited country in the world by tourists?",
-    "choices": ["Tuvalu", "Nauru", "North Korea", "Turkmenistan"],
+    "choices": [
+      "Tuvalu",
+      "Nauru",
+      "North Korea",
+      "Turkmenistan"
+    ],
     "correctIndex": 0,
     "hostIntro": "Some countries roll out the red carpet for tourists. This one barely has a runway.",
     "hostCorrect": "Tuvalu! A tiny Pacific island nation that gets about 3,700 visitors per year. That's fewer tourists than some restaurants get in a month.",
@@ -1540,7 +2180,12 @@
     "type": "multiple_choice",
     "category": "Technology",
     "prompt": "What does 'HTTP' stand for in a web address?",
-    "choices": ["HyperText Transfer Protocol", "High-Tech Transfer Platform", "Hyper-Threaded Transfer Process", "Host Terminal Transfer Protocol"],
+    "choices": [
+      "HyperText Transfer Protocol",
+      "High-Tech Transfer Platform",
+      "Hyper-Threaded Transfer Process",
+      "Host Terminal Transfer Protocol"
+    ],
     "correctIndex": 0,
     "hostIntro": "You type it every day. Or rather, your browser types it for you. But what does it mean?",
     "hostCorrect": "HyperText Transfer Protocol! The language your browser speaks to web servers. You've used it millions of times and this might be the first time you've thought about it.",
@@ -1552,7 +2197,12 @@
     "type": "multiple_choice",
     "category": "Food & Drink",
     "prompt": "Which of these foods can last essentially forever if stored properly?",
-    "choices": ["White rice", "Honey", "Salt", "All of the above"],
+    "choices": [
+      "White rice",
+      "Honey",
+      "Salt",
+      "All of the above"
+    ],
     "correctIndex": 3,
     "hostIntro": "Some foods don't expire. Like, ever. Your leftovers could never.",
     "hostCorrect": "All of them! White rice, honey, and salt can all last indefinitely when stored properly. Your fridge is full of things that expire. These three laugh at expiration dates.",
@@ -1564,8 +2214,13 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "Which was invented first: the lighter or the match?",
-    "choices": ["The match — obviously", "The lighter — surprisingly", "They were invented the same year", "Neither — both occur in nature"],
-    "correctIndex": 1,
+    "choices": [
+      "The match — obviously",
+      "Neither — both occur in nature",
+      "They were invented the same year",
+      "The lighter — surprisingly"
+    ],
+    "correctIndex": 3,
     "hostIntro": "The order of inventions is rarely what you'd expect. This one gets everybody.",
     "hostCorrect": "The lighter! Invented in 1823 by a German chemist. Friction matches weren't invented until 1826. The lighter came first. Logic means nothing in the history of invention.",
     "hostWrong": "The lighter came first! 1823 vs. 1826. The complicated thing was invented before the simple thing. Technology doesn't follow a logical order.",
@@ -1576,7 +2231,12 @@
     "type": "multiple_choice",
     "category": "Movies",
     "prompt": "The actor who voiced Shrek was originally someone else before Mike Myers took over. Who was the first Shrek?",
-    "choices": ["Eddie Murphy", "Chris Farley", "Jack Black", "Robin Williams"],
+    "choices": [
+      "Eddie Murphy",
+      "Chris Farley",
+      "Jack Black",
+      "Robin Williams"
+    ],
     "correctIndex": 1,
     "hostIntro": "Mike Myers IS Shrek. But he almost wasn't. Someone else recorded the role first.",
     "hostCorrect": "Chris Farley! He recorded almost the entire movie before his death in 1997. Some of his recordings have never been released. Mike Myers rerecorded the whole thing with a Scottish accent.",
@@ -1588,7 +2248,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "Which of these is NOT a real element on the periodic table?",
-    "choices": ["Einsteinium", "Californium", "Pandemonium", "Tennessine"],
+    "choices": [
+      "Einsteinium",
+      "Californium",
+      "Pandemonium",
+      "Tennessine"
+    ],
     "correctIndex": 2,
     "hostIntro": "Real elements have some wild names. But one of these is completely made up.",
     "hostCorrect": "Pandemonium! It's not real. But Einsteinium (99), Californium (98), and Tennessine (117) are all genuine elements on the periodic table. Scientists name elements like they're naming racehorses.",
@@ -1600,7 +2265,12 @@
     "type": "multiple_choice",
     "category": "Language",
     "prompt": "The sentence 'The quick brown fox jumps over the lazy dog' is special because:",
-    "choices": ["It's the oldest known English sentence", "It contains every letter of the alphabet", "It was the first sentence ever typed on a keyboard", "It was used to test the first telegraph"],
+    "choices": [
+      "It's the oldest known English sentence",
+      "It contains every letter of the alphabet",
+      "It was the first sentence ever typed on a keyboard",
+      "It was used to test the first telegraph"
+    ],
     "correctIndex": 1,
     "hostIntro": "You've seen this sentence before. But do you know WHY it exists?",
     "hostCorrect": "Every letter of the alphabet! It's a pangram — a sentence using all 26 letters. That's why it was used to test typewriters, keyboards, and fonts for over a century.",
@@ -1612,8 +2282,13 @@
     "type": "multiple_choice",
     "category": "Psychology",
     "prompt": "What is the 'doorway effect'?",
-    "choices": ["Feeling anxious about entering new rooms", "Forgetting why you walked into a room", "Assuming people who answer doors are the homeowners", "Judging a business by its entrance"],
-    "correctIndex": 1,
+    "choices": [
+      "Feeling anxious about entering new rooms",
+      "Judging a business by its entrance",
+      "Assuming people who answer doors are the homeowners",
+      "Forgetting why you walked into a room"
+    ],
+    "correctIndex": 3,
     "hostIntro": "There's a scientific reason you walk into the kitchen and forget why you're there.",
     "hostCorrect": "Forgetting why you walked into a room! Walking through doorways triggers your brain to 'file away' the previous room's context. You're not losing your mind — your brain is organizing badly.",
     "hostWrong": "Forgetting your purpose when entering a room. It's a real, studied phenomenon. Doorways are memory erasers. It's not you — it's architecture.",
@@ -1624,7 +2299,12 @@
     "type": "multiple_choice",
     "category": "World Records",
     "prompt": "The world's oldest known joke, from 1900 BC Sumeria, is about what topic?",
-    "choices": ["Marriage", "Flatulence", "Death", "Stupidity"],
+    "choices": [
+      "Marriage",
+      "Flatulence",
+      "Death",
+      "Stupidity"
+    ],
     "correctIndex": 1,
     "hostIntro": "Humans have been telling jokes for almost 4,000 years. And the first one? Oh, it's exactly what you'd expect.",
     "hostCorrect": "Flatulence! The oldest known joke: 'Something which has never occurred since time immemorial; a young woman did not fart in her husband's lap.' Fart jokes: eternal.",
@@ -1636,7 +2316,12 @@
     "type": "multiple_choice",
     "category": "Sports",
     "prompt": "The Olympic flame has gone out accidentally during the relay multiple times. How do they relight it?",
-    "choices": ["They use a regular lighter — it's just fire", "From a backup flame kept in a special lantern", "They fly a new flame from Greece", "They start over with a new ceremony"],
+    "choices": [
+      "They use a regular lighter — it's just fire",
+      "From a backup flame kept in a special lantern",
+      "They fly a new flame from Greece",
+      "They start over with a new ceremony"
+    ],
     "correctIndex": 1,
     "hostIntro": "The eternal flame is... not always eternal. What happens when it goes out?",
     "hostCorrect": "A backup flame in a lantern! Multiple backup flames travel with the relay in miner's lanterns. They've been needed more than the Olympics would like to admit.",
@@ -1648,7 +2333,12 @@
     "type": "multiple_choice",
     "category": "Technology",
     "prompt": "In 1999, the entire storage capacity of the internet was estimated to be about how much?",
-    "choices": ["About 70 terabytes", "About 1 petabyte", "About 12 petabytes", "About 200 petabytes"],
+    "choices": [
+      "About 70 terabytes",
+      "About 1 petabyte",
+      "About 12 petabytes",
+      "About 200 petabytes"
+    ],
     "correctIndex": 2,
     "hostIntro": "The entire internet. All of it. In 1999. How much data do you think that was?",
     "hostCorrect": "About 12 petabytes! The whole internet, everything, was about 12 PB. Today, that much data is uploaded to the internet roughly every few minutes.",
@@ -1660,7 +2350,12 @@
     "type": "multiple_choice",
     "category": "Animals",
     "prompt": "Which animal kills more humans per year than sharks, lions, and wolves COMBINED?",
-    "choices": ["Hippopotamus", "Mosquito", "Freshwater snail", "All of the above"],
+    "choices": [
+      "Hippopotamus",
+      "Mosquito",
+      "Freshwater snail",
+      "All of the above"
+    ],
     "correctIndex": 3,
     "hostIntro": "The most dangerous animals aren't the ones you'd expect. Nature's deadliest creatures don't have dramatic music.",
     "hostCorrect": "All of them! Mosquitoes kill ~700,000/year (malaria), freshwater snails ~200,000/year (schistosomiasis), and hippos ~500/year. Sharks kill about 5. FIVE. Jaws lied to you.",
@@ -1672,7 +2367,12 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "Oxford University was teaching students for how many years before the Aztec Empire even began?",
-    "choices": ["About 50 years", "About 150 years", "About 230 years", "About 400 years"],
+    "choices": [
+      "About 50 years",
+      "About 150 years",
+      "About 230 years",
+      "About 400 years"
+    ],
     "correctIndex": 2,
     "hostIntro": "We touched on this earlier, but let's get specific. How OLD is Oxford compared to the Aztecs?",
     "hostCorrect": "About 230 years! Oxford's teaching dates to 1096 AD; the Aztec Empire started around 1325 AD. Oxford had a 230-year head start on an entire civilization.",
@@ -1684,7 +2384,12 @@
     "type": "multiple_choice",
     "category": "Space",
     "prompt": "On Venus, a single day (one full rotation) is LONGER than a single year (one orbit around the Sun). How long is a Venus day?",
-    "choices": ["About 30 Earth days", "About 116 Earth days", "About 243 Earth days", "About 365 Earth days"],
+    "choices": [
+      "About 30 Earth days",
+      "About 116 Earth days",
+      "About 243 Earth days",
+      "About 365 Earth days"
+    ],
     "correctIndex": 2,
     "hostIntro": "Venus breaks every rule. Including the one where days are shorter than years.",
     "hostCorrect": "243 Earth days! Venus rotates so slowly that it completes an orbit around the Sun (225 days) before it finishes one rotation. A Venus year is shorter than a Venus day.",
@@ -1696,8 +2401,13 @@
     "type": "multiple_choice",
     "category": "Food & Drink",
     "prompt": "What is the most shoplifted food item in the world?",
-    "choices": ["Candy bars", "Cheese", "Steak", "Baby formula"],
-    "correctIndex": 1,
+    "choices": [
+      "Cheese",
+      "Candy bars",
+      "Steak",
+      "Baby formula"
+    ],
+    "correctIndex": 0,
     "hostIntro": "One specific food category is stolen more than any other. Worldwide. And it's not what you'd expect.",
     "hostCorrect": "Cheese! About 4% of all cheese produced globally is stolen. There's even a black market for high-end cheese. Cheese heists are a real thing.",
     "hostWrong": "Cheese! The most stolen food on Earth. There are literal cheese crime rings. The dairy underworld is no joke.",
@@ -1708,7 +2418,12 @@
     "type": "multiple_choice",
     "category": "Movies",
     "prompt": "In the movie 'The Shining,' the famous 'Here's Johnny!' line was:",
-    "choices": ["Written by Stephen King in the novel", "Improvised by Jack Nicholson on set", "Suggested by Stanley Kubrick", "Added in post-production dubbing"],
+    "choices": [
+      "Written by Stephen King in the novel",
+      "Improvised by Jack Nicholson on set",
+      "Suggested by Stanley Kubrick",
+      "Added in post-production dubbing"
+    ],
     "correctIndex": 1,
     "hostIntro": "One of cinema's most iconic lines was never in the script. It was a gift from a genius actor.",
     "hostCorrect": "Improvised by Nicholson! It's a reference to Ed McMahon's catchphrase on The Tonight Show. Kubrick kept it. Stephen King actually hated it because it's an American TV reference and the hotel is supposed to be remote.",
@@ -1720,8 +2435,13 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "If you could drive a car straight up at highway speed, how long would it take to reach space?",
-    "choices": ["About 15 minutes", "About 1 hour", "About 6 hours", "About 1 day"],
-    "correctIndex": 1,
+    "choices": [
+      "About 15 minutes",
+      "About 1 day",
+      "About 6 hours",
+      "About 1 hour"
+    ],
+    "correctIndex": 3,
     "hostIntro": "Space is closer than you think. Like, embarrassingly close.",
     "hostCorrect": "About an hour! Space starts at about 62 miles up (the Kármán line). At 60 mph, you'd be there in just over an hour. Space is closer than most people's commute.",
     "hostWrong": "One hour! At highway speed, straight up. Space is only 62 miles away. You probably drive further to visit your in-laws.",
@@ -1732,7 +2452,12 @@
     "type": "multiple_choice",
     "category": "Language",
     "prompt": "The word 'set' holds the record in English for having the most what?",
-    "choices": ["Syllables when fully pronounced", "Different definitions", "Languages it's been borrowed into", "Rhyming words"],
+    "choices": [
+      "Syllables when fully pronounced",
+      "Different definitions",
+      "Languages it's been borrowed into",
+      "Rhyming words"
+    ],
     "correctIndex": 1,
     "hostIntro": "Three little letters. One of the most complex words in the English language.",
     "hostCorrect": "Different definitions! The word 'set' has over 430 different definitions in the Oxford English Dictionary. Three letters, 430 meanings. English is absurd.",
@@ -1744,7 +2469,12 @@
     "type": "multiple_choice",
     "category": "Video Games",
     "prompt": "The voice actor for Mario — Charles Martinet — voiced the character for over 30 years. What nationality is he?",
-    "choices": ["Italian", "Japanese", "American", "British"],
+    "choices": [
+      "Italian",
+      "Japanese",
+      "American",
+      "British"
+    ],
     "correctIndex": 2,
     "hostIntro": "It's-a him! But WHO is him, really?",
     "hostCorrect": "American! Born in San Jose, California. The most famous Italian accent in gaming history belongs to a guy from California. Acting!",
@@ -1756,7 +2486,12 @@
     "type": "multiple_choice",
     "category": "Geography",
     "prompt": "Africa is so large that you could fit the US, China, India, and most of Europe inside it. What percentage of the world's total land area is Africa?",
-    "choices": ["About 10%", "About 15%", "About 20%", "About 30%"],
+    "choices": [
+      "About 10%",
+      "About 15%",
+      "About 20%",
+      "About 30%"
+    ],
     "correctIndex": 2,
     "hostIntro": "Maps lie about Africa's size. Mercator projection has been scamming you. Let's fix that.",
     "hostCorrect": "About 20%! Africa is 30.3 million square kilometers — a fifth of all land on Earth. Standard maps make it look much smaller than it actually is.",
@@ -1768,7 +2503,12 @@
     "type": "multiple_choice",
     "category": "Music",
     "prompt": "Which famous musician's real first name is 'Farrokh'?",
-    "choices": ["Prince", "Sting", "Freddie Mercury", "Bono"],
+    "choices": [
+      "Prince",
+      "Sting",
+      "Freddie Mercury",
+      "Bono"
+    ],
     "correctIndex": 2,
     "hostIntro": "Rock stars love stage names. This one's real name was Farrokh. Farrokh.",
     "hostCorrect": "Freddie Mercury! Born Farrokh Bulsara in Zanzibar (now Tanzania). He became the greatest rock vocalist ever. The name change was... a good call.",
@@ -1780,7 +2520,12 @@
     "type": "multiple_choice",
     "category": "Psychology",
     "prompt": "The 'Spotlight Effect' is the tendency to:",
-    "choices": ["Perform better when people are watching", "Overestimate how much others notice your appearance or behavior", "Seek attention in group settings", "Remember moments when you were the center of attention"],
+    "choices": [
+      "Perform better when people are watching",
+      "Overestimate how much others notice your appearance or behavior",
+      "Seek attention in group settings",
+      "Remember moments when you were the center of attention"
+    ],
     "correctIndex": 1,
     "hostIntro": "That time you had spinach in your teeth all day? Relax. Nobody noticed. Science says so.",
     "hostCorrect": "Overestimate how much others notice you! Studies show people dramatically overestimate how much attention others pay to them. That embarrassing thing you did? Nobody remembers. They're too busy worrying about their own embarrassments.",
@@ -1792,7 +2537,12 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "In 1969, the computing power that sent astronauts to the Moon was less powerful than:",
-    "choices": ["A modern car key fob", "A graphing calculator", "A musical greeting card", "All of the above"],
+    "choices": [
+      "A modern car key fob",
+      "A graphing calculator",
+      "A musical greeting card",
+      "All of the above"
+    ],
     "correctIndex": 3,
     "hostIntro": "We went to the Moon with less computing power than things you throw in the trash today.",
     "hostCorrect": "All of them! The Apollo Guidance Computer had 74 KB of memory. Your car key fob, a TI-84 calculator, and a musical birthday card all have more processing power. We went to the Moon with a glorified abacus.",
@@ -1804,8 +2554,13 @@
     "type": "multiple_choice",
     "category": "Animals",
     "prompt": "What is the only mammal that can truly fly (not glide)?",
-    "choices": ["Flying squirrels", "Bats", "Sugar gliders", "Colugos"],
-    "correctIndex": 1,
+    "choices": [
+      "Bats",
+      "Flying squirrels",
+      "Sugar gliders",
+      "Colugos"
+    ],
+    "correctIndex": 0,
     "hostIntro": "Flying squirrels don't fly. Sugar gliders don't fly. Only one mammal truly flies.",
     "hostCorrect": "Bats! Every other 'flying' mammal is actually gliding — falling with style. Bats are the only mammals with powered flight. They flap, they soar, they genuinely fly.",
     "hostWrong": "Bats! Flying squirrels are glorified BASE jumpers. Only bats achieve real, powered, flapping flight among mammals.",
@@ -1816,7 +2571,12 @@
     "type": "multiple_choice",
     "category": "Business",
     "prompt": "What product did Sony originally manufacture before electronics?",
-    "choices": ["Cameras", "Rice cookers", "Umbrellas", "Toys"],
+    "choices": [
+      "Cameras",
+      "Rice cookers",
+      "Umbrellas",
+      "Toys"
+    ],
     "correctIndex": 1,
     "hostIntro": "Before PlayStation, before Walkman, before anything electronic — Sony made something very domestic.",
     "hostCorrect": "Rice cookers! Sony's first product was an electric rice cooker in 1946. It didn't work very well — it either burned or undercooked the rice. Thankfully, they pivoted.",
@@ -1828,7 +2588,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "What color is a mirror?",
-    "choices": ["Silver", "White", "It has no color — it reflects everything", "Green"],
+    "choices": [
+      "Silver",
+      "White",
+      "It has no color — it reflects everything",
+      "Green"
+    ],
     "correctIndex": 3,
     "hostIntro": "You look in a mirror every day. But have you ever really LOOKED at one?",
     "hostCorrect": "Green! Mirrors reflect green light slightly more than other wavelengths. If you set up two mirrors facing each other and look at the infinite tunnel, it gets progressively greener. Your mirror has a color. It's green.",
@@ -1840,7 +2605,12 @@
     "type": "multiple_choice",
     "category": "Pop Culture",
     "prompt": "How many people have walked on the Moon?",
-    "choices": ["2", "6", "12", "24"],
+    "choices": [
+      "2",
+      "6",
+      "12",
+      "24"
+    ],
     "correctIndex": 2,
     "hostIntro": "Everyone knows Neil Armstrong walked on the Moon. But how many others joined the club?",
     "hostCorrect": "12! Twelve humans have walked on the Moon, across six Apollo missions from 1969 to 1972. The last person to walk on the Moon was Gene Cernan. Most people can't name anyone after Buzz Aldrin.",
@@ -1852,8 +2622,13 @@
     "type": "multiple_choice",
     "category": "Law",
     "prompt": "In the UK, it is technically illegal to handle a salmon in what manner?",
-    "choices": ["While standing in a river", "In suspicious circumstances", "Without a government-issued fish license", "While wearing a disguise"],
-    "correctIndex": 1,
+    "choices": [
+      "While standing in a river",
+      "While wearing a disguise",
+      "Without a government-issued fish license",
+      "In suspicious circumstances"
+    ],
+    "correctIndex": 3,
     "hostIntro": "British law is a treasure trove of absurdity. This one involves fish. Obviously.",
     "hostCorrect": "Suspiciously! The Salmon Act of 1986 makes it illegal to 'handle salmon in suspicious circumstances.' What constitutes suspicious salmon handling is, sadly, not defined.",
     "hostWrong": "In suspicious circumstances! The Salmon Act of 1986. You can handle a salmon — just don't be suspicious about it. The British legal system, everybody.",
@@ -1864,7 +2639,12 @@
     "type": "multiple_choice",
     "category": "Medicine",
     "prompt": "Which common household substance was used as an anesthetic during surgeries in the 1800s?",
-    "choices": ["Whiskey", "Chloroform", "Ether", "All of the above"],
+    "choices": [
+      "Whiskey",
+      "Chloroform",
+      "Ether",
+      "All of the above"
+    ],
     "correctIndex": 3,
     "hostIntro": "Before modern anesthesia, doctors got creative. Very creative. Questionably creative.",
     "hostCorrect": "All of them! Whiskey, chloroform, and ether were all used to knock patients out for surgery. Sometimes combined. The 1800s were a horror movie with medical licenses.",
@@ -1876,7 +2656,12 @@
     "type": "multiple_choice",
     "category": "Inventions",
     "prompt": "WD-40 got its name because it was the formula that finally worked on the:",
-    "choices": ["20th try", "40th try", "400th try", "4th attempt in the lab on Day 0"],
+    "choices": [
+      "20th try",
+      "40th try",
+      "400th try",
+      "4th attempt in the lab on Day 0"
+    ],
     "correctIndex": 1,
     "hostIntro": "WD-40 is in everyone's garage. But what does the name actually mean?",
     "hostCorrect": "The 40th try! 'Water Displacement, 40th formula.' It took 39 failures to get the recipe right. Persistence pays off. Eventually. After 39 failures.",
@@ -1888,7 +2673,12 @@
     "type": "multiple_choice",
     "category": "Geography",
     "prompt": "The Dead Sea is not a sea. What is it, and what makes it 'dead'?",
-    "choices": ["A lake — too salty for most life", "An inlet — dried up from volcanic activity", "A swamp — toxic gases killed everything", "A reservoir — poisoned by ancient mining"],
+    "choices": [
+      "A lake — too salty for most life",
+      "An inlet — dried up from volcanic activity",
+      "A swamp — toxic gases killed everything",
+      "A reservoir — poisoned by ancient mining"
+    ],
     "correctIndex": 0,
     "hostIntro": "It's not dead. It's not a sea. It's two lies in one name.",
     "hostCorrect": "A lake! A landlocked salt lake so salty (34% salinity) that almost nothing can live in it. The name is dramatic but accurate-ish — very little survives in it.",
@@ -1900,8 +2690,13 @@
     "type": "multiple_choice",
     "category": "TV Shows",
     "prompt": "Breaking Bad's Walter White was based on which real-life concept that creator Vince Gilligan pitched as:",
-    "choices": ["A true crime documentary he saw", "'Mr. Rogers becomes Scarface'", "'A chemistry teacher who snaps'", "A news article about a meth lab explosion"],
-    "correctIndex": 1,
+    "choices": [
+      "A true crime documentary he saw",
+      "A news article about a meth lab explosion",
+      "'A chemistry teacher who snaps'",
+      "'Mr. Rogers becomes Scarface'"
+    ],
+    "correctIndex": 3,
     "hostIntro": "The pitch that launched one of the greatest TV shows ever was exactly one sentence long.",
     "hostCorrect": "'Mr. Rogers becomes Scarface!' That's how Vince Gilligan pitched Breaking Bad. The transformation of the most wholesome person into the most dangerous. TV gold in seven words.",
     "hostWrong": "'Mr. Rogers to Scarface.' That's the entire pitch. Kind, gentle man becomes drug kingpin. Every network passed except AMC. Their gain, everyone else's loss.",
@@ -1912,7 +2707,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "Water can exist in all three states — solid, liquid, and gas — simultaneously at what specific temperature and pressure?",
-    "choices": ["Absolute zero", "The triple point (0.01°C at 611.73 pascals)", "Room temperature in a vacuum", "It's theoretically impossible"],
+    "choices": [
+      "Absolute zero",
+      "The triple point (0.01°C at 611.73 pascals)",
+      "Room temperature in a vacuum",
+      "It's theoretically impossible"
+    ],
     "correctIndex": 1,
     "hostIntro": "Water being ice, liquid, and steam all at once sounds impossible. It's not.",
     "hostCorrect": "The triple point! At exactly 0.01°C and 611.73 pascals of pressure, water exists as ice, liquid, and vapor simultaneously. Physics is cool. Literally.",
@@ -1924,8 +2724,13 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "Which war lasted only 38 to 45 minutes, making it the shortest war in recorded history?",
-    "choices": ["The Football War (Honduras vs El Salvador)", "The Anglo-Zanzibar War", "The Six-Day War", "The Falklands War"],
-    "correctIndex": 1,
+    "choices": [
+      "The Anglo-Zanzibar War",
+      "The Football War (Honduras vs El Salvador)",
+      "The Six-Day War",
+      "The Falklands War"
+    ],
+    "correctIndex": 0,
     "hostIntro": "Some wars drag on for years. This one was over before lunch.",
     "hostCorrect": "The Anglo-Zanzibar War! On August 27, 1896, Britain and Zanzibar went to war. Zanzibar surrendered after 38-45 minutes. The shortest war in history. Barely enough time to make tea.",
     "hostWrong": "Anglo-Zanzibar War. 38 to 45 minutes. That's shorter than most movies. Shorter than most meetings. Barely enough time to realize you're at war.",
@@ -1936,7 +2741,12 @@
     "type": "multiple_choice",
     "category": "Food & Drink",
     "prompt": "What gives red velvet cake its distinctive red color? Originally, it was:",
-    "choices": ["Beet juice", "A chemical reaction between cocoa and buttermilk", "Strawberry extract", "Red food coloring — always has been"],
+    "choices": [
+      "Beet juice",
+      "A chemical reaction between cocoa and buttermilk",
+      "Strawberry extract",
+      "Red food coloring — always has been"
+    ],
     "correctIndex": 1,
     "hostIntro": "Red velvet cake has a secret origin story. And it doesn't involve red dye #40.",
     "hostCorrect": "A chemical reaction! The original red color came from anthocyanin in cocoa reacting with acidic buttermilk and vinegar. No dye needed. Modern recipes use food coloring because processed cocoa lost this property.",
@@ -1948,7 +2758,12 @@
     "type": "multiple_choice",
     "category": "Pop Culture",
     "prompt": "The character of Yoda in Star Wars was almost played by a real person instead of a puppet. Who was considered?",
-    "choices": ["Danny DeVito", "A trained monkey wearing a mask", "An animatronic robot", "A small child in prosthetic makeup"],
+    "choices": [
+      "Danny DeVito",
+      "A trained monkey wearing a mask",
+      "An animatronic robot",
+      "A small child in prosthetic makeup"
+    ],
     "correctIndex": 1,
     "hostIntro": "Yoda was almost very different. Very, VERY different. Brace yourself.",
     "hostCorrect": "A monkey in a mask! George Lucas seriously considered using a trained monkey in a Yoda mask. The idea was abandoned when the monkey kept pulling the mask off. Thank goodness.",
@@ -1960,7 +2775,12 @@
     "type": "multiple_choice",
     "category": "Sports",
     "prompt": "Wilt Chamberlain's famous 100-point basketball game in 1962 has no complete video recording. How much footage exists?",
-    "choices": ["The full game exists but is locked in a vault", "About 30 minutes of highlights", "Only a few seconds of grainy footage", "Zero — no video recording exists at all"],
+    "choices": [
+      "The full game exists but is locked in a vault",
+      "About 30 minutes of highlights",
+      "Only a few seconds of grainy footage",
+      "Zero — no video recording exists at all"
+    ],
     "correctIndex": 3,
     "hostIntro": "The greatest single-game performance in NBA history. And the evidence is... lacking.",
     "hostCorrect": "Zero! No video exists of Wilt's 100-point game. Not a single frame. One of the greatest sports achievements ever, and nobody filmed it. There's only audio and a few photos.",
@@ -1972,7 +2792,12 @@
     "type": "multiple_choice",
     "category": "Science",
     "prompt": "Which of these is heavier: a pound of feathers or a pound of gold?",
-    "choices": ["They weigh the same — a pound is a pound", "Feathers, because they use a different pound measurement", "Gold, because of its density", "It depends on the altitude"],
+    "choices": [
+      "They weigh the same — a pound is a pound",
+      "Feathers, because they use a different pound measurement",
+      "Gold, because of its density",
+      "It depends on the altitude"
+    ],
     "correctIndex": 1,
     "hostIntro": "You've heard this riddle before. But the actual answer might surprise you. It surprised me.",
     "hostCorrect": "Feathers are heavier! Gold uses Troy pounds (12 ounces), while feathers use Avoirdupois pounds (16 ounces). A 'pound' of feathers is actually heavier than a 'pound' of gold. The trick question has a trick answer.",
@@ -1984,7 +2809,12 @@
     "type": "multiple_choice",
     "category": "Literature",
     "prompt": "Which famous book's original title was 'First Impressions' before it was published under a different name?",
-    "choices": ["The Great Gatsby", "Pride and Prejudice", "Moby Dick", "1984"],
+    "choices": [
+      "The Great Gatsby",
+      "Pride and Prejudice",
+      "Moby Dick",
+      "1984"
+    ],
     "correctIndex": 1,
     "hostIntro": "Some books are known by names that weren't the author's first choice.",
     "hostCorrect": "Pride and Prejudice! Jane Austen originally called it 'First Impressions.' She rewrote it, renamed it, and created one of the most famous titles in literature. Good edit.",
@@ -1996,7 +2826,12 @@
     "type": "multiple_choice",
     "category": "Technology",
     "prompt": "The @ symbol in email addresses was chosen by programmer Ray Tomlinson in 1971 because:",
-    "choices": ["It was already used in programming for 'at' commands", "It was the least-used key on the keyboard", "It looked like a snail and he thought that was fun", "It was chosen randomly by his cat walking on the keyboard"],
+    "choices": [
+      "It was already used in programming for 'at' commands",
+      "It was the least-used key on the keyboard",
+      "It looked like a snail and he thought that was fun",
+      "It was chosen randomly by his cat walking on the keyboard"
+    ],
     "correctIndex": 1,
     "hostIntro": "That little @ symbol you use every day. Someone picked it for a specific reason.",
     "hostCorrect": "Least-used key! Tomlinson needed a symbol that wouldn't appear in anyone's name. The @ was basically unused, sitting lonely on the keyboard. Now it's one of the most typed symbols on Earth.",
@@ -2008,7 +2843,12 @@
     "type": "multiple_choice",
     "category": "Art",
     "prompt": "The 'Salvator Mundi,' attributed to Leonardo da Vinci, sold for $450 million in 2017. Where is it now?",
-    "choices": ["The Louvre in Paris", "A Saudi Arabian prince's yacht", "Nobody knows — it hasn't been seen publicly since", "The Metropolitan Museum of Art"],
+    "choices": [
+      "The Louvre in Paris",
+      "A Saudi Arabian prince's yacht",
+      "Nobody knows — it hasn't been seen publicly since",
+      "The Metropolitan Museum of Art"
+    ],
     "correctIndex": 2,
     "hostIntro": "Someone paid $450 million for a painting. And then... it vanished.",
     "hostCorrect": "Nobody knows! The most expensive painting ever sold was purchased by Saudi Crown Prince Mohammed bin Salman, and it hasn't been publicly displayed since. Half a billion dollars, whereabouts unknown.",
@@ -2020,7 +2860,12 @@
     "type": "multiple_choice",
     "category": "Animals",
     "prompt": "Pigeons can do something that most humans struggle with. What is it?",
-    "choices": ["They can count up to 9", "They can recognize every letter of the alphabet", "They can distinguish between paintings by Monet and Picasso", "All of the above"],
+    "choices": [
+      "They can count up to 9",
+      "They can recognize every letter of the alphabet",
+      "They can distinguish between paintings by Monet and Picasso",
+      "All of the above"
+    ],
     "correctIndex": 3,
     "hostIntro": "You think pigeons are stupid. Pigeons think you're rude. Let's see who's right.",
     "hostCorrect": "All of them! Pigeons can count to 9, recognize all 26 letters, and distinguish art styles. They've been trained to detect cancer in medical images too. Pigeons are wildly underestimated.",
@@ -2032,11 +2877,526 @@
     "type": "multiple_choice",
     "category": "History",
     "prompt": "How did Albert Einstein's brain end up being studied after his death?",
-    "choices": ["He donated it to science in his will", "The pathologist who did his autopsy stole it", "His family sold it to Princeton", "It was lost for decades and rediscovered in a storage unit"],
-    "correctIndex": 1,
+    "choices": [
+      "The pathologist who did his autopsy stole it",
+      "He donated it to science in his will",
+      "His family sold it to Princeton",
+      "It was lost for decades and rediscovered in a storage unit"
+    ],
+    "correctIndex": 0,
     "hostIntro": "Einstein's brain has quite the post-mortem adventure. It's stranger than fiction.",
     "hostCorrect": "The pathologist stole it! Dr. Thomas Harvey removed Einstein's brain during the autopsy without permission and kept it for over 40 years. He took it home. In a jar. In a cider box.",
     "hostWrong": "Stolen! By the pathologist. Dr. Thomas Harvey took Einstein's brain without authorization and kept it in a cider box for decades. The greatest theft in scientific history.",
     "hostTimeout": "The autopsy pathologist stole it. Took it home. In a jar. For 40 years. Nobody asked for it back for a LONG time."
+  },
+  {
+    "id": "q171",
+    "type": "multiple_choice",
+    "category": "Science",
+    "prompt": "Diamonds can be made from peanut butter. What else can create diamonds?",
+    "choices": [
+      "Tequila",
+      "Lightning strikes on carbon-rich soil",
+      "The pressure inside Jupiter",
+      "All of the above"
+    ],
+    "correctIndex": 3,
+    "hostIntro": "Diamonds are forever. And apparently they're everywhere too.",
+    "hostCorrect": "All of them! Tequila vapor, lightning strikes, and Jupiter's atmosphere can all produce diamonds. Diamonds aren't rare — the marketing is.",
+    "hostWrong": "All of the above. Diamonds form in more ways than De Beers wants you to know.",
+    "hostTimeout": "All of them. Diamonds from tequila, lightning, and gas giants. Nature is generous with carbon."
+  },
+  {
+    "id": "q172",
+    "type": "multiple_choice",
+    "category": "History",
+    "prompt": "Genghis Khan killed so many people that he actually cooled the Earth's climate. Roughly how many did he kill?",
+    "choices": [
+      "About 1 million",
+      "About 10 million",
+      "About 40 million",
+      "About 100 million"
+    ],
+    "correctIndex": 2,
+    "hostIntro": "One man changed the planet's temperature. Through violence. This is real climate science.",
+    "hostCorrect": "About 40 million — roughly 10% of the world's population. So much farmland reverted to forest that it measurably reduced CO2 levels. History's most brutal carbon offset.",
+    "hostWrong": "40 million. Ten percent of humanity. Enough death to literally cool the planet. Genghis Khan: history's worst environmentalist.",
+    "hostTimeout": "40 million. He killed enough people to change the climate. That's a sentence I wish I didn't have to say."
+  },
+  {
+    "id": "q173",
+    "type": "multiple_choice",
+    "category": "Animals",
+    "prompt": "Sea otters hold hands while sleeping. Why?",
+    "choices": [
+      "To stay warm in cold water",
+      "To avoid drifting apart from each other",
+      "To signal dominance in the group",
+      "Scientists don't actually know why"
+    ],
+    "correctIndex": 1,
+    "hostIntro": "The cutest fact in all of marine biology. You're welcome.",
+    "hostCorrect": "To avoid drifting apart! They hold hands so ocean currents don't separate them while they nap. They also wrap themselves in kelp as anchors. Otters are adorable geniuses.",
+    "hostWrong": "So they don't float away from each other. Sea otters hold hands to stay together. If that doesn't warm your heart, nothing will.",
+    "hostTimeout": "To stay together. They hold hands so they don't drift apart. I'm not crying, you're crying."
+  },
+  {
+    "id": "q174",
+    "type": "multiple_choice",
+    "category": "Music",
+    "prompt": "Mozart wrote a piece called 'Leck mich im Arsch.' What does that translate to?",
+    "choices": [
+      "Kiss my hand",
+      "Dance with the devil",
+      "Leave me in peace",
+      "Lick me in the behind"
+    ],
+    "correctIndex": 3,
+    "hostIntro": "Mozart was a genius composer. He was also a 12-year-old boy trapped in a genius's body.",
+    "hostCorrect": "Lick me in the behind! Mozart wrote a canon literally titled that. He was famously obsessed with toilet humor. Classical music's greatest composer was basically a frat boy.",
+    "hostWrong": "It means exactly what you think. Mozart had the humor of a middle schooler. And the talent of a god. A confusing combination.",
+    "hostTimeout": "It means 'lick me in the behind.' Mozart. The genius. Wrote that. Classical music is wilder than you think."
+  },
+  {
+    "id": "q175",
+    "type": "multiple_choice",
+    "category": "Technology",
+    "prompt": "The QWERTY keyboard layout was designed to:",
+    "choices": [
+      "Maximize typing speed",
+      "Slow typists down to prevent typewriter jams",
+      "Match the frequency of English letters",
+      "Be easy to learn for telegraph operators"
+    ],
+    "correctIndex": 1,
+    "hostIntro": "You use this keyboard layout every day. It was designed to make you WORSE at typing.",
+    "hostCorrect": "Slow you down! Early typewriters jammed when adjacent keys were pressed too quickly. QWERTY separates common letter pairs. You've been using a deliberately inefficient layout your whole life.",
+    "hostWrong": "To slow typists down. QWERTY prevents jamming by keeping common letter combos apart. We're all using a layout designed for 1870s mechanical limitations.",
+    "hostTimeout": "To prevent typewriter jams. QWERTY is intentionally slow. And we're stuck with it forever."
+  },
+  {
+    "id": "q176",
+    "type": "multiple_choice",
+    "category": "Geography",
+    "prompt": "Which country has the most natural lakes in the world?",
+    "choices": [
+      "Canada",
+      "Russia",
+      "Finland",
+      "United States"
+    ],
+    "correctIndex": 0,
+    "hostIntro": "Lakes. Lots and lots of lakes. One country hoards most of them.",
+    "hostCorrect": "Canada! Over 60% of all the natural lakes in the world are in Canada. More lakes than all other countries combined. Canada is basically a lake with some land around it.",
+    "hostWrong": "Canada! More than 60% of the world's lakes. Canada doesn't just have a lot of lakes — it has MOST of the lakes.",
+    "hostTimeout": "Canada. Over 60% of the world's lakes. Canada is less a country and more a collection of lakes that agreed to form a government."
+  },
+  {
+    "id": "q177",
+    "type": "multiple_choice",
+    "category": "Pop Culture",
+    "prompt": "The shortest Oscar acceptance speech in history was just one word. What was the word?",
+    "choices": [
+      "Thanks",
+      "Wow",
+      "Finally",
+      "Cheers"
+    ],
+    "correctIndex": 0,
+    "hostIntro": "Most Oscar speeches are too long. This one was almost too short.",
+    "hostCorrect": "Thanks! Patty Duke won Best Supporting Actress in 1963 at age 16 and said just 'Thank you.' That's it. The mic drop before mic drops existed.",
+    "hostWrong": "'Thanks.' One word. Done. The most efficient Oscar speech in history. Everyone else could learn from this.",
+    "hostTimeout": "Thanks. One word. Patty Duke, 1963. Said thank you and sat down. Respect."
+  },
+  {
+    "id": "q178",
+    "type": "multiple_choice",
+    "category": "Food & Drink",
+    "prompt": "Which common fruit is a member of the rose family?",
+    "choices": [
+      "Apples",
+      "Oranges",
+      "Bananas",
+      "Grapes"
+    ],
+    "correctIndex": 0,
+    "hostIntro": "A fruit and a flower, sitting in a family tree. Literally.",
+    "hostCorrect": "Apples! Along with pears, cherries, plums, and strawberries — all members of the Rosaceae family. Your fruit bowl is basically a rose garden.",
+    "hostWrong": "Apples! They're related to roses. So are pears, cherries, and strawberries. Your apple pie is technically rose-flavored.",
+    "hostTimeout": "Apples. They're in the rose family. Botany never stops being weird."
+  },
+  {
+    "id": "q179",
+    "type": "multiple_choice",
+    "category": "Sports",
+    "prompt": "In baseball, the distance between bases is 90 feet. Who decided that distance?",
+    "choices": [
+      "Alexander Cartwright in 1845",
+      "Abner Doubleday in 1839",
+      "Nobody knows — it evolved from informal games",
+      "Congress set it in 1857"
+    ],
+    "correctIndex": 0,
+    "hostIntro": "90 feet. The perfect distance. Too short and every hit is a home run. Too long and nobody reaches base. But who picked it?",
+    "hostCorrect": "Alexander Cartwright! He codified the Knickerbocker Rules in 1845. Abner Doubleday is a myth — he probably never even played baseball. Cartwright is the real father of baseball.",
+    "hostWrong": "Alexander Cartwright! Not Doubleday. The Doubleday myth was invented by a commission that wanted a patriotic origin story. Baseball's founding is a lie.",
+    "hostTimeout": "Alexander Cartwright, 1845. Not Doubleday. The Doubleday story is a fabrication. Baseball can't even be honest about its own history."
+  },
+  {
+    "id": "q180",
+    "type": "multiple_choice",
+    "category": "Literature",
+    "prompt": "Which famous author wrote a novel entirely without using the letter 'E'?",
+    "choices": [
+      "Georges Perec",
+      "Ernest Hemingway",
+      "Mark Twain",
+      "Virginia Woolf"
+    ],
+    "correctIndex": 0,
+    "hostIntro": "The letter E is the most common letter in English. One author said 'I don't need it' and proved it.",
+    "hostCorrect": "Georges Perec! His 1969 novel 'La Disparition' (translated as 'A Void') is 300 pages without a single letter E. The English translation ALSO avoids E. Both translators are legends.",
+    "hostWrong": "Georges Perec! 300 pages, no E. The most common letter in French AND English, completely avoided. That's not writing, that's a superpower.",
+    "hostTimeout": "Georges Perec. 'A Void.' 300 pages. Zero letter E's. I can barely write a sentence without E. He wrote a novel."
+  },
+  {
+    "id": "q181",
+    "type": "multiple_choice",
+    "category": "Science",
+    "prompt": "What is the hardest natural substance on Earth?",
+    "choices": [
+      "Diamond",
+      "Wurtzite boron nitride",
+      "Titanium",
+      "Graphene"
+    ],
+    "correctIndex": 0,
+    "hostIntro": "This one seems easy. Maybe too easy. Or maybe not.",
+    "hostCorrect": "Diamond! Despite some lab-created materials being harder, diamond remains the hardest naturally occurring substance. Sometimes the obvious answer IS the answer.",
+    "hostWrong": "Diamond! The obvious answer was right this time. Don't overthink it. A 10 on the Mohs scale. Nothing natural beats it.",
+    "hostTimeout": "Diamond. The answer you thought was too obvious to be right. Sometimes trivia is straightforward. Not often, but sometimes."
+  },
+  {
+    "id": "q182",
+    "type": "multiple_choice",
+    "category": "History",
+    "prompt": "The Great Fire of London in 1666 destroyed 13,200 houses and 87 churches. How many people officially died?",
+    "choices": [
+      "Over 10,000",
+      "About 1,000",
+      "About 100",
+      "6"
+    ],
+    "correctIndex": 3,
+    "hostIntro": "One of the most destructive fires in history. The death toll will shock you.",
+    "hostCorrect": "Six! Only 6 recorded deaths. A fire that destroyed most of London killed fewer people than a bad car accident. Though historians believe the real number was higher — many deaths of poor people went unrecorded.",
+    "hostWrong": "Six. Officially, six people. A fire that leveled a city. Six deaths. Either Londoners were incredibly fast runners or the record-keeping was terrible. Probably both.",
+    "hostTimeout": "Six. The official death toll of the Great Fire of London is six. History's most survivable disaster."
+  },
+  {
+    "id": "q183",
+    "type": "multiple_choice",
+    "category": "Movies",
+    "prompt": "What was the first feature-length animated film ever made?",
+    "choices": [
+      "Snow White and the Seven Dwarfs (1937)",
+      "Fantasia (1940)",
+      "El Apóstol (1917)",
+      "Steamboat Willie (1928)"
+    ],
+    "correctIndex": 2,
+    "hostIntro": "Disney gets the credit. But Disney wasn't first. Not even close.",
+    "hostCorrect": "El Apóstol! A 1917 Argentine political satire by Quirino Cristiani. It predates Snow White by 20 years. Sadly, all copies were lost in a fire. Disney just had better luck.",
+    "hostWrong": "El Apóstol, 1917! An Argentine animated film made two decades before Snow White. Disney was first in SURVIVING animation. Not first in making it.",
+    "hostTimeout": "El Apóstol, 1917. Argentina. Twenty years before Snow White. All copies were destroyed in a fire. History is cruel."
+  },
+  {
+    "id": "q184",
+    "type": "multiple_choice",
+    "category": "Psychology",
+    "prompt": "The 'Pratfall Effect' suggests that competent people become MORE likeable when they:",
+    "choices": [
+      "Show vulnerability in public",
+      "Ask for help",
+      "Admit they don't know something",
+      "Make a mistake or blunder"
+    ],
+    "correctIndex": 3,
+    "hostIntro": "Want people to like you more? Science has a counterintuitive suggestion.",
+    "hostCorrect": "Make a mistake! Competent people who make small blunders are rated as more likeable and relatable. Perfection is intimidating. Clumsiness is endearing. Science says so.",
+    "hostWrong": "Mess up! Spill your coffee, trip on stage — competent people become MORE likeable when they goof. Perfection is off-putting. Be a lovable disaster.",
+    "hostTimeout": "Make a blunder. Perfect people are intimidating. Clumsy competent people are charming. The Pratfall Effect. Embrace your mistakes."
+  },
+  {
+    "id": "q185",
+    "type": "multiple_choice",
+    "category": "Geography",
+    "prompt": "What is the only continent with land in all four hemispheres (North, South, East, West)?",
+    "choices": [
+      "Asia",
+      "Europe",
+      "South America",
+      "Africa"
+    ],
+    "correctIndex": 3,
+    "hostIntro": "Four hemispheres. One continent touches them all. Which one?",
+    "hostCorrect": "Africa! It crosses the equator (north and south) and the prime meridian (east and west). Africa is in all four hemispheres simultaneously. The only continent to pull that off.",
+    "hostWrong": "Africa! It straddles both the equator and the prime meridian. All four hemispheres. Africa doesn't pick sides.",
+    "hostTimeout": "Africa. All four hemispheres. North, south, east, west. Africa is everywhere."
+  },
+  {
+    "id": "q186",
+    "type": "multiple_choice",
+    "category": "Animals",
+    "prompt": "Flamingos are born what color?",
+    "choices": [
+      "Pink",
+      "White/grey",
+      "Yellow",
+      "Light orange"
+    ],
+    "correctIndex": 1,
+    "hostIntro": "Pink birds. Iconic pink birds. But were they always pink?",
+    "hostCorrect": "White or grey! Flamingos get their pink color from the carotenoids in the shrimp and algae they eat. Stop feeding them and they turn white again. They are what they eat, literally.",
+    "hostWrong": "White! Flamingos earn their pink. It comes from their diet. A flamingo that doesn't eat shrimp is just a tall white bird with weird legs.",
+    "hostTimeout": "White or grey. The pink comes from food. No shrimp diet, no pink. Flamingos are nature's mood rings."
+  },
+  {
+    "id": "q187",
+    "type": "multiple_choice",
+    "category": "Business",
+    "prompt": "What does the 'Mc' in McDonald's stand for?",
+    "choices": [
+      "Nothing — it's the founders' actual surname",
+      "Master of Cuisine",
+      "Midwest Commissary",
+      "Machine-Cut (referring to their burger process)"
+    ],
+    "correctIndex": 0,
+    "hostIntro": "McDonald's is so ubiquitous you probably never thought about where the name comes from.",
+    "hostCorrect": "It's their surname! Dick and Mac McDonald — the brothers who started it. Ray Kroc bought them out and turned it into a global empire. The name is literally just their last name.",
+    "hostWrong": "It's just their name! The McDonald brothers. Sometimes a name is just a name. No acronym, no hidden meaning. Just two brothers named McDonald.",
+    "hostTimeout": "Their last name. McDonald. The brothers. That's it. Not everything has a secret origin story."
+  },
+  {
+    "id": "q188",
+    "type": "multiple_choice",
+    "category": "Art",
+    "prompt": "How long did it take Leonardo da Vinci to paint the Mona Lisa's lips?",
+    "choices": [
+      "A few hours",
+      "About 2 weeks",
+      "About 12 years",
+      "Nobody knows — he never discussed it"
+    ],
+    "correctIndex": 2,
+    "hostIntro": "That mysterious smile took longer than you'd ever guess.",
+    "hostCorrect": "About 12 years! Da Vinci reportedly worked on the lips alone for over a decade, using a technique called sfumato — dozens of ultra-thin translucent layers. Perfectionism taken to the extreme.",
+    "hostWrong": "12 years on the lips. Twelve. The most famous smile in history took over a decade. Leonardo was not in a rush.",
+    "hostTimeout": "12 years. Just the lips. Leonardo spent 12 years on a smile. And people say I'M slow."
+  },
+  {
+    "id": "q189",
+    "type": "multiple_choice",
+    "category": "Space",
+    "prompt": "The footprints left by astronauts on the Moon will last for approximately how long?",
+    "choices": [
+      "About 100 years",
+      "About 10,000 years",
+      "About 1 million years",
+      "About 100 million years"
+    ],
+    "correctIndex": 3,
+    "hostIntro": "Neil Armstrong's first step is still up there. And it's going to be there for a LONG time.",
+    "hostCorrect": "About 100 million years! No wind, no water, no erosion on the Moon. Only micrometeorites slowly degrade the prints. Those bootprints will outlast human civilization.",
+    "hostWrong": "100 million years. The Moon has no weather. Those footprints will exist long after everything you've ever known is gone. Cheerful, right?",
+    "hostTimeout": "100 million years. Those footprints will be on the Moon long after humans are extinct. Have a nice day."
+  },
+  {
+    "id": "q190",
+    "type": "multiple_choice",
+    "category": "Language",
+    "prompt": "The word 'nerd' was first used in print by which author?",
+    "choices": [
+      "Isaac Asimov",
+      "George Orwell",
+      "J.R.R. Tolkien",
+      "Dr. Seuss"
+    ],
+    "correctIndex": 3,
+    "hostIntro": "Every word has a first appearance. This one's origin is delightfully unexpected.",
+    "hostCorrect": "Dr. Seuss! In 'If I Ran the Zoo' (1950), he wrote about a 'Nerd' as a fictional creature. Within a year, teenagers had adopted it as slang. A children's book author invented the word 'nerd.'",
+    "hostWrong": "Dr. Seuss! The man who wrote 'Green Eggs and Ham' also invented the word 'nerd.' Children's literature shaped the English language.",
+    "hostTimeout": "Dr. Seuss. The Cat in the Hat guy invented the word 'nerd.' In 1950. You learn something new every day."
+  },
+  {
+    "id": "q191",
+    "type": "multiple_choice",
+    "category": "Inventions",
+    "prompt": "The inventor of the Segway died in a tragic irony. How?",
+    "choices": [
+      "He was hit by a car while riding one",
+      "He rode one off a cliff",
+      "He tripped over one in his garage",
+      "He's still alive — this is a trick question"
+    ],
+    "correctIndex": 1,
+    "hostIntro": "Fate has a dark sense of humor. Especially when it involves personal transportation.",
+    "hostCorrect": "Rode one off a cliff! Jimi Heselden, who bought the Segway company, accidentally drove a Segway off a cliff on his estate in 2010. The cruelest irony in invention history.",
+    "hostWrong": "Off a cliff. On his own product. On his own property. You can't write tragedy this perfectly. Even Shakespeare would say 'that's a bit much.'",
+    "hostTimeout": "He rode a Segway off a cliff. The owner of the Segway company. On a Segway. Off a cliff. Irony doesn't get darker than that."
+  },
+  {
+    "id": "q192",
+    "type": "multiple_choice",
+    "category": "Food & Drink",
+    "prompt": "What percentage of the world's almonds are grown in California?",
+    "choices": [
+      "About 20%",
+      "About 40%",
+      "About 60%",
+      "About 80%"
+    ],
+    "correctIndex": 3,
+    "hostIntro": "One US state dominates one of the world's most popular nuts. And it's not even close.",
+    "hostCorrect": "About 80%! California produces roughly 80% of the world's almonds. One state. One nut. Global domination. The almond industry IS California.",
+    "hostWrong": "80%! California grows four out of every five almonds on Earth. That's not farming, that's a monopoly.",
+    "hostTimeout": "80%. California. One state grows 80% of the world's almonds. That's an absurd level of nut dominance."
+  },
+  {
+    "id": "q193",
+    "type": "multiple_choice",
+    "category": "TV Shows",
+    "prompt": "What show holds the record for most Emmy Awards won by a single series?",
+    "choices": [
+      "Saturday Night Live",
+      "The Simpsons",
+      "Frasier",
+      "Game of Thrones"
+    ],
+    "correctIndex": 3,
+    "hostIntro": "The Emmy race. One show has won more than any other in history.",
+    "hostCorrect": "Game of Thrones! 59 Emmys total. Despite the controversial final season, it remains the most awarded scripted show in Emmy history. The Iron Throne of awards shows.",
+    "hostWrong": "Game of Thrones! 59 wins. The ending was divisive but the Emmys didn't care. More awards than any other scripted series ever.",
+    "hostTimeout": "Game of Thrones. 59 Emmys. Love the ending or hate it, the trophy case doesn't lie."
+  },
+  {
+    "id": "q194",
+    "type": "multiple_choice",
+    "category": "Science",
+    "prompt": "What is the most abundant element in the universe?",
+    "choices": [
+      "Hydrogen",
+      "Oxygen",
+      "Carbon",
+      "Helium"
+    ],
+    "correctIndex": 0,
+    "hostIntro": "Everything is made of something. And most of everything is made of this one thing.",
+    "hostCorrect": "Hydrogen! About 75% of all matter in the universe is hydrogen. The simplest atom — one proton, one electron — and it makes up three-quarters of everything.",
+    "hostWrong": "Hydrogen! The simplest element dominates the cosmos. 75% of all matter. The universe keeps things basic.",
+    "hostTimeout": "Hydrogen. 75% of all matter. The universe's favorite element by a landslide."
+  },
+  {
+    "id": "q195",
+    "type": "multiple_choice",
+    "category": "History",
+    "prompt": "The shortest reign of any monarch in history lasted approximately:",
+    "choices": [
+      "20 minutes",
+      "3 hours",
+      "1 day",
+      "3 days"
+    ],
+    "correctIndex": 0,
+    "hostIntro": "Being king sounds great until you realize some kings barely had time to sit on the throne.",
+    "hostCorrect": "20 minutes! Crown Prince Luís Filipe of Portugal technically became king for about 20 minutes in 1908 after his father was assassinated — before dying of his own wounds from the same attack.",
+    "hostWrong": "20 minutes. King for 20 minutes. Technically a reign, practically a tragedy. The shortest crown ever worn.",
+    "hostTimeout": "20 minutes. The shortest reign in history. Barely enough time to say 'I'm the king' before it was over."
+  },
+  {
+    "id": "q196",
+    "type": "multiple_choice",
+    "category": "Math",
+    "prompt": "What is the only number that, when spelled out in English, has its letters in alphabetical order?",
+    "choices": [
+      "Forty",
+      "Eight",
+      "One",
+      "Zero"
+    ],
+    "correctIndex": 0,
+    "hostIntro": "A math question disguised as a spelling question. Or is it the other way around?",
+    "hostCorrect": "Forty! F-O-R-T-Y. Each letter comes after the previous one alphabetically. The only number in English with this property. Forty is special and doesn't even know it.",
+    "hostWrong": "Forty! F, O, R, T, Y — alphabetical order. No other number pulls this off. Forty: the most alphabetically organized number.",
+    "hostTimeout": "Forty. F-O-R-T-Y. Alphabetical order. The only number that can say that. A deeply nerdy fact."
+  },
+  {
+    "id": "q197",
+    "type": "multiple_choice",
+    "category": "Video Games",
+    "prompt": "The best-selling video game of all time (by copies sold) is:",
+    "choices": [
+      "Tetris",
+      "Minecraft",
+      "Grand Theft Auto V",
+      "Wii Sports"
+    ],
+    "correctIndex": 1,
+    "hostIntro": "Billions of blocks placed, billions of copies sold. Or is it?",
+    "hostCorrect": "Minecraft! Over 300 million copies sold across all platforms. A game about placing blocks. The simplest concept, the biggest sales. Simplicity wins.",
+    "hostWrong": "Minecraft! 300+ million copies. A game with no story, no cutscenes, and graphics from 2005 — and it outsold everything. Proof that gameplay is king.",
+    "hostTimeout": "Minecraft. 300 million copies. A game made of blocks. The most successful game in history. Let that sink in."
+  },
+  {
+    "id": "q198",
+    "type": "multiple_choice",
+    "category": "Medicine",
+    "prompt": "The human nose can detect over how many different scents?",
+    "choices": [
+      "About 1,000",
+      "About 10,000",
+      "About 1 million",
+      "Over 1 trillion"
+    ],
+    "correctIndex": 3,
+    "hostIntro": "Your nose is more powerful than you give it credit for. WAY more powerful.",
+    "hostCorrect": "Over 1 trillion! A 2014 study showed humans can distinguish at least 1 trillion different odors. The old '10,000 smells' number was wildly wrong. Your nose is a supercomputer.",
+    "hostWrong": "A trillion! The old estimate of 10,000 was off by a factor of 100 billion. Your nose is the most underrated organ in your body.",
+    "hostTimeout": "Over a trillion. Your nose can detect a trillion scents. It's the most impressive thing about you and you never think about it."
+  },
+  {
+    "id": "q199",
+    "type": "multiple_choice",
+    "category": "World Records",
+    "prompt": "The loudest sound ever recorded in human history was:",
+    "choices": [
+      "The eruption of Krakatoa in 1883",
+      "A nuclear bomb test",
+      "A NASA rocket launch",
+      "A volcanic eruption in Pompeii"
+    ],
+    "correctIndex": 0,
+    "hostIntro": "How loud can the world get? One event answered that question definitively.",
+    "hostCorrect": "Krakatoa! The 1883 eruption was heard 3,000 miles away. The sound wave circled the Earth FOUR TIMES. It ruptured eardrums 40 miles away. The loudest sound in recorded history.",
+    "hostWrong": "Krakatoa. Heard 3,000 miles away. The sound went around the planet four times. Nothing humans have made comes close.",
+    "hostTimeout": "Krakatoa, 1883. Heard from 3,000 miles away. Circled the Earth four times. The planet screamed."
+  },
+  {
+    "id": "q200",
+    "type": "multiple_choice",
+    "category": "Pop Culture",
+    "prompt": "What is the most-watched YouTube video of all time?",
+    "choices": [
+      "Gangnam Style by PSY",
+      "Despacito by Luis Fonsi",
+      "Baby Shark Dance by Pinkfong",
+      "See You Again by Wiz Khalifa"
+    ],
+    "correctIndex": 2,
+    "hostIntro": "The internet has spoken. Billions of times. And its choice is... unexpected. Or maybe not, if you have kids.",
+    "hostCorrect": "Baby Shark! Over 14 billion views. A children's song about sharks. This is what humanity chose to watch more than anything else ever created. We are a simple species.",
+    "hostWrong": "Baby Shark. 14 billion views. Doo doo doo doo doo doo. The most-watched piece of content in human history is a toddler song about fish. Peak civilization.",
+    "hostTimeout": "Baby Shark. 14 billion views. More views than there are people on Earth. Baby Shark has been watched almost twice by every human alive."
   }
 ]
