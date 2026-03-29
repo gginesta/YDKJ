@@ -4,12 +4,13 @@ import type { ClientToServerEvents, ServerToClientEvents } from '../../types/soc
 import { GameState } from '../../types/game';
 import { calculateScore, updateStreak, getStreakBonus, assignQuestionValues, getLeadingPlayer } from './scoring';
 import { saveGameResult, hashPlayerGroup, getSeenQuestionIds, recordSeenQuestions, resetSeenQuestions } from '../db';
+import { generateGameQuestions } from '../ai/question-pipeline';
 import seedQuestionsData from '../ai/seed-questions.json';
 
 type AppIO = SocketIOServer<ClientToServerEvents, ServerToClientEvents>;
 
 interface SeedQuestion {
-  id: string;
+  id?: string;
   type: string;
   category: string;
   prompt: string;
@@ -61,10 +62,9 @@ export class GameEngine {
   }
 
   /**
-   * Start the game. Loads questions and begins the state machine.
+   * Start the game. Loads questions (AI or seed) and begins the state machine.
    */
   start(): void {
-    this.loadQuestions();
     this.room.state = GameState.GAME_STARTING;
     this.room.round = 1;
     this.room.questionIndex = 0;
@@ -81,7 +81,12 @@ export class GameEngine {
       hostScript: this.getStartingScript(),
     });
 
-    this.scheduleNext(DURATIONS.GAME_STARTING, () => this.startQuestionIntro());
+    // Load questions (try AI, fall back to seeds) during the GAME_STARTING phase
+    this.loadQuestionsAsync().then(() => {
+      if (!this.destroyed) {
+        this.scheduleNext(DURATIONS.GAME_STARTING, () => this.startQuestionIntro());
+      }
+    });
   }
 
   /**
@@ -139,30 +144,53 @@ export class GameEngine {
   // Private — State Machine
   // ============================================================
 
-  private loadQuestions(): void {
-    const seed = seedQuestionsData as SeedQuestion[];
-
-    // Deduplicate: filter out questions this player group has already seen
+  /**
+   * Load questions — tries AI pipeline first, falls back to seed bank.
+   * Runs during GAME_STARTING phase so players see the countdown while questions load.
+   */
+  private async loadQuestionsAsync(): Promise<void> {
     const playerNames = this.room.players.map((p) => p.name);
+
+    try {
+      // Try AI pipeline (fetches from Open Trivia DB → Claude → validate)
+      const result = await generateGameQuestions(playerNames, TOTAL_QUESTIONS + 2, 1, this.room.theme);
+      const selected = result.questions.slice(0, TOTAL_QUESTIONS);
+      console.log(`[GameEngine] Loaded ${selected.length} questions from source: ${result.source}`);
+      this.applyQuestions(selected);
+    } catch (err) {
+      console.error('[GameEngine] AI pipeline failed entirely, using seed fallback:', err);
+      this.loadSeedQuestions(playerNames);
+    }
+  }
+
+  /**
+   * Fallback: load from seed-questions.json with dedup tracking.
+   */
+  private loadSeedQuestions(playerNames: string[]): void {
+    const seed = seedQuestionsData as SeedQuestion[];
     const groupHash = hashPlayerGroup(playerNames);
     let seenIds = getSeenQuestionIds(groupHash);
 
-    let pool = seed.filter((q) => !seenIds.includes(q.id));
+    let pool = seed.filter((q) => !q.id || !seenIds.includes(q.id));
 
-    // If not enough unseen questions, reset and use full pool
     if (pool.length < TOTAL_QUESTIONS) {
       resetSeenQuestions(groupHash);
       seenIds = [];
       pool = [...seed];
     }
 
-    // Shuffle and pick TOTAL_QUESTIONS
-    const shuffled = pool.sort(() => Math.random() - 0.5);
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
     const selected = shuffled.slice(0, TOTAL_QUESTIONS);
 
-    // Record the selected questions as seen
-    recordSeenQuestions(groupHash, selected.map((q) => q.id));
+    const selectedIds = selected.map((q) => q.id).filter((id): id is string => !!id);
+    recordSeenQuestions(groupHash, selectedIds);
+    this.applyQuestions(selected);
+  }
 
+  /**
+   * Apply raw question data to the game engine with round-based values.
+   */
+  private applyQuestions(selected: SeedQuestion[]): void {
     const round1Values = assignQuestionValues(1);
     const round2Values = assignQuestionValues(2);
 
@@ -172,7 +200,7 @@ export class GameEngine {
       const values = round === 1 ? round1Values : round2Values;
 
       return {
-        id: q.id,
+        id: q.id || `gen_${Date.now()}_${i}`,
         type: 'multiple_choice',
         category: q.category,
         prompt: q.prompt,
