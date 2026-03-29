@@ -52,7 +52,7 @@ Granular tasks organized by phase. Each task is a single unit of work.
 
 ---
 
-## Phase 2: Core Game ✅ MOSTLY COMPLETE
+## Phase 2: Core Game ✅ COMPLETE
 
 ### 2.1 Game State Machine
 - [x] Create `src/lib/game-engine/game-engine.ts`
@@ -96,9 +96,13 @@ Granular tasks organized by phase. Each task is a single unit of work.
 - [x] Create `src/components/game/HostDialogue.tsx` — host text display
 
 ### 2.6 Reconnection
-- [ ] Detect player disconnect (socket close) — _partially done: markDisconnected exists but not used_
-- [ ] On reconnect: rejoin room, restore state, sync to current question
-- [ ] Timeout: if disconnected >30s during active game, remove from room
+- [x] Detect player disconnect (socket close) with conditional handling (lobby vs active game)
+- [x] 30-second grace period for disconnected players during active games
+- [x] On reconnect: rejoin room, remap socket ID, restore full game state via snapshot
+- [x] Timeout: if disconnected >30s during active game, remove from room and notify others
+- [x] Client-side session persistence (localStorage) with 2-hour TTL
+- [x] Auto-reconnect on socket connect if stored session exists
+- [x] Visual state support: player_disconnected/player_reconnected events update player list
 
 ### 2.7 Play Again
 - [x] Post-game: "Play Again" button returns to lobby with same players
@@ -401,13 +405,13 @@ Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4
 | Phase | Tasks | Status |
 |-------|-------|--------|
 | Phase 1: Foundation | 28 | ✅ Complete |
-| Phase 2: Core Game | 27 | ✅ ~90% Complete (reconnection pending) |
+| Phase 2: Core Game | 27 | ✅ Complete |
 | Phase 3: The Host | 30 | ⬜ Not started |
 | Phase 4: Question Variety | 22 | ⬜ Not started |
 | Phase 5: Power-Ups & Easter Eggs | 24 | ⬜ Not started |
 | Phase 6: Audio & Visual Polish | 33 | ⬜ Not started |
 | Phase 7: Deployment & Testing | 22 | ⬜ 1 task done (graceful shutdown) |
-| **Total** | **186 tasks** | **~31% complete** |
+| **Total** | **186 tasks** | **~33% complete** |
 
 ## MVP Shortcut
 
@@ -421,7 +425,7 @@ If you want to play with friends ASAP, here's the fastest path:
 
 This gets you: **AI-hosted multiple choice + Jack Attack with voice, for 10 players, deployed.** Then layer in the remaining question types, power-ups, pixel art, and audio iteratively.
 
-## Known Bugs Fixed (2026-03-28)
+## Known Bugs Fixed (2026-03-29)
 
 - ✅ Server now uses its own timestamp for speed bonus calculation (prevents client-side manipulation)
 - ✅ Answer index validated (must be 0-3 integer)
@@ -430,3 +434,5 @@ This gets you: **AI-hosted multiple choice + Jack Attack with voice, for 10 play
 - ✅ Streak bonus now only counts current game answers
 - ✅ Scoreboard round count no longer hardcoded
 - ✅ `resetSeenQuestions` export cleaned up
+- ✅ Fixed React 19 ref access during render warning in useSocket hook
+- ✅ Disconnect during active game now uses grace period instead of immediate removal

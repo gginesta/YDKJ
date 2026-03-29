@@ -5,12 +5,16 @@ const ROOM_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ';
 const ROOM_CODE_LENGTH = 4;
 const MAX_PLAYERS = 10;
 const ROOM_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours
+const RECONNECT_GRACE_MS = 30_000; // 30 seconds
 
 // In-memory room store
 const rooms = new Map<string, GameRoom>();
 
 // Cleanup interval handle
 let cleanupInterval: ReturnType<typeof setInterval> | null = null;
+
+// Disconnect grace timers: key = "roomCode:playerId"
+const disconnectTimers = new Map<string, ReturnType<typeof setTimeout>>();
 
 /**
  * Generate a random 4-letter room code (no ambiguous chars).
@@ -151,6 +155,71 @@ export function markDisconnected(socketId: string): { room: GameRoom; roomCode: 
     }
   }
   return null;
+}
+
+/**
+ * Start a grace timer for a disconnected player.
+ * If they don't reconnect within RECONNECT_GRACE_MS, onExpire is called.
+ */
+export function startDisconnectTimer(
+  roomCode: string,
+  playerId: string,
+  onExpire: () => void
+): void {
+  const key = `${roomCode}:${playerId}`;
+  // Clear any existing timer
+  const existing = disconnectTimers.get(key);
+  if (existing) clearTimeout(existing);
+
+  const timer = setTimeout(() => {
+    disconnectTimers.delete(key);
+    onExpire();
+  }, RECONNECT_GRACE_MS);
+
+  disconnectTimers.set(key, timer);
+}
+
+/**
+ * Cancel a disconnect grace timer (player reconnected or left).
+ */
+export function cancelDisconnectTimer(roomCode: string, playerId: string): void {
+  const key = `${roomCode}:${playerId}`;
+  const timer = disconnectTimers.get(key);
+  if (timer) {
+    clearTimeout(timer);
+    disconnectTimers.delete(key);
+  }
+}
+
+/**
+ * Reconnect a player to a room. Remaps their socket ID and marks them connected.
+ * Returns null if reconnection is not possible.
+ */
+export function reconnectPlayer(
+  roomCode: string,
+  oldPlayerId: string,
+  newSocketId: string
+): { room: GameRoom; player: Player } | null {
+  const room = rooms.get(roomCode.toUpperCase());
+  if (!room) return null;
+
+  const player = room.players.find((p) => p.id === oldPlayerId && !p.connected);
+  if (!player) return null;
+
+  // Cancel the grace timer
+  cancelDisconnectTimer(roomCode, oldPlayerId);
+
+  // Remap player ID to new socket ID
+  const oldId = player.id;
+  player.id = newSocketId;
+  player.connected = true;
+
+  // Update host reference if needed
+  if (room.hostPlayerId === oldId) {
+    room.hostPlayerId = newSocketId;
+  }
+
+  return { room, player };
 }
 
 /**

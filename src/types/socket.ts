@@ -1,4 +1,24 @@
-import type { GameRoom, Player, PowerUpType } from './game';
+import type { Player, PowerUpType } from './game';
+
+// ============================================================
+// Game Snapshot (sent to reconnecting clients)
+// ============================================================
+
+export interface GameSnapshot {
+  gameState: string;
+  currentQuestion: Record<string, unknown> | null;
+  questionTimeRemainingMs: number | null;
+  answeredPlayerIds: string[];
+  scores: { playerId: string; name: string; money: number }[];
+  currentRound: number;
+  questionIndex: number;
+  totalQuestions: number;
+  hostDialogue: string | null;
+  correctAnswerIndex: number | null;
+  playerResults: Record<string, unknown>[];
+  finalScores: { playerId: string; name: string; money: number }[];
+  gameOverHostScript: string | null;
+}
 
 // ============================================================
 // Client -> Server Events
@@ -20,6 +40,7 @@ export interface ClientToServerEvents {
   jack_attack_buzz: (data: { answerId: string; timestamp: number }) => void;
   play_again: () => void;
   leave_room: () => void;
+  reconnect_attempt: (data: { roomCode: string; playerId: string }) => void;
 }
 
 // ============================================================
@@ -31,6 +52,14 @@ export interface ServerToClientEvents {
   room_joined: (data: { room: ClientGameRoom; player: Player }) => void;
   player_joined: (data: { player: Player }) => void;
   player_left: (data: { playerId: string; reason?: string }) => void;
+  player_disconnected: (data: { playerId: string }) => void;
+  player_reconnected: (data: { playerId: string; newPlayerId: string }) => void;
+  reconnect_success: (data: {
+    room: ClientGameRoom;
+    player: Player;
+    gameSnapshot: GameSnapshot | null;
+  }) => void;
+  reconnect_failed: (data: { reason: string }) => void;
   game_starting: (data: { hostScript?: string; audioUrl?: string }) => void;
   question_intro: (data: {
     question: Record<string, unknown>;

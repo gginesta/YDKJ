@@ -1,6 +1,6 @@
 import type { Server as SocketIOServer } from 'socket.io';
 import type { GameRoom, MultipleChoiceQuestion } from '../../types/game';
-import type { ClientToServerEvents, ServerToClientEvents } from '../../types/socket';
+import type { ClientToServerEvents, ServerToClientEvents, GameSnapshot } from '../../types/socket';
 import { GameState } from '../../types/game';
 import { calculateScore, updateStreak, getStreakBonus, assignQuestionValues, getLeadingPlayer } from './scoring';
 import { saveGameResult, hashPlayerGroup, getSeenQuestionIds, recordSeenQuestions, resetSeenQuestions } from '../db';
@@ -133,6 +133,73 @@ export class GameEngine {
       player.streak = 0;
       player.answers = [];
     }
+  }
+
+  /**
+   * Remap a player's ID in the current answers map (used on reconnection).
+   */
+  remapPlayerId(oldId: string, newId: string): void {
+    const answer = this.currentAnswers.get(oldId);
+    if (answer) {
+      this.currentAnswers.delete(oldId);
+      answer.playerId = newId;
+      this.currentAnswers.set(newId, answer);
+    }
+  }
+
+  /**
+   * Get a snapshot of the current game state for a reconnecting client.
+   */
+  getGameSnapshot(): GameSnapshot {
+    const q = this.questions[this.room.questionIndex];
+    const isActive = this.room.state === GameState.QUESTION_ACTIVE;
+    const isReveal = this.room.state === GameState.QUESTION_REVEAL;
+
+    const scores = this.room.players
+      .map((p) => ({ playerId: p.id, name: p.name, money: p.money }))
+      .sort((a, b) => b.money - a.money);
+
+    // Build question data appropriate for the current phase
+    let currentQuestion: Record<string, unknown> | null = null;
+    if (q && this.room.state !== GameState.LOBBY && this.room.state !== GameState.GAME_OVER) {
+      currentQuestion = {
+        id: q.id,
+        type: q.type,
+        category: q.category,
+        value: q.value,
+        timeLimit: q.timeLimit,
+        questionIndex: this.room.questionIndex,
+        totalQuestions: TOTAL_QUESTIONS,
+        round: this.room.round,
+        // Only include answers if the question is active or being revealed
+        ...(isActive || isReveal
+          ? { prompt: q.prompt, choices: q.choices }
+          : {}),
+      };
+    }
+
+    // Calculate remaining time for active questions
+    let questionTimeRemainingMs: number | null = null;
+    if (isActive) {
+      const elapsed = Date.now() - this.questionStartTime;
+      questionTimeRemainingMs = Math.max(0, this.questionTimeLimit - elapsed);
+    }
+
+    return {
+      gameState: this.room.state,
+      currentQuestion,
+      questionTimeRemainingMs,
+      answeredPlayerIds: Array.from(this.currentAnswers.keys()),
+      scores,
+      currentRound: this.room.round,
+      questionIndex: this.room.questionIndex,
+      totalQuestions: TOTAL_QUESTIONS,
+      hostDialogue: null,
+      correctAnswerIndex: isReveal ? q?.correctIndex ?? null : null,
+      playerResults: [],
+      finalScores: this.room.state === GameState.GAME_OVER ? scores : [],
+      gameOverHostScript: null,
+    };
   }
 
   // ============================================================

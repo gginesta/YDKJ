@@ -8,8 +8,13 @@ import {
   startGame,
   getRoom,
   getRoomBySocketId,
+  markDisconnected,
+  startDisconnectTimer,
+  cancelDisconnectTimer,
+  reconnectPlayer,
   toClientRoom,
 } from '../game-engine/room-manager';
+import { GameState } from '../../types/game';
 import { GameEngine } from '../game-engine/game-engine';
 
 export type AppSocket = SocketIOServer<ClientToServerEvents, ServerToClientEvents>;
@@ -78,6 +83,45 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
       }
     });
 
+    // ---- Reconnect Attempt ----
+    socket.on('reconnect_attempt', ({ roomCode, playerId: oldPlayerId }) => {
+      try {
+        const result = reconnectPlayer(roomCode, oldPlayerId, socket.id);
+        if (!result) {
+          socket.emit('reconnect_failed', { reason: 'Session expired or room not found.' });
+          return;
+        }
+
+        const { room, player } = result;
+        socket.join(roomCode);
+
+        // Remap answer key in game engine if mid-question
+        const engine = activeGames.get(roomCode);
+        if (engine) {
+          engine.remapPlayerId(oldPlayerId, socket.id);
+        }
+
+        // Build game snapshot
+        const gameSnapshot = engine ? engine.getGameSnapshot() : null;
+
+        socket.emit('reconnect_success', {
+          room: toClientRoom(room),
+          player,
+          gameSnapshot,
+        });
+
+        // Notify other players
+        socket.to(roomCode).emit('player_reconnected', {
+          playerId: socket.id,
+          newPlayerId: socket.id,
+        });
+
+        console.log(`[Socket] Player ${player.name} reconnected to room ${roomCode}`);
+      } catch (err) {
+        socket.emit('reconnect_failed', { reason: (err as Error).message });
+      }
+    });
+
     // ---- Start Game ----
     socket.on('start_game', ({ roomCode }) => {
       try {
@@ -135,13 +179,46 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
 
     // ---- Leave Room ----
     socket.on('leave_room', () => {
-      handleLeave(socket);
+      handleLeaveImmediate(socket);
     });
 
     // ---- Disconnect ----
     socket.on('disconnect', (reason) => {
       console.log(`[Socket] Disconnected: ${socket.id} (${reason})`);
-      handleLeave(socket);
+
+      const result = getRoomBySocketId(socket.id);
+      if (!result) return;
+
+      const { room, roomCode } = result;
+      const isGameActive = room.state !== GameState.LOBBY &&
+                           room.state !== GameState.GAME_OVER &&
+                           room.state !== GameState.POST_GAME;
+
+      if (isGameActive) {
+        // Game in progress: use grace period for reconnection
+        markDisconnected(socket.id);
+        socket.to(roomCode).emit('player_disconnected', { playerId: socket.id });
+        console.log(`[Socket] Player ${socket.id} disconnected mid-game, 30s grace period started`);
+
+        startDisconnectTimer(roomCode, socket.id, () => {
+          // Grace period expired — remove player
+          console.log(`[Socket] Grace period expired for ${socket.id} in room ${roomCode}`);
+          const leaveResult = leaveRoom(socket.id);
+          if (leaveResult && leaveResult.room) {
+            io!.to(roomCode).emit('player_left', { playerId: socket.id, reason: 'timeout' });
+          }
+          if (leaveResult && !leaveResult.room) {
+            const engine = activeGames.get(roomCode);
+            if (engine) {
+              engine.destroy();
+              activeGames.delete(roomCode);
+            }
+          }
+        });
+      } else {
+        // In lobby or game over: remove immediately
+        handleLeaveImmediate(socket);
+      }
     });
   });
 
@@ -149,7 +226,13 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleLeave(socket: any) {
+function handleLeaveImmediate(socket: any) {
+  // Cancel any pending grace timer for this player
+  const lookupResult = getRoomBySocketId(socket.id);
+  if (lookupResult) {
+    cancelDisconnectTimer(lookupResult.roomCode, socket.id);
+  }
+
   const result = leaveRoom(socket.id);
   if (result && result.room) {
     socket.to(result.roomCode).emit('player_left', {

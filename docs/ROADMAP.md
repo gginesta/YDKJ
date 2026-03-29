@@ -43,7 +43,7 @@
 
 ---
 
-## Phase 2: Core Game ✅ ~90% COMPLETE
+## Phase 2: Core Game ✅ COMPLETE
 
 **Goal:** Play a complete game of multiple choice trivia with scoring.
 
@@ -58,7 +58,7 @@
 - [x] Round 1 → Round 2 transition (doubled values)
 - [x] Game over screen with final standings
 - [x] 32 hardcoded sample questions with host scripts
-- [ ] Reconnection handling (player phone sleeps) — _partially scaffolded_
+- [x] Reconnection handling (30s grace period, localStorage session, full state snapshot)
 - [x] Play again flow
 
 ### Key Decisions

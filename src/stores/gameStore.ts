@@ -55,6 +55,8 @@ interface GameStore {
   // Player list mutations
   addPlayer: (player: Player) => void;
   removePlayer: (playerId: string) => void;
+  setPlayerConnected: (playerId: string, connected: boolean) => void;
+  remapPlayerId: (oldId: string, newId: string) => void;
 
   // Game state
   gameState: string;
@@ -165,6 +167,33 @@ export const useGameStore = create<GameStore>((set) => ({
         room: {
           ...state.room,
           players: state.room.players.filter((p) => p.id !== playerId),
+        },
+      };
+    }),
+
+  setPlayerConnected: (playerId, connected) =>
+    set((state) => {
+      if (!state.room) return state;
+      return {
+        room: {
+          ...state.room,
+          players: state.room.players.map((p) =>
+            p.id === playerId ? { ...p, connected } : p
+          ),
+        },
+      };
+    }),
+
+  remapPlayerId: (oldId, newId) =>
+    set((state) => {
+      if (!state.room) return state;
+      return {
+        room: {
+          ...state.room,
+          players: state.room.players.map((p) =>
+            p.id === oldId ? { ...p, id: newId, connected: true } : p
+          ),
+          hostPlayerId: state.room.hostPlayerId === oldId ? newId : state.room.hostPlayerId,
         },
       };
     }),
