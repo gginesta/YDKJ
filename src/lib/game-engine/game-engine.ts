@@ -86,11 +86,11 @@ export class GameEngine {
     // Always load seed questions immediately (instant, never fails)
     this.loadSeedQuestions(this.room.players.map((p) => p.name));
 
-    // Try AI intro in background (non-blocking, best-effort)
-    this.commentary.getGameIntro(this.room, staticIntro).then((aiIntro) => {
+    // Try AI intro + voice in background (non-blocking, best-effort)
+    this.commentary.getGameIntroWithAudio(this.room, staticIntro).then(({ text, audioUrl }) => {
       if (this.destroyed) return;
-      if (aiIntro !== staticIntro) {
-        this.emit('game_starting', { hostScript: aiIntro });
+      if (text !== staticIntro || audioUrl) {
+        this.emit('game_starting', { hostScript: text, audioUrl });
       }
     }).catch(() => {});
 
@@ -241,8 +241,8 @@ export class GameEngine {
     this.currentAnswers.clear();
     this.wimpMode = false;
 
-    // Get AI host intro (races against timeout, falls back to static)
-    const hostScript = await this.commentary.getQuestionIntro(this.room, q, q.hostIntro);
+    // Get AI host intro + voice (races against timeout, falls back to static)
+    const { text: hostScript, audioUrl } = await this.commentary.getQuestionIntroWithAudio(this.room, q, q.hostIntro);
 
     if (this.destroyed) return;
 
@@ -259,6 +259,7 @@ export class GameEngine {
         round: this.room.round,
       },
       hostScript,
+      audioUrl,
     });
 
     this.scheduleNext(DURATIONS.QUESTION_INTRO, () => this.startQuestionActive());
@@ -418,8 +419,8 @@ export class GameEngine {
       staticScript = correctPlayers.length > wrongPlayers.length ? q.hostCorrect : q.hostWrong;
     }
 
-    // Get AI commentary (races against timeout, falls back to static)
-    const hostScript = await this.commentary.getQuestionReveal(this.room, q, playerResults, staticScript);
+    // Get AI commentary + voice (races against timeout, falls back to static)
+    const { text: hostScript, audioUrl } = await this.commentary.getQuestionRevealWithAudio(this.room, q, playerResults, staticScript);
 
     if (this.destroyed) return;
 
@@ -427,6 +428,7 @@ export class GameEngine {
       correctAnswer: q.correctIndex,
       playerResults,
       hostScript,
+      audioUrl,
     });
 
     this.scheduleNext(DURATIONS.QUESTION_REVEAL, () => this.showScores());
@@ -457,13 +459,14 @@ export class GameEngine {
       this.room.state = GameState.ROUND_TRANSITION;
 
       const staticScript = "Round 2! All values are DOUBLED! Things are about to get serious.";
-      const hostScript = await this.commentary.getRoundTransition(this.room, staticScript);
+      const { text: hostScript, audioUrl } = await this.commentary.getRoundTransitionWithAudio(this.room, staticScript);
 
       if (this.destroyed) return;
 
       this.emit('round_transition', {
         round: 2,
         hostScript,
+        audioUrl,
       });
 
       this.scheduleNext(DURATIONS.ROUND_TRANSITION, () => this.startQuestionIntro());
@@ -505,14 +508,15 @@ export class GameEngine {
       staticScript += `${winner.name} wins with $${winner.money.toLocaleString()}!`;
     }
 
-    // Get AI outro (15s phase — plenty of time)
-    const hostScript = await this.commentary.getGameOutro(this.room, staticScript);
+    // Get AI outro + voice (15s phase — plenty of time)
+    const { text: hostScript, audioUrl } = await this.commentary.getGameOutroWithAudio(this.room, staticScript);
 
     if (this.destroyed) return;
 
     this.emit('game_over', {
       finalScores,
       hostScript,
+      audioUrl,
     });
 
     // Save to database

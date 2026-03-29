@@ -8,6 +8,28 @@ import { useGameStore } from '@/stores/gameStore';
 type AppSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
 let globalSocket: AppSocket | null = null;
+let currentAudio: HTMLAudioElement | null = null;
+
+/**
+ * Play audio from a base64 data URL. Stops any currently playing audio.
+ */
+function playAudio(audioUrl: string | undefined | null): void {
+  if (!audioUrl) return;
+  try {
+    // Stop any currently playing audio
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
+    const audio = new Audio(audioUrl);
+    currentAudio = audio;
+    audio.play().catch(() => {
+      // Autoplay blocked — user hasn't interacted yet, silently skip
+    });
+  } catch {
+    // Audio playback failed, text fallback handles it
+  }
+}
 
 function getSocket(): AppSocket {
   if (!globalSocket) {
@@ -64,13 +86,14 @@ export function useSocket() {
       useGameStore.getState().removePlayer(playerId);
     });
 
-    socket.on('game_starting', ({ hostScript }) => {
+    socket.on('game_starting', ({ hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       store.setGameState('game_starting');
       if (hostScript) store.setHostDialogue(hostScript);
+      playAudio(audioUrl);
     });
 
-    socket.on('question_intro', ({ question, hostScript }) => {
+    socket.on('question_intro', ({ question, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       store.setGameState('question_intro');
       store.setCurrentQuestion(question as unknown as import('@/stores/gameStore').UIQuestion);
@@ -79,6 +102,7 @@ export function useSocket() {
       store.setPlayerResults([]);
       store.setQuestionEndsAt(null);
       if (hostScript) store.setHostDialogue(hostScript);
+      playAudio(audioUrl);
     });
 
     socket.on('question_active', ({ question, timeLimit }) => {
@@ -92,12 +116,13 @@ export function useSocket() {
       useGameStore.getState().addAnsweredPlayer(playerId);
     });
 
-    socket.on('question_reveal', ({ correctAnswer, playerResults, hostScript }) => {
+    socket.on('question_reveal', ({ correctAnswer, playerResults, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       store.setGameState('question_reveal');
       store.setCorrectAnswerIndex(correctAnswer);
       store.setPlayerResults(playerResults as unknown as import('@/stores/gameStore').PlayerResult[]);
       if (hostScript) store.setHostDialogue(hostScript);
+      playAudio(audioUrl);
     });
 
     socket.on('scores_update', ({ scores }) => {
@@ -106,18 +131,20 @@ export function useSocket() {
       store.setScores(scores);
     });
 
-    socket.on('round_transition', ({ round, hostScript }) => {
+    socket.on('round_transition', ({ round, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       store.setGameState('round_transition');
       store.setCurrentRound(round);
       if (hostScript) store.setHostDialogue(hostScript);
+      playAudio(audioUrl);
     });
 
-    socket.on('game_over', ({ finalScores, hostScript }) => {
+    socket.on('game_over', ({ finalScores, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       store.setGameState('game_over');
       store.setFinalScores(finalScores);
       if (hostScript) store.setGameOverHostScript(hostScript);
+      playAudio(audioUrl);
     });
 
     socket.on('error', ({ message }) => {

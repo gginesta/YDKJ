@@ -8,6 +8,7 @@
  */
 
 import { generateText } from './claude-client';
+import { generateSpeechDataUrl, isVoiceEnabled } from '../voice/elevenlabs-client';
 import {
   HOST_PERSONALITY,
   buildGameIntroPrompt,
@@ -28,6 +29,11 @@ interface PlayerResult {
 }
 
 const AI_TIMEOUT_MS = 3500;
+
+export interface CommentaryResult {
+  text: string;
+  audioUrl: string | null;
+}
 
 export class HostCommentaryService {
   private previousLines: string[] = [];
@@ -53,6 +59,31 @@ export class HostCommentaryService {
     if (this.previousLines.length > 5) {
       this.previousLines.shift();
     }
+  }
+
+  /**
+   * Generate TTS audio for a text line. Returns null if voice is disabled or fails.
+   */
+  private async generateAudio(text: string): Promise<string | null> {
+    if (!isVoiceEnabled()) return null;
+    try {
+      return await generateSpeechDataUrl(text);
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * Get commentary with optional voice audio.
+   * Text resolves first (fast), audio generates in parallel.
+   */
+  async getCommentaryWithAudio(
+    textPromise: Promise<string>,
+  ): Promise<CommentaryResult> {
+    const text = await textPromise;
+    // Fire TTS in parallel — don't block on it
+    const audioUrl = await this.generateAudio(text);
+    return { text, audioUrl };
   }
 
   private buildContext(room: GameRoom, lastResults?: PlayerResult[]): GameContext {
@@ -199,6 +230,49 @@ Generate a SHORT reaction (1-2 sentences). React specifically to who got it righ
       generateText(prompt, 'Write the game outro now. ONLY the text.'),
       staticFallback
     );
+  }
+
+  // ============================================================
+  // WithAudio variants — return text + audio together
+  // ============================================================
+
+  async getGameIntroWithAudio(room: GameRoom, staticFallback: string): Promise<CommentaryResult> {
+    const text = await this.getGameIntro(room, staticFallback);
+    const audioUrl = await this.generateAudio(text);
+    return { text, audioUrl };
+  }
+
+  async getQuestionIntroWithAudio(
+    room: GameRoom,
+    question: MultipleChoiceQuestion,
+    staticFallback: string
+  ): Promise<CommentaryResult> {
+    const text = await this.getQuestionIntro(room, question, staticFallback);
+    const audioUrl = await this.generateAudio(text);
+    return { text, audioUrl };
+  }
+
+  async getQuestionRevealWithAudio(
+    room: GameRoom,
+    question: MultipleChoiceQuestion,
+    playerResults: PlayerResult[],
+    staticFallback: string
+  ): Promise<CommentaryResult> {
+    const text = await this.getQuestionReveal(room, question, playerResults, staticFallback);
+    const audioUrl = await this.generateAudio(text);
+    return { text, audioUrl };
+  }
+
+  async getRoundTransitionWithAudio(room: GameRoom, staticFallback: string): Promise<CommentaryResult> {
+    const text = await this.getRoundTransition(room, staticFallback);
+    const audioUrl = await this.generateAudio(text);
+    return { text, audioUrl };
+  }
+
+  async getGameOutroWithAudio(room: GameRoom, staticFallback: string): Promise<CommentaryResult> {
+    const text = await this.getGameOutro(room, staticFallback);
+    const audioUrl = await this.generateAudio(text);
+    return { text, audioUrl };
   }
 
   /**
