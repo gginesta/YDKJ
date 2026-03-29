@@ -5,6 +5,7 @@ import { io, Socket } from 'socket.io-client';
 import type { ClientToServerEvents, ServerToClientEvents } from '@/types/socket';
 import { useGameStore } from '@/stores/gameStore';
 import type { UIQuestion, PlayerResult } from '@/stores/gameStore';
+import { playAudio, initAudioContext, stopAllAudio } from '@/lib/audio/voice-player';
 
 type AppSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
@@ -177,13 +178,14 @@ export function useSocket() {
       console.log('[Socket] Reconnect failed:', reason);
     });
 
-    socket.on('game_starting', ({ hostScript }) => {
+    socket.on('game_starting', ({ hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       store.setGameState('game_starting');
       if (hostScript) store.setHostDialogue(hostScript);
+      if (audioUrl) playAudio(audioUrl);
     });
 
-    socket.on('question_intro', ({ question, hostScript }) => {
+    socket.on('question_intro', ({ question, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       store.setGameState('question_intro');
       store.setCurrentQuestion(question as unknown as UIQuestion);
@@ -192,6 +194,7 @@ export function useSocket() {
       store.setPlayerResults([]);
       store.setQuestionEndsAt(null);
       if (hostScript) store.setHostDialogue(hostScript);
+      if (audioUrl) playAudio(audioUrl);
     });
 
     socket.on('question_active', ({ question, timeLimit }) => {
@@ -205,12 +208,13 @@ export function useSocket() {
       useGameStore.getState().addAnsweredPlayer(playerId);
     });
 
-    socket.on('question_reveal', ({ correctAnswer, playerResults, hostScript }) => {
+    socket.on('question_reveal', ({ correctAnswer, playerResults, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       store.setGameState('question_reveal');
       store.setCorrectAnswerIndex(correctAnswer);
       store.setPlayerResults(playerResults as unknown as PlayerResult[]);
       if (hostScript) store.setHostDialogue(hostScript);
+      if (audioUrl) playAudio(audioUrl);
     });
 
     socket.on('scores_update', ({ scores }) => {
@@ -219,18 +223,20 @@ export function useSocket() {
       store.setScores(scores);
     });
 
-    socket.on('round_transition', ({ round, hostScript }) => {
+    socket.on('round_transition', ({ round, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       store.setGameState('round_transition');
       store.setCurrentRound(round);
       if (hostScript) store.setHostDialogue(hostScript);
+      if (audioUrl) playAudio(audioUrl);
     });
 
-    socket.on('game_over', ({ finalScores, hostScript }) => {
+    socket.on('game_over', ({ finalScores, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       store.setGameState('game_over');
       store.setFinalScores(finalScores);
       if (hostScript) store.setGameOverHostScript(hostScript);
+      if (audioUrl) playAudio(audioUrl);
     });
 
     socket.on('error', ({ message }) => {
@@ -261,19 +267,23 @@ export function useSocket() {
   }, []);
 
   const createRoom = useCallback((playerName: string) => {
+    initAudioContext(); // Init on user gesture
     socketRef.current?.emit('create_room', { playerName });
   }, []);
 
   const joinRoom = useCallback((roomCode: string, playerName: string) => {
+    initAudioContext(); // Init on user gesture
     socketRef.current?.emit('join_room', { roomCode, playerName });
   }, []);
 
   const startGame = useCallback((roomCode: string) => {
+    initAudioContext(); // Ensure audio context is ready
     socketRef.current?.emit('start_game', { roomCode });
   }, []);
 
   const leaveRoom = useCallback(() => {
     socketRef.current?.emit('leave_room');
+    stopAllAudio();
     clearSession();
     useGameStore.getState().reset();
   }, []);
