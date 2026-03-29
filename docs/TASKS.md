@@ -118,21 +118,28 @@ Granular tasks organized by phase. Each task is a single unit of work.
 - [ ] Error handling (timeout, rate limit, bad response)
 
 ### 3.2 Question Generation Prompts
-- [ ] Create `src/lib/ai/prompts/question-generation.ts` — main generation prompt
-- [ ] System prompt with YDKJ writing style rules
-- [ ] Tool schema for structured question output (all 5 types)
-- [ ] Include theme parameter (optional)
-- [ ] Include player names for personalization
+- [x] Create `src/lib/ai/prompts/question-generation.ts` — main generation prompt
+- [x] System prompt with YDKJ writing style rules (voice, misdirection, comedy)
+- [x] Tool schema for structured question output (multiple_choice)
+- [x] Include theme parameter (optional)
+- [x] Include player names for personalization
+- [x] Include round context and category variety tracking
+- [x] Seed fact transformation pipeline (Open Trivia DB → YDKJ style)
+- [x] 6 question styles defined (mashups, disguised facts, wordplay, modern reframing, reverse, absurd-but-true)
+- [x] Wrong answer quality rules (plausible + funny, not throwaways)
+- [x] Difficulty calibration guidelines (30% easy, 50% medium, 20% tricky)
 - [ ] Test prompt quality — iterate until questions are genuinely funny
+- [ ] Add tool schemas for additional question types (dis_or_dat, gibberish, three_way)
 
 ### 3.3 Host Commentary Prompts
-- [ ] Create `src/lib/ai/prompts/host-commentary.ts`
-- [ ] Game intro prompt (greet players by name, set the tone)
-- [ ] Per-question reaction prompt (correct, wrong, timeout variants)
-- [ ] Transition commentary prompt (between questions)
-- [ ] Round transition prompt ("Values are doubled!")
-- [ ] Game outro prompt (crown winner, roast loser)
-- [ ] Include dynamic context: scores, streaks, answer history, power-ups
+- [x] Create `src/lib/ai/prompts/host-commentary.ts`
+- [x] Host personality system prompt (sarcastic, warm, uses player names)
+- [x] Game intro prompt (greet players by name, set the tone)
+- [x] Transition commentary prompt (between questions, reacts to scores/streaks)
+- [x] Round transition prompt ("Values are doubled!" + standings commentary)
+- [x] Game outro prompt (crown winner, roast loser, make them want to play again)
+- [x] Dynamic context injection: scores, streaks, answer history, previous lines
+- [ ] Per-question reaction prompt (personalized correct/wrong/timeout beyond static host scripts)
 
 ### 3.4 Open Trivia DB Integration
 - [ ] Create `src/lib/ai/trivia-api.ts`

@@ -36,6 +36,21 @@ Game Start
 └──────────────────────────────────┘
 ```
 
+## Implementation Status
+
+| Component | Status | File |
+|-----------|--------|------|
+| Seed question bank (200 questions) | ✅ Done | `src/lib/ai/seed-questions.json` |
+| Question dedup per player group | ✅ Done | `src/lib/db/index.ts` |
+| Question generation prompt ("creative bible") | ✅ Done | `src/lib/ai/prompts/question-generation.ts` |
+| Host commentary prompts | ✅ Done | `src/lib/ai/prompts/host-commentary.ts` |
+| Claude API client | ❌ Not started | `src/lib/ai/claude-client.ts` |
+| Open Trivia DB integration | ❌ Not started | `src/lib/ai/trivia-api.ts` |
+| Question pipeline orchestration | ❌ Not started | `src/lib/ai/question-pipeline.ts` |
+| Question validation | ❌ Not started | (defined in prompt, needs runtime impl) |
+| ElevenLabs TTS integration | ❌ Not started | `src/lib/voice/elevenlabs-client.ts` |
+| Client audio playback | ❌ Not started | `src/lib/audio/voice-player.ts` |
+
 ## Question Generation Pipeline
 
 ### Step 1: Seed Data Collection
