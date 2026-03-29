@@ -4,7 +4,7 @@ import { createHash } from 'crypto';
 
 let db: Database.Database | null = null;
 
-const DB_PATH = path.join(process.cwd(), 'ydkj.db');
+const DB_PATH = process.env.DATABASE_PATH || path.join(process.cwd(), 'ydkj.db');
 
 /**
  * Get or create the SQLite database connection.
