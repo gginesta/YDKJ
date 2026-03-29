@@ -12,7 +12,7 @@
  */
 
 import { generateWithTool } from './claude-client';
-import { fetchSeedFacts } from './trivia-api';
+import { fetchMixedDifficultyFacts } from './trivia-api';
 import {
   buildSystemPrompt,
   buildSeedFactsMessage,
@@ -161,7 +161,7 @@ export async function generateGameQuestions(
   // Step 1: Try AI generation
   try {
     // Fetch seed facts from Open Trivia DB
-    const seeds = await fetchSeedFacts(questionsNeeded + 5);
+    const seeds = await fetchMixedDifficultyFacts(questionsNeeded + 5);
     console.log(`[Pipeline] Fetched ${seeds.length} seed facts from Open Trivia DB`);
 
     if (seeds.length >= 5) {
