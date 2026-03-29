@@ -228,7 +228,7 @@ export class GameEngine {
     this.room.questions = this.questions;
   }
 
-  private async startQuestionIntro(): Promise<void> {
+  private startQuestionIntro(): void {
     if (this.destroyed) return;
 
     const q = this.questions[this.room.questionIndex];
@@ -241,12 +241,7 @@ export class GameEngine {
     this.currentAnswers.clear();
     this.wimpMode = false;
 
-    // Get AI host intro + voice (races against timeout, falls back to static)
-    const { text: hostScript, audioUrl } = await this.commentary.getQuestionIntroWithAudio(this.room, q, q.hostIntro);
-
-    if (this.destroyed) return;
-
-    // Send question WITHOUT answers (redacted)
+    // Emit immediately with static text
     this.emit('question_intro', {
       question: {
         id: q.id,
@@ -258,11 +253,18 @@ export class GameEngine {
         totalQuestions: TOTAL_QUESTIONS,
         round: this.room.round,
       },
-      hostScript,
-      audioUrl,
+      hostScript: q.hostIntro,
     });
 
+    // Schedule next phase immediately — never wait for AI
     this.scheduleNext(DURATIONS.QUESTION_INTRO, () => this.startQuestionActive());
+
+    // Fire AI + TTS in background — send audio update if it arrives in time
+    this.commentary.getQuestionIntroWithAudio(this.room, q, q.hostIntro).then(({ text, audioUrl }) => {
+      if (this.destroyed || this.room.state !== GameState.QUESTION_INTRO) return;
+      if (text !== q.hostIntro) this.emit('question_intro', { question: { id: q.id, type: q.type, category: q.category, value: q.value, timeLimit: q.timeLimit, questionIndex: this.room.questionIndex, totalQuestions: TOTAL_QUESTIONS, round: this.room.round }, hostScript: text, audioUrl });
+      else if (audioUrl) this.emit('host_audio', { audioUrl });
+    }).catch(() => {});
   }
 
   private startQuestionActive(): void {
@@ -340,7 +342,7 @@ export class GameEngine {
     this.scheduleNext(DURATIONS.WIMP_TIMER, () => this.revealAnswer());
   }
 
-  private async revealAnswer(): Promise<void> {
+  private revealAnswer(): void {
     if (this.destroyed) return;
 
     const q = this.questions[this.room.questionIndex];
@@ -419,19 +421,22 @@ export class GameEngine {
       staticScript = correctPlayers.length > wrongPlayers.length ? q.hostCorrect : q.hostWrong;
     }
 
-    // Get AI commentary + voice (races against timeout, falls back to static)
-    const { text: hostScript, audioUrl } = await this.commentary.getQuestionRevealWithAudio(this.room, q, playerResults, staticScript);
-
-    if (this.destroyed) return;
-
+    // Emit immediately with static text
     this.emit('question_reveal', {
       correctAnswer: q.correctIndex,
       playerResults,
-      hostScript,
-      audioUrl,
+      hostScript: staticScript,
     });
 
+    // Schedule next phase immediately
     this.scheduleNext(DURATIONS.QUESTION_REVEAL, () => this.showScores());
+
+    // Fire AI + TTS in background
+    this.commentary.getQuestionRevealWithAudio(this.room, q, playerResults, staticScript).then(({ text, audioUrl }) => {
+      if (this.destroyed || this.room.state !== GameState.QUESTION_REVEAL) return;
+      if (text !== staticScript) this.emit('question_reveal', { correctAnswer: q.correctIndex, playerResults, hostScript: text, audioUrl });
+      else if (audioUrl) this.emit('host_audio', { audioUrl });
+    }).catch(() => {});
   }
 
   private showScores(): void {
@@ -448,7 +453,7 @@ export class GameEngine {
     this.scheduleNext(DURATIONS.SCORES_UPDATE, () => this.advanceToNextQuestion());
   }
 
-  private async advanceToNextQuestion(): Promise<void> {
+  private advanceToNextQuestion(): void {
     if (this.destroyed) return;
 
     this.room.questionIndex++;
@@ -459,17 +464,22 @@ export class GameEngine {
       this.room.state = GameState.ROUND_TRANSITION;
 
       const staticScript = "Round 2! All values are DOUBLED! Things are about to get serious.";
-      const { text: hostScript, audioUrl } = await this.commentary.getRoundTransitionWithAudio(this.room, staticScript);
 
-      if (this.destroyed) return;
-
+      // Emit immediately with static text
       this.emit('round_transition', {
         round: 2,
-        hostScript,
-        audioUrl,
+        hostScript: staticScript,
       });
 
       this.scheduleNext(DURATIONS.ROUND_TRANSITION, () => this.startQuestionIntro());
+
+      // Fire AI + TTS in background
+      this.commentary.getRoundTransitionWithAudio(this.room, staticScript).then(({ text, audioUrl }) => {
+        if (this.destroyed || this.room.state !== GameState.ROUND_TRANSITION) return;
+        if (text !== staticScript) this.emit('round_transition', { round: 2, hostScript: text, audioUrl });
+        else if (audioUrl) this.emit('host_audio', { audioUrl });
+      }).catch(() => {});
+
       return;
     }
 
@@ -483,7 +493,7 @@ export class GameEngine {
     this.startQuestionIntro();
   }
 
-  private async endGame(): Promise<void> {
+  private endGame(): void {
     if (this.destroyed) return;
 
     this.room.state = GameState.GAME_OVER;
@@ -508,19 +518,22 @@ export class GameEngine {
       staticScript += `${winner.name} wins with $${winner.money.toLocaleString()}!`;
     }
 
-    // Get AI outro + voice (15s phase — plenty of time)
-    const { text: hostScript, audioUrl } = await this.commentary.getGameOutroWithAudio(this.room, staticScript);
-
-    if (this.destroyed) return;
-
+    // Emit immediately with static text
     this.emit('game_over', {
       finalScores,
-      hostScript,
-      audioUrl,
+      hostScript: staticScript,
     });
 
     // Save to database
     this.saveResults(finalScores);
+
+    // Fire AI + TTS in background — upgrade text/audio if it arrives
+    this.commentary.getGameOutroWithAudio(this.room, staticScript).then(({ text, audioUrl }) => {
+      if (this.destroyed) return;
+      if (text !== staticScript || audioUrl) {
+        this.emit('game_over', { finalScores, hostScript: text, audioUrl });
+      }
+    }).catch(() => {});
   }
 
   private async saveResults(

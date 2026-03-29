@@ -82,6 +82,7 @@ export interface ServerToClientEvents {
     effect: string;
   }) => void;
   error: (data: { message: string }) => void;
+  host_audio: (data: { audioUrl: string }) => void;
 }
 
 // ============================================================

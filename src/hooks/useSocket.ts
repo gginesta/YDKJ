@@ -147,6 +147,10 @@ export function useSocket() {
       playAudio(audioUrl);
     });
 
+    socket.on('host_audio', ({ audioUrl }) => {
+      playAudio(audioUrl);
+    });
+
     socket.on('error', ({ message }) => {
       useGameStore.getState().setError(message);
     });
@@ -166,6 +170,7 @@ export function useSocket() {
       socket.off('scores_update');
       socket.off('round_transition');
       socket.off('game_over');
+      socket.off('host_audio');
       socket.off('error');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
