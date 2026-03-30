@@ -46,6 +46,15 @@
 │  │  SQLite DB (better-sqlite3)                           ││
 │  │  - Game results history                               ││
 │  │  - Generated question cache                           ││
+│  │  - Player group dedup (seen question tracking)        ││
+│  └──────────────────────────────────────────────────────┘│
+│                                                           │
+│  ┌──────────────────────────────────────────────────────┐│
+│  │  Audio Cache (in-memory)                              ││
+│  │  - Tier 1: ~33 pre-generated TTS clips per game      ││
+│  │  - Keyed by question ID + type (intro/correct/wrong)  ││
+│  │  - Generated during extended loading phase (18s)      ││
+│  │  - Cleared on game reset/destroy                      ││
 │  └──────────────────────────────────────────────────────┘│
 └──────────────────────────────────────────────────────────┘
 ```

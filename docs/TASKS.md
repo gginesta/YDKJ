@@ -110,12 +110,12 @@ Granular tasks organized by phase. Each task is a single unit of work.
 ## Phase 3: The Host
 
 ### 3.1 Claude API Integration
-- [ ] Install `@anthropic-ai/sdk`
-- [ ] Create `src/lib/ai/claude-client.ts` — API wrapper
-- [ ] Implement structured output via tool use for question generation
-- [ ] Response validation (ensure schema compliance)
-- [ ] Retry logic (1 retry on parse failure)
-- [ ] Error handling (timeout, rate limit, bad response)
+- [x] Install `@anthropic-ai/sdk`
+- [x] Create `src/lib/ai/claude-client.ts` — API wrapper
+- [x] Implement structured output via tool use for question generation
+- [x] Response validation (ensure schema compliance)
+- [x] Retry logic (1 retry on parse failure)
+- [x] Error handling (timeout, rate limit, bad response)
 
 ### 3.2 Question Generation Prompts
 - [x] Create `src/lib/ai/prompts/question-generation.ts` — main generation prompt
@@ -131,7 +131,7 @@ Granular tasks organized by phase. Each task is a single unit of work.
 - [ ] Test prompt quality — iterate until questions are genuinely funny
 - [ ] Add tool schemas for additional question types (dis_or_dat, gibberish, three_way)
 
-### 3.3 Host Commentary Prompts
+### 3.3 Host Commentary Prompts & Service
 - [x] Create `src/lib/ai/prompts/host-commentary.ts`
 - [x] Host personality system prompt (sarcastic, warm, uses player names)
 - [x] Game intro prompt (greet players by name, set the tone)
@@ -139,44 +139,56 @@ Granular tasks organized by phase. Each task is a single unit of work.
 - [x] Round transition prompt ("Values are doubled!" + standings commentary)
 - [x] Game outro prompt (crown winner, roast loser, make them want to play again)
 - [x] Dynamic context injection: scores, streaks, answer history, previous lines
-- [ ] Per-question reaction prompt (personalized correct/wrong/timeout beyond static host scripts)
+- [x] Create `src/lib/ai/host-commentary-service.ts` — orchestrates text + audio
+- [x] Race AI calls against 3.5s timeout with static fallback
+- [x] Track last 5 lines to avoid repetition
+- [x] WithAudio variants for all commentary methods (Tier 2)
 
 ### 3.4 Open Trivia DB Integration
-- [ ] Create `src/lib/ai/trivia-api.ts`
-- [ ] Fetch questions from Open Trivia DB API
-- [ ] Parse and normalize response format
-- [ ] Use as seed facts for Claude to riff on
-- [ ] Fallback if API is down (use curated seeds)
+- [x] Create `src/lib/ai/trivia-api.ts`
+- [x] Fetch questions from Open Trivia DB API
+- [x] Parse and normalize response format (HTML entity decoding)
+- [x] Use as seed facts for Claude to riff on
+- [x] Fallback if API is down (use curated seed bank)
+- [x] Session token system to avoid repeat questions across games
+- [x] Auto-reset token when exhausted, auto-request when expired
+- [x] Mixed difficulty fetching (30% easy, 50% medium, 20% hard)
+- [x] Rate limit awareness (1 req per 5s per IP)
 
 ### 3.5 Question Pipeline Orchestration
-- [ ] Create `src/lib/ai/question-pipeline.ts`
-- [ ] Fetch seed data (Open Trivia DB + curated bank)
-- [ ] Call Claude to generate 12 questions (10 + 2 backup)
-- [ ] Validate all generated questions
-- [ ] Cache in SQLite (7-day TTL, dedup per player group)
-- [ ] Trigger generation during GAME_STARTING state
-- [ ] Background generation: don't block game start
+- [x] Create `src/lib/ai/question-pipeline.ts`
+- [x] Fetch seed data (Open Trivia DB + curated bank)
+- [x] Call Claude to generate questions with YDKJ prompt
+- [x] Validate all generated questions (4 choices, host scripts, length)
+- [x] Cache in SQLite (7-day TTL, dedup per player group)
+- [x] Trigger generation during GAME_STARTING state
+- [x] Non-blocking: seed questions load instantly, AI is best-effort
 
 ### 3.6 ElevenLabs TTS Integration
-- [ ] Create `src/lib/voice/elevenlabs-client.ts`
-- [ ] Streaming TTS function (text → audio stream)
-- [ ] Voice selection and configuration
-- [ ] Audio format: MP3 44.1kHz 128kbps
-- [ ] Create `src/app/api/voice/tts/route.ts` — TTS proxy endpoint
-- [ ] Server-side audio caching (avoid re-generating same lines)
+- [x] Create `src/lib/voice/elevenlabs-client.ts`
+- [x] TTS function (text → base64 MP3 data URL)
+- [x] Voice configuration (voice ID: 1t1EeRixsJrKbiF1zwM6, eleven_turbo_v2 model)
+- [x] 8s timeout, graceful fallback to text-only
+- [x] `isVoiceEnabled()` check for graceful degradation
 
-### 3.7 Client Audio Playback
-- [ ] Create `src/lib/audio/voice-player.ts`
-- [ ] Web Audio API setup for voice playback
-- [ ] Handle audio autoplay restrictions (require user gesture)
-- [ ] Queue system (don't overlap voice lines)
-- [ ] Text fallback display while voice loads or if voice fails
+### 3.7 Two-Tier Audio System
+- [x] Create `src/lib/voice/audio-cache.ts` — Tier 1 batch pre-generation
+- [x] Extended GAME_STARTING phase (18s when voice enabled, 5s without)
+- [x] Batch-generate ~33 audio clips during loading (all hostIntro/Correct/Wrong/Timeout)
+- [x] Bounded concurrency (5 parallel requests) to avoid ElevenLabs rate limits
+- [x] 16s master timeout — use whatever is cached by then
+- [x] Early start optimization: if all audio ready + 5s minimum, start game early
+- [x] Cache lookup per phase: `audioCache.get("q_{id}_intro")` — instant playback
+- [x] Tier 2 live-buffered: AI personalized reactions fire in background (bonus)
+- [x] Loading UX: progress bar + rotating quirky messages
+- [x] `loading_progress` socket event for client progress updates
 
-### 3.8 Voice Pre-Buffering
-- [ ] Generate next question's host intro during current question's reveal phase
-- [ ] Buffer audio on client before it's needed
-- [ ] Track buffer state (loading, ready, playing, done)
-- [ ] Sync state transitions to voice completion
+### 3.8 Client Audio Playback
+- [x] `playAudio()` helper in `useSocket.ts`
+- [x] Stops previous audio before playing new clip
+- [x] Handles autoplay restrictions silently (text fallback)
+- [x] `host_audio` socket event for late-arriving audio updates
+- [x] Audio plays on: game_starting, question_intro, question_reveal, round_transition, game_over
 
 ---
 
@@ -405,16 +417,24 @@ Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4
 
 ## Task Count Summary
 
-| Phase | Tasks | Critical Path? |
-|-------|-------|----------------|
-| Phase 1: Foundation | 28 | Yes |
-| Phase 2: Core Game | 27 | Yes |
-| Phase 3: The Host | 30 | Yes |
-| Phase 4: Question Variety | 22 | Yes (Jack Attack only for MVP) |
-| Phase 5: Power-Ups & Easter Eggs | 24 | No — can ship without |
-| Phase 6: Audio & Visual Polish | 33 | No — can ship basic |
-| Phase 7: Deployment & Testing | 22 | Yes (deploy subset) |
-| **Total** | **186 tasks** | |
+| Phase | Status | Critical Path? |
+|-------|--------|----------------|
+| Phase 1: Foundation | ✅ Complete | Yes |
+| Phase 2: Core Game | ✅ Complete | Yes |
+| Phase 3: The Host | ✅ Complete | Yes |
+| Phase 4: Question Variety | ❌ Not started | Yes (Jack Attack only for MVP) |
+| Phase 5: Power-Ups & Easter Eggs | ❌ Not started | No — can ship without |
+| Phase 6: Audio & Visual Polish | ❌ Not started | No — can ship basic |
+| Phase 7: Deployment & Testing | 🔨 Partial (Railway deployed) | Yes (deploy subset) |
+
+## Current State
+
+The game is **playable end-to-end** with:
+- 200 seed questions + AI-generated questions via Claude
+- AI host commentary (personalized, uses player names/scores)
+- ElevenLabs TTS voice with two-tier audio (pre-generated + live-buffered)
+- Deployed on Railway
+- 2-10 player multiplayer via Socket.io
 
 ## MVP Shortcut
 
