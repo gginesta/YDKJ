@@ -147,6 +147,10 @@ export function useSocket() {
       playAudio(audioUrl);
     });
 
+    socket.on('loading_progress', (data) => {
+      useGameStore.getState().setLoadingProgress(data);
+    });
+
     socket.on('host_audio', ({ audioUrl }) => {
       playAudio(audioUrl);
     });
@@ -170,6 +174,7 @@ export function useSocket() {
       socket.off('scores_update');
       socket.off('round_transition');
       socket.off('game_over');
+      socket.off('loading_progress');
       socket.off('host_audio');
       socket.off('error');
     };

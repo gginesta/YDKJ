@@ -105,6 +105,10 @@ interface GameStore {
   gameOverHostScript: string | null;
   setGameOverHostScript: (script: string | null) => void;
 
+  // Loading progress
+  loadingProgress: { completed: number; total: number; message: string } | null;
+  setLoadingProgress: (progress: { completed: number; total: number; message: string } | null) => void;
+
   // Error handling
   error: string | null;
   setError: (error: string | null) => void;
@@ -132,6 +136,7 @@ const initialState = {
   hostDialogue: null,
   finalScores: [] as ScoreEntry[],
   gameOverHostScript: null,
+  loadingProgress: null,
   error: null,
 };
 
@@ -224,6 +229,9 @@ export const useGameStore = create<GameStore>((set) => ({
   setFinalScores: (finalScores) => set({ finalScores }),
   gameOverHostScript: null,
   setGameOverHostScript: (gameOverHostScript) => set({ gameOverHostScript }),
+
+  loadingProgress: null,
+  setLoadingProgress: (loadingProgress) => set({ loadingProgress }),
 
   setError: (error) => set({ error }),
   clearError: () => set({ error: null }),

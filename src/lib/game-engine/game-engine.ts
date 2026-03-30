@@ -6,6 +6,8 @@ import { calculateScore, updateStreak, getStreakBonus, assignQuestionValues, get
 import { saveGameResult, hashPlayerGroup, getSeenQuestionIds, recordSeenQuestions, resetSeenQuestions } from '../db';
 import { generateGameQuestions } from '../ai/question-pipeline';
 import { HostCommentaryService } from '../ai/host-commentary-service';
+import { AudioCache, buildAudioEntries } from '../voice/audio-cache';
+import { isVoiceEnabled } from '../voice/elevenlabs-client';
 import seedQuestionsData from '../ai/seed-questions.json';
 
 type AppIO = SocketIOServer<ClientToServerEvents, ServerToClientEvents>;
@@ -31,7 +33,9 @@ interface PlayerAnswer {
 
 // Phase durations in milliseconds
 const DURATIONS = {
-  GAME_STARTING: 5000,
+  GAME_STARTING: 5000, // Extended to 18000 when voice is enabled
+  GAME_STARTING_VOICE: 18000,
+  MIN_LOADING_MS: 5000,
   QUESTION_INTRO: 6000,
   QUESTION_ACTIVE: 20000,
   QUESTION_REVEAL: 5000,
@@ -56,22 +60,26 @@ export class GameEngine {
   private destroyed: boolean = false;
   private wimpMode: boolean = false;
   private commentary: HostCommentaryService;
+  private audioCache: AudioCache;
+  private gameStartedAt: number = 0;
 
   constructor(io: AppIO, room: GameRoom, roomCode: string) {
     this.io = io;
     this.room = room;
     this.roomCode = roomCode;
     this.commentary = new HostCommentaryService();
+    this.audioCache = new AudioCache();
   }
 
   /**
-   * Start the game. Loads questions (AI or seed) and begins the state machine.
+   * Start the game. Loads questions and pre-generates voice audio.
    */
   start(): void {
     this.room.state = GameState.GAME_STARTING;
     this.room.round = 1;
     this.room.questionIndex = 0;
     this.room.startedAt = Date.now();
+    this.gameStartedAt = Date.now();
 
     // Reset all players
     for (const player of this.room.players) {
@@ -86,16 +94,48 @@ export class GameEngine {
     // Always load seed questions immediately (instant, never fails)
     this.loadSeedQuestions(this.room.players.map((p) => p.name));
 
-    // Try AI intro + voice in background (non-blocking, best-effort)
-    this.commentary.getGameIntroWithAudio(this.room, staticIntro).then(({ text, audioUrl }) => {
-      if (this.destroyed) return;
-      if (text !== staticIntro || audioUrl) {
-        this.emit('game_starting', { hostScript: text, audioUrl });
-      }
-    }).catch(() => {});
+    if (isVoiceEnabled()) {
+      // Voice enabled: extended loading phase with Tier 1 pre-generation
+      const loadingDuration = DURATIONS.GAME_STARTING_VOICE;
 
-    // Start the game after the countdown — questions are already loaded
-    this.scheduleNext(DURATIONS.GAME_STARTING, () => this.startQuestionIntro());
+      // Build batch entries from all loaded questions
+      const gameOverText = this.buildStaticOutroScript();
+      const entries = buildAudioEntries(
+        staticIntro,
+        this.questions,
+        "Round 2! All values are DOUBLED! Things are about to get serious.",
+        gameOverText
+      );
+
+      // Pre-generate all audio with progress updates
+      let audioComplete = false;
+      this.audioCache.generateBatch(entries, (completed, total) => {
+        if (this.destroyed) return;
+        this.emit('loading_progress', {
+          completed,
+          total,
+          message: `Generating voice ${completed}/${total}...`,
+        });
+
+        // Early start: if all audio ready and minimum time elapsed
+        if (completed === total && !audioComplete) {
+          audioComplete = true;
+          const elapsed = Date.now() - this.gameStartedAt;
+          const remaining = Math.max(0, DURATIONS.MIN_LOADING_MS - elapsed);
+          // Start game after minimum loading time
+          this.clearTimer();
+          this.scheduleNext(remaining, () => this.startQuestionIntro());
+        }
+      }).catch(() => {});
+
+      // Fallback timer: start game after max loading duration regardless
+      this.scheduleNext(loadingDuration, () => {
+        if (!audioComplete) this.startQuestionIntro();
+      });
+    } else {
+      // No voice: original 5-second countdown
+      this.scheduleNext(DURATIONS.GAME_STARTING, () => this.startQuestionIntro());
+    }
   }
 
   /**
@@ -127,6 +167,7 @@ export class GameEngine {
   destroy(): void {
     this.destroyed = true;
     this.clearTimer();
+    this.audioCache.clear();
   }
 
   /**
@@ -142,6 +183,7 @@ export class GameEngine {
     this.room.startedAt = undefined;
     this.currentAnswers.clear();
     this.commentary.reset();
+    this.audioCache.clear();
 
     for (const player of this.room.players) {
       player.money = 0;
@@ -241,7 +283,10 @@ export class GameEngine {
     this.currentAnswers.clear();
     this.wimpMode = false;
 
-    // Emit immediately with static text
+    // Get cached Tier 1 audio (instant) or null
+    const cachedAudio = this.audioCache.get(`q_${q.id}_intro`);
+
+    // Emit with static text + cached audio
     this.emit('question_intro', {
       question: {
         id: q.id,
@@ -254,17 +299,21 @@ export class GameEngine {
         round: this.room.round,
       },
       hostScript: q.hostIntro,
+      audioUrl: cachedAudio,
     });
 
     // Schedule next phase immediately — never wait for AI
     this.scheduleNext(DURATIONS.QUESTION_INTRO, () => this.startQuestionActive());
 
-    // Fire AI + TTS in background — send audio update if it arrives in time
-    this.commentary.getQuestionIntroWithAudio(this.room, q, q.hostIntro).then(({ text, audioUrl }) => {
-      if (this.destroyed || this.room.state !== GameState.QUESTION_INTRO) return;
-      if (text !== q.hostIntro) this.emit('question_intro', { question: { id: q.id, type: q.type, category: q.category, value: q.value, timeLimit: q.timeLimit, questionIndex: this.room.questionIndex, totalQuestions: TOTAL_QUESTIONS, round: this.room.round }, hostScript: text, audioUrl });
-      else if (audioUrl) this.emit('host_audio', { audioUrl });
-    }).catch(() => {});
+    // Tier 2: Fire AI commentary in background (text upgrade only, audio already cached)
+    if (!cachedAudio) {
+      this.commentary.getQuestionIntroWithAudio(this.room, q, q.hostIntro).then(({ text, audioUrl }) => {
+        if (this.destroyed || this.room.state !== GameState.QUESTION_INTRO) return;
+        if (text !== q.hostIntro || audioUrl) {
+          this.emit('question_intro', { question: { id: q.id, type: q.type, category: q.category, value: q.value, timeLimit: q.timeLimit, questionIndex: this.room.questionIndex, totalQuestions: TOTAL_QUESTIONS, round: this.room.round }, hostScript: text, audioUrl });
+        }
+      }).catch(() => {});
+    }
   }
 
   private startQuestionActive(): void {
@@ -408,30 +457,40 @@ export class GameEngine {
       });
     }
 
-    // Build static fallback for reveal
+    // Build static fallback + pick the right cached audio
     const correctPlayers = playerResults.filter((r) => r.isCorrect);
     const wrongPlayers = playerResults.filter((r) => !r.isCorrect && r.selectedIndex !== undefined);
     let staticScript: string;
+    let audioCacheKey: string;
 
     if (correctPlayers.length === 0) {
       staticScript = q.hostTimeout;
+      audioCacheKey = `q_${q.id}_timeout`;
     } else if (wrongPlayers.length === 0) {
       staticScript = q.hostCorrect + " Everyone got it!";
+      audioCacheKey = `q_${q.id}_correct`;
+    } else if (correctPlayers.length > wrongPlayers.length) {
+      staticScript = q.hostCorrect;
+      audioCacheKey = `q_${q.id}_correct`;
     } else {
-      staticScript = correctPlayers.length > wrongPlayers.length ? q.hostCorrect : q.hostWrong;
+      staticScript = q.hostWrong;
+      audioCacheKey = `q_${q.id}_wrong`;
     }
 
-    // Emit immediately with static text
+    const cachedAudio = this.audioCache.get(audioCacheKey);
+
+    // Emit with static text + cached Tier 1 audio
     this.emit('question_reveal', {
       correctAnswer: q.correctIndex,
       playerResults,
       hostScript: staticScript,
+      audioUrl: cachedAudio,
     });
 
     // Schedule next phase immediately
     this.scheduleNext(DURATIONS.QUESTION_REVEAL, () => this.showScores());
 
-    // Fire AI + TTS in background
+    // Tier 2: Fire AI personalized reaction in background (bonus)
     this.commentary.getQuestionRevealWithAudio(this.room, q, playerResults, staticScript).then(({ text, audioUrl }) => {
       if (this.destroyed || this.room.state !== GameState.QUESTION_REVEAL) return;
       if (text !== staticScript) this.emit('question_reveal', { correctAnswer: q.correctIndex, playerResults, hostScript: text, audioUrl });
@@ -464,21 +523,23 @@ export class GameEngine {
       this.room.state = GameState.ROUND_TRANSITION;
 
       const staticScript = "Round 2! All values are DOUBLED! Things are about to get serious.";
+      const cachedAudio = this.audioCache.get('round2_transition');
 
-      // Emit immediately with static text
       this.emit('round_transition', {
         round: 2,
         hostScript: staticScript,
+        audioUrl: cachedAudio,
       });
 
       this.scheduleNext(DURATIONS.ROUND_TRANSITION, () => this.startQuestionIntro());
 
-      // Fire AI + TTS in background
-      this.commentary.getRoundTransitionWithAudio(this.room, staticScript).then(({ text, audioUrl }) => {
-        if (this.destroyed || this.room.state !== GameState.ROUND_TRANSITION) return;
-        if (text !== staticScript) this.emit('round_transition', { round: 2, hostScript: text, audioUrl });
-        else if (audioUrl) this.emit('host_audio', { audioUrl });
-      }).catch(() => {});
+      // Tier 2: AI upgrade in background
+      if (!cachedAudio) {
+        this.commentary.getRoundTransitionWithAudio(this.room, staticScript).then(({ text, audioUrl }) => {
+          if (this.destroyed || this.room.state !== GameState.ROUND_TRANSITION) return;
+          if (text !== staticScript || audioUrl) this.emit('round_transition', { round: 2, hostScript: text, audioUrl });
+        }).catch(() => {});
+      }
 
       return;
     }
@@ -518,16 +579,18 @@ export class GameEngine {
       staticScript += `${winner.name} wins with $${winner.money.toLocaleString()}!`;
     }
 
-    // Emit immediately with static text
+    const cachedAudio = this.audioCache.get('game_over');
+
     this.emit('game_over', {
       finalScores,
       hostScript: staticScript,
+      audioUrl: cachedAudio,
     });
 
     // Save to database
     this.saveResults(finalScores);
 
-    // Fire AI + TTS in background — upgrade text/audio if it arrives
+    // Tier 2: AI personalized outro (15s phase — plenty of time)
     this.commentary.getGameOutroWithAudio(this.room, staticScript).then(({ text, audioUrl }) => {
       if (this.destroyed) return;
       if (text !== staticScript || audioUrl) {
@@ -591,5 +654,13 @@ export class GameEngine {
     }
     const last = names.pop();
     return `Welcome to You Don't Know Jack! We've got ${names.join(', ')}, and ${last}. ${this.room.players.length} players, zero excuses. Let's go!`;
+  }
+
+  private buildStaticOutroScript(): string {
+    const names = this.room.players.map((p) => p.name);
+    if (names.length === 2) {
+      return `And that's the game! Great battle between ${names[0]} and ${names[1]}!`;
+    }
+    return `And that's the game! What a round, everyone!`;
   }
 }

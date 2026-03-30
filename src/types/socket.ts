@@ -83,6 +83,7 @@ export interface ServerToClientEvents {
   }) => void;
   error: (data: { message: string }) => void;
   host_audio: (data: { audioUrl: string }) => void;
+  loading_progress: (data: { completed: number; total: number; message: string }) => void;
 }
 
 // ============================================================
