@@ -18,6 +18,7 @@ export interface ClientToServerEvents {
     targetPlayerId?: string;
   }) => void;
   jack_attack_buzz: (data: { answerId: string; timestamp: number }) => void;
+  rejoin_room: (data: { roomCode: string; playerName: string }) => void;
   play_again: () => void;
   leave_room: () => void;
 }

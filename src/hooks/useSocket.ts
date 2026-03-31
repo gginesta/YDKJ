@@ -55,7 +55,17 @@ export function useSocket() {
 
     // Track connection state
     socket.on('connect', () => {
-      useGameStore.getState().setConnected(true);
+      const store = useGameStore.getState();
+      store.setConnected(true);
+
+      // Attempt to rejoin if we were in a game
+      if (store.room && store.myPlayer && store.gameState !== 'lobby') {
+        console.log('[Socket] Reconnected — attempting to rejoin room', store.room.id);
+        socket.emit('rejoin_room', {
+          roomCode: store.room.id,
+          playerName: store.myPlayer.name,
+        });
+      }
     });
 
     socket.on('disconnect', () => {
@@ -107,6 +117,8 @@ export function useSocket() {
 
     socket.on('question_active', ({ question, timeLimit }) => {
       const store = useGameStore.getState();
+      // Don't let wimp mode re-emit override a reveal that already arrived
+      if (store.gameState === 'question_reveal' || store.gameState === 'scores_update') return;
       store.setGameState('question_active');
       store.setCurrentQuestion(question as unknown as import('@/stores/gameStore').UIQuestion);
       store.setQuestionEndsAt(Date.now() + timeLimit * 1000);

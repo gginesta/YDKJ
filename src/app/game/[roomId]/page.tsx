@@ -22,14 +22,17 @@ export default function GamePage() {
 
   const roomId = params.roomId as string;
 
+  const connected = useGameStore((s) => s.connected);
+
   useEffect(() => {
-    if (!room && !myPlayer) {
+    // Only redirect if we have no room state AND we're connected (not mid-reconnect)
+    if (!room && !myPlayer && connected) {
       const timeout = setTimeout(() => {
         router.push('/');
-      }, 500);
+      }, 3000); // Give reconnection time to complete
       return () => clearTimeout(timeout);
     }
-  }, [room, myPlayer, router]);
+  }, [room, myPlayer, connected, router]);
 
   const isHost = myPlayer?.id === room?.hostPlayerId;
   const canStart = isHost && (room?.players.length ?? 0) >= 2;
