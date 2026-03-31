@@ -94,7 +94,10 @@ export class GameEngine {
     // Always load seed questions immediately (instant, never fails)
     this.loadSeedQuestions(this.room.players.map((p) => p.name));
 
-    if (isVoiceEnabled()) {
+    const voiceEnabled = isVoiceEnabled();
+    console.log(`[GameEngine] Voice enabled: ${voiceEnabled}, ELEVENLABS_API_KEY: ${process.env.ELEVENLABS_API_KEY ? 'set' : 'NOT SET'}, ELEVENLABS_VOICE_ID: ${process.env.ELEVENLABS_VOICE_ID || 'not set (using default)'}`);
+
+    if (voiceEnabled) {
       // Voice enabled: extended loading phase with Tier 1 pre-generation
       const loadingDuration = DURATIONS.GAME_STARTING_VOICE;
 

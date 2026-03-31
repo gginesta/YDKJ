@@ -27,7 +27,11 @@ const DEFAULT_VOICE_SETTINGS: VoiceSettings = {
  * Check if ElevenLabs is configured.
  */
 export function isVoiceEnabled(): boolean {
-  return !!process.env.ELEVENLABS_API_KEY;
+  const enabled = !!process.env.ELEVENLABS_API_KEY;
+  if (!enabled) {
+    console.log('[ElevenLabs] Voice disabled — no ELEVENLABS_API_KEY set');
+  }
+  return enabled;
 }
 
 /**
