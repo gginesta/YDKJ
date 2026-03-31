@@ -40,6 +40,8 @@ export default function GamePage() {
   const handleStart = () => {
     if (room) {
       clearError();
+      // Init audio on user gesture (required by browsers)
+      import('@/lib/audio/sound-system').then((m) => m.initAudio());
       startGame(room.id);
     }
   };

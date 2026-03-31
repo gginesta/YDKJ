@@ -4,6 +4,19 @@ import { useEffect, useRef, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 import type { ClientToServerEvents, ServerToClientEvents } from '@/types/socket';
 import { useGameStore } from '@/stores/gameStore';
+import {
+  initAudio,
+  playCorrectSound,
+  playWrongSound,
+  playTransitionSound,
+  playGameStartSound,
+  playRoundTransitionSound,
+  playScoreRevealSound,
+  playGameOverSound,
+  playTapSound,
+  speakText,
+  stopSpeaking,
+} from '@/lib/audio/sound-system';
 
 type AppSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
@@ -100,7 +113,10 @@ export function useSocket() {
       const store = useGameStore.getState();
       store.setGameState('game_starting');
       if (hostScript) store.setHostDialogue(hostScript);
-      playAudio(audioUrl);
+      initAudio(); // Ensure audio context is ready
+      playGameStartSound();
+      if (audioUrl) playAudio(audioUrl);
+      else if (hostScript) speakText(hostScript);
     });
 
     socket.on('question_intro', ({ question, hostScript, audioUrl }) => {
@@ -112,25 +128,28 @@ export function useSocket() {
       store.setCorrectAnswerIndex(null);
       store.setPlayerResults([]);
       store.setQuestionEndsAt(null);
-      // Sync question metadata from server
       if (typeof q.questionIndex === 'number') store.setQuestionIndex(q.questionIndex);
       if (typeof q.round === 'number') store.setCurrentRound(q.round);
       if (typeof q.totalQuestions === 'number') store.setTotalQuestions(q.totalQuestions);
       if (hostScript) store.setHostDialogue(hostScript);
-      playAudio(audioUrl);
+      stopSpeaking();
+      playTransitionSound();
+      if (audioUrl) playAudio(audioUrl);
+      else if (hostScript) speakText(hostScript);
     });
 
     socket.on('question_active', ({ question, timeLimit }) => {
       const store = useGameStore.getState();
-      // Don't let wimp mode re-emit override a reveal that already arrived
       if (store.gameState === 'question_reveal' || store.gameState === 'scores_update') return;
       store.setGameState('question_active');
       store.setCurrentQuestion(question as unknown as import('@/stores/gameStore').UIQuestion);
       store.setQuestionEndsAt(Date.now() + timeLimit * 1000);
+      stopSpeaking();
     });
 
     socket.on('answer_received', ({ playerId }) => {
       useGameStore.getState().addAnsweredPlayer(playerId);
+      playTapSound();
     });
 
     socket.on('question_reveal', ({ correctAnswer, playerResults, hostScript, audioUrl }) => {
@@ -139,13 +158,22 @@ export function useSocket() {
       store.setCorrectAnswerIndex(correctAnswer);
       store.setPlayerResults(playerResults as unknown as import('@/stores/gameStore').PlayerResult[]);
       if (hostScript) store.setHostDialogue(hostScript);
-      playAudio(audioUrl);
+      // Play correct/wrong sound based on my result
+      const myId = store.myPlayer?.id;
+      const myResult = (playerResults as unknown as import('@/stores/gameStore').PlayerResult[]).find(
+        (r) => r.playerId === myId
+      );
+      if (myResult?.isCorrect) playCorrectSound();
+      else if (myResult && !myResult.isCorrect) playWrongSound();
+      if (audioUrl) playAudio(audioUrl);
+      else if (hostScript) speakText(hostScript);
     });
 
     socket.on('scores_update', ({ scores }) => {
       const store = useGameStore.getState();
       store.setGameState('scores_update');
       store.setScores(scores);
+      playScoreRevealSound();
     });
 
     socket.on('round_transition', ({ round, hostScript, audioUrl }) => {
@@ -153,15 +181,19 @@ export function useSocket() {
       store.setGameState('round_transition');
       store.setCurrentRound(round);
       if (hostScript) store.setHostDialogue(hostScript);
-      playAudio(audioUrl);
+      playRoundTransitionSound();
+      if (audioUrl) playAudio(audioUrl);
+      else if (hostScript) speakText(hostScript);
     });
 
     socket.on('game_over', ({ finalScores, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       store.setGameState('game_over');
+      playGameOverSound();
       store.setFinalScores(finalScores);
       if (hostScript) store.setGameOverHostScript(hostScript);
-      playAudio(audioUrl);
+      if (audioUrl) playAudio(audioUrl);
+      else if (hostScript) setTimeout(() => speakText(hostScript), 1500); // Wait for game over sound
     });
 
     socket.on('loading_progress', (data) => {

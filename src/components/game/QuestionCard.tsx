@@ -62,31 +62,33 @@ export default function QuestionCard() {
 
   return (
     <main className="flex flex-1 flex-col min-h-screen">
-      {/* Host dialogue */}
-      {(isIntro || isReveal) && <HostDialogue />}
-
-      <div className="flex flex-col flex-1 items-center px-4 py-6 max-w-lg mx-auto w-full">
+      <div className="flex flex-col flex-1 items-center px-4 py-4 max-w-lg mx-auto w-full">
         {/* Question header */}
-        <div className="text-center mb-4 w-full">
+        <div className="text-center mb-3 w-full">
           <p className="text-text-muted text-xs mb-1 uppercase tracking-wider">
             Round {currentRound}
           </p>
-          <p className="text-accent-yellow text-sm font-bold">
+          <p className="text-accent-yellow text-base font-bold">
             Question {displayQuestionNum} &mdash; {formatValue(currentQuestion.value)}
           </p>
         </div>
 
         {/* Timer */}
         {isActive && questionEndsAt && (
-          <div className="w-full mb-5">
+          <div className="w-full mb-4">
             <Timer endsAt={questionEndsAt} totalDuration={currentQuestion.timeLimit} />
           </div>
         )}
 
-        {/* Question prompt */}
+        {/* Host dialogue — inline with the question, not separate */}
+        {(isIntro || isReveal) && (
+          <HostDialogue />
+        )}
+
+        {/* Question prompt — larger, more prominent */}
         {(isActive || isReveal) && currentQuestion.prompt && (
-          <div className="w-full mb-6">
-            <p className="text-text-primary text-lg sm:text-xl font-bold leading-relaxed text-center">
+          <div className="w-full mb-5">
+            <p className="text-text-primary text-xl sm:text-2xl font-bold leading-snug text-center">
               {currentQuestion.prompt}
             </p>
           </div>
@@ -96,15 +98,15 @@ export default function QuestionCard() {
         {isIntro && (
           <div className="flex flex-1 items-center justify-center">
             <div className="text-center animate-scale-in">
-              <p className="text-text-muted text-xs uppercase tracking-wider mb-3">Category</p>
-              <p className="text-accent-purple text-2xl sm:text-3xl font-extrabold">
+              <p className="text-text-muted text-sm uppercase tracking-wider mb-3">Category</p>
+              <p className="text-accent-purple text-3xl sm:text-4xl font-extrabold">
                 {currentQuestion.category}
               </p>
             </div>
           </div>
         )}
 
-        {/* Answer cards */}
+        {/* Answer cards — larger text */}
         {(isActive || isReveal) && currentQuestion.choices && (
           <div className="w-full flex flex-col gap-3 mb-6">
             {currentQuestion.choices.map((choice, index) => (
@@ -114,10 +116,10 @@ export default function QuestionCard() {
                 disabled={hasAnswered || !isActive}
                 className={getCardClass(index)}
               >
-                <span className={`text-sm font-bold shrink-0 w-6 ${ANSWER_COLORS[index] || 'text-accent-cyan'}`}>
+                <span className={`text-base font-bold shrink-0 w-7 ${ANSWER_COLORS[index] || 'text-accent-cyan'}`}>
                   {ANSWER_LABELS[index]}
                 </span>
-                <span className="text-text-primary text-sm sm:text-base font-medium leading-relaxed flex-1">
+                <span className="text-text-primary text-base sm:text-lg font-medium leading-snug flex-1">
                   {choice}
                 </span>
                 {isReveal && index === correctAnswerIndex && (

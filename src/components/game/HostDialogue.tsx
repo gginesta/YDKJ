@@ -8,8 +8,8 @@ export default function HostDialogue() {
   if (!hostDialogue) return null;
 
   return (
-    <div className="w-full px-5 py-4 bg-bg-card/80 border-y border-border-default backdrop-blur-sm">
-      <p className="text-text-secondary text-sm leading-relaxed text-center max-w-lg mx-auto italic">
+    <div className="w-full px-4 py-3 mb-4 rounded-lg bg-bg-card border border-border-default">
+      <p className="text-text-secondary text-base leading-relaxed text-center max-w-lg mx-auto italic">
         &ldquo;{hostDialogue}&rdquo;
       </p>
     </div>
