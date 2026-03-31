@@ -9,6 +9,9 @@ const ELEVENLABS_API = 'https://api.elevenlabs.io/v1';
 const DEFAULT_VOICE_ID = '1t1EeRixsJrKbiF1zwM6';
 const TTS_TIMEOUT_MS = 8000;
 
+// Track if ElevenLabs has rejected us (401) — don't keep retrying
+let voiceDisabledByError = false;
+
 interface VoiceSettings {
   stability: number;
   similarity_boost: number;
@@ -43,7 +46,7 @@ export async function generateSpeech(
   voiceId?: string
 ): Promise<Buffer | null> {
   const apiKey = process.env.ELEVENLABS_API_KEY;
-  if (!apiKey) {
+  if (!apiKey || voiceDisabledByError) {
     return null;
   }
 
@@ -71,6 +74,11 @@ export async function generateSpeech(
     if (!response.ok) {
       const errorText = await response.text().catch(() => 'unknown');
       console.error(`[ElevenLabs] HTTP ${response.status}: ${errorText}`);
+      // Disable voice for this session on auth errors — stop spamming
+      if (response.status === 401 || response.status === 403) {
+        console.error('[ElevenLabs] Auth failed — disabling voice for this session');
+        voiceDisabledByError = true;
+      }
       return null;
     }
 

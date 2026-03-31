@@ -105,12 +105,17 @@ export function useSocket() {
 
     socket.on('question_intro', ({ question, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
+      const q = question as Record<string, unknown>;
       store.setGameState('question_intro');
-      store.setCurrentQuestion(question as unknown as import('@/stores/gameStore').UIQuestion);
+      store.setCurrentQuestion(q as unknown as import('@/stores/gameStore').UIQuestion);
       store.clearAnsweredPlayers();
       store.setCorrectAnswerIndex(null);
       store.setPlayerResults([]);
       store.setQuestionEndsAt(null);
+      // Sync question metadata from server
+      if (typeof q.questionIndex === 'number') store.setQuestionIndex(q.questionIndex);
+      if (typeof q.round === 'number') store.setCurrentRound(q.round);
+      if (typeof q.totalQuestions === 'number') store.setTotalQuestions(q.totalQuestions);
       if (hostScript) store.setHostDialogue(hostScript);
       playAudio(audioUrl);
     });
