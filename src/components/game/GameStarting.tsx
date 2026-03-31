@@ -23,12 +23,21 @@ export default function GameStarting() {
   const hostDialogue = useGameStore((s) => s.hostDialogue);
   const loadingProgress = useGameStore((s) => s.loadingProgress);
   const [messageIndex, setMessageIndex] = useState(0);
+  const [elapsed, setElapsed] = useState(0);
 
   // Rotate quirky messages every 2.5 seconds
   useEffect(() => {
-    const timer = setInterval(() => {
+    const msgTimer = setInterval(() => {
       setMessageIndex((i) => (i + 1) % QUIRKY_MESSAGES.length);
     }, 2500);
+    return () => clearInterval(msgTimer);
+  }, []);
+
+  // Elapsed time counter (so it doesn't feel like an eternity)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setElapsed((e) => e + 1);
+    }, 1000);
     return () => clearInterval(timer);
   }, []);
 
@@ -71,7 +80,7 @@ export default function GameStarting() {
       </div>
 
       {/* Loading progress */}
-      {isLoading && (
+      {isLoading ? (
         <div className="w-full max-w-sm">
           {/* Progress bar */}
           <div className="w-full h-2 bg-bg-card rounded-full overflow-hidden mb-3">
@@ -80,19 +89,22 @@ export default function GameStarting() {
               style={{ width: `${progressPercent}%` }}
             />
           </div>
-
-          {/* Quirky message */}
           <p className="text-text-muted text-xs text-center animate-pulse-glow">
             {QUIRKY_MESSAGES[messageIndex]}
           </p>
         </div>
-      )}
-
-      {/* Simple loading state when no progress data (voice disabled) */}
-      {!isLoading && !hostDialogue && (
-        <p className="text-text-muted text-sm animate-pulse-glow">
-          Starting game...
-        </p>
+      ) : (
+        <div className="w-full max-w-sm text-center">
+          {/* Simple loading indicator with timer */}
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <div className="w-2 h-2 bg-accent-cyan rounded-full animate-pulse" />
+            <div className="w-2 h-2 bg-accent-cyan rounded-full animate-pulse" style={{ animationDelay: '0.3s' }} />
+            <div className="w-2 h-2 bg-accent-cyan rounded-full animate-pulse" style={{ animationDelay: '0.6s' }} />
+          </div>
+          <p className="text-text-muted text-xs animate-pulse-glow">
+            {elapsed < 3 ? 'Starting game...' : QUIRKY_MESSAGES[messageIndex]}
+          </p>
+        </div>
       )}
     </main>
   );

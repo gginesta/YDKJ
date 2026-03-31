@@ -4,7 +4,6 @@ import type { ClientToServerEvents, ServerToClientEvents } from '../../types/soc
 import { GameState } from '../../types/game';
 import { calculateScore, updateStreak, getStreakBonus, assignQuestionValues, getLeadingPlayer } from './scoring';
 import { saveGameResult, hashPlayerGroup, getSeenQuestionIds, recordSeenQuestions, resetSeenQuestions } from '../db';
-import { generateGameQuestions } from '../ai/question-pipeline';
 import { HostCommentaryService } from '../ai/host-commentary-service';
 import { AudioCache, buildAudioEntries } from '../voice/audio-cache';
 import { isVoiceEnabled } from '../voice/elevenlabs-client';
@@ -200,25 +199,6 @@ export class GameEngine {
   // ============================================================
 
   /**
-   * Load questions — tries AI pipeline first, falls back to seed bank.
-   * Runs during GAME_STARTING phase so players see the countdown while questions load.
-   */
-  private async loadQuestionsAsync(): Promise<void> {
-    const playerNames = this.room.players.map((p) => p.name);
-
-    try {
-      // Try AI pipeline (fetches from Open Trivia DB → Claude → validate)
-      const result = await generateGameQuestions(playerNames, TOTAL_QUESTIONS + 2, 1, this.room.theme);
-      const selected = result.questions.slice(0, TOTAL_QUESTIONS);
-      console.log(`[GameEngine] Loaded ${selected.length} questions from source: ${result.source}`);
-      this.applyQuestions(selected);
-    } catch (err) {
-      console.error('[GameEngine] AI pipeline failed entirely, using seed fallback:', err);
-      this.loadSeedQuestions(playerNames);
-    }
-  }
-
-  /**
    * Fallback: load from seed-questions.json with dedup tracking.
    */
   private loadSeedQuestions(playerNames: string[]): void {
@@ -277,6 +257,7 @@ export class GameEngine {
     if (this.destroyed) return;
 
     const q = this.questions[this.room.questionIndex];
+    console.log(`[GameEngine] startQuestionIntro: questionIndex=${this.room.questionIndex}, hasQuestion=${!!q}, totalQuestions=${this.questions.length}`);
     if (!q) {
       this.endGame();
       return;
@@ -320,6 +301,7 @@ export class GameEngine {
   }
 
   private startQuestionActive(): void {
+    console.log(`[GameEngine] startQuestionActive: questionIndex=${this.room.questionIndex}, destroyed=${this.destroyed}`);
     if (this.destroyed) return;
 
     const q = this.questions[this.room.questionIndex];
@@ -395,6 +377,7 @@ export class GameEngine {
   }
 
   private revealAnswer(): void {
+    console.log(`[GameEngine] revealAnswer: questionIndex=${this.room.questionIndex}, answers=${this.currentAnswers.size}`);
     if (this.destroyed) return;
 
     const q = this.questions[this.room.questionIndex];
@@ -502,6 +485,7 @@ export class GameEngine {
   }
 
   private showScores(): void {
+    console.log(`[GameEngine] showScores: questionIndex=${this.room.questionIndex}`);
     if (this.destroyed) return;
 
     this.room.state = GameState.SCORES_UPDATE;
@@ -519,6 +503,7 @@ export class GameEngine {
     if (this.destroyed) return;
 
     this.room.questionIndex++;
+    console.log(`[GameEngine] advanceToNextQuestion: now at questionIndex=${this.room.questionIndex}, round=${this.room.round}`);
 
     // Check if we need a round transition
     if (this.room.questionIndex === QUESTIONS_PER_ROUND && this.room.round === 1) {

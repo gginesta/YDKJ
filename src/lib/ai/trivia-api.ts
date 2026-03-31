@@ -211,23 +211,12 @@ export async function fetchSeedFacts(
 
 /**
  * Fetch facts from a mix of difficulties for variety.
- * Gets some easy, some medium, some hard.
+ * Uses a single request (no difficulty filter) to avoid rate limits.
+ * Open Trivia DB rate limit: 1 request per 5 seconds per IP.
  */
 export async function fetchMixedDifficultyFacts(count: number = 15): Promise<SeedFact[]> {
-  const easy = Math.ceil(count * 0.3);
-  const medium = Math.ceil(count * 0.5);
-  const hard = count - easy - medium;
-
-  // Fetch all difficulties in parallel
-  const [easyFacts, mediumFacts, hardFacts] = await Promise.all([
-    fetchSeedFacts(easy, 'easy'),
-    fetchSeedFacts(medium, 'medium'),
-    fetchSeedFacts(hard, 'hard'),
-  ]);
-
-  // Combine and shuffle
-  const all = [...easyFacts, ...mediumFacts, ...hardFacts];
-  return all.sort(() => Math.random() - 0.5);
+  // Single request with mixed difficulty — avoids 429 rate limit
+  return fetchSeedFacts(count);
 }
 
 /**
