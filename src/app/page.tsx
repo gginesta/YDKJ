@@ -76,6 +76,10 @@ export default function HomePage() {
             className="game-input"
             autoFocus
             maxLength={16}
+            autoComplete="name"
+            autoCorrect="off"
+            autoCapitalize="words"
+            spellCheck={false}
           />
           <button
             onClick={handleCreate}

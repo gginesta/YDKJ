@@ -135,7 +135,7 @@ export function useSocket() {
       if (typeof q.round === 'number') store.setCurrentRound(q.round);
       if (typeof q.totalQuestions === 'number') store.setTotalQuestions(q.totalQuestions);
       if (hostScript) store.setHostDialogue(hostScript);
-      stopSpeaking();
+      // speakText internally cancels any prior speech before starting new
       playTransitionSound();
       if (audioUrl) playAudio(audioUrl);
       else if (hostScript) speakText(hostScript);
@@ -152,7 +152,7 @@ export function useSocket() {
       store.setGameState('question_active');
       store.setCurrentQuestion(question as unknown as import('@/stores/gameStore').UIQuestion);
       store.setQuestionEndsAt(Date.now() + timeLimit * 1000);
-      stopSpeaking();
+      // Don't stop speech — let the intro speech finish naturally while player reads the question
     });
 
     socket.on('answer_received', ({ playerId }) => {
@@ -163,7 +163,6 @@ export function useSocket() {
     socket.on('question_reveal', ({ correctAnswer, disOrDatCorrect, playerResults, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       console.log(`[Socket] question_reveal — prev_state=${store.gameState}`);
-      stopSpeaking();
       store.setGameState('question_reveal');
       store.setCorrectAnswerIndex(correctAnswer);
       if (disOrDatCorrect) store.setDisOrDatCorrectAnswers(disOrDatCorrect);
@@ -183,7 +182,7 @@ export function useSocket() {
     socket.on('scores_update', ({ scores }) => {
       const store = useGameStore.getState();
       console.log(`[Socket] scores_update — prev_state=${store.gameState}`);
-      stopSpeaking();
+      // Let reveal speech finish naturally while scores display
       store.setGameState('scores_update');
       store.setScores(scores);
       playScoreRevealSound();
@@ -191,7 +190,6 @@ export function useSocket() {
 
     socket.on('round_transition', ({ round, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
-      stopSpeaking();
       store.setGameState('round_transition');
       store.setCurrentRound(round);
       if (hostScript) store.setHostDialogue(hostScript);
@@ -234,7 +232,6 @@ export function useSocket() {
 
     socket.on('game_over', ({ finalScores, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
-      stopSpeaking();
       store.setGameState('game_over');
       playGameOverSound();
       store.setFinalScores(finalScores);

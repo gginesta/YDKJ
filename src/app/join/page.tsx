@@ -52,6 +52,11 @@ function JoinForm() {
             className="game-input text-2xl tracking-[0.4em] font-bold"
             autoFocus
             maxLength={4}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="characters"
+            spellCheck={false}
+            inputMode="text"
           />
         </div>
 
@@ -67,6 +72,10 @@ function JoinForm() {
             placeholder="Enter name"
             className="game-input"
             maxLength={16}
+            autoComplete="name"
+            autoCorrect="off"
+            autoCapitalize="words"
+            spellCheck={false}
           />
         </div>
 
