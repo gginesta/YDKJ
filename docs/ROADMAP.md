@@ -6,10 +6,10 @@
 |-------|------|--------|------|
 | 1 | Foundation | ✅ Complete | Project setup, core infrastructure, basic game flow |
 | 2 | Core Game | ✅ Complete | Multiple choice working end-to-end with scoring |
-| 3 | The Host | ✅ Complete | AI question generation + ElevenLabs voice + two-tier audio |
+| 3 | The Host | ✅ Complete | AI question generation + voice + two-tier audio |
 | 4 | Question Variety | ❌ Not started | DisOrDat, Gibberish, ThreeWay, Jack Attack |
 | 5 | Power-Ups & Polish | ❌ Not started | Catch-up mechanics, Easter eggs, animations |
-| 6 | Audio & Visual Polish | ❌ Not started | Full audio design, pixel art, animations |
+| 6 | Audio & Visual Polish | 🔨 Partial | SFX + browser TTS done; pixel art, animations, background music TBD |
 | 7 | Deployment & Testing | 🔨 Partial | Railway deployed, playtesting in progress |
 
 **Total estimated: 8-14 weeks** (depending on pace)
@@ -73,29 +73,31 @@
 **Goal:** AI generates all questions and the host speaks with personality.
 
 ### Deliverables
-- [ ] Claude API integration with structured output (tool use)
-- [ ] Question generation prompt engineering
-- [ ] Host personality system prompt
-- [ ] Personalized commentary generation (uses player names, scores, streaks)
-- [ ] ElevenLabs TTS integration (streaming)
-- [ ] Audio playback on client (Web Audio API)
-- [ ] Voice pre-buffering strategy (generate 1-2 states ahead)
-- [ ] Text fallback when voice is unavailable or slow
-- [ ] Open Trivia DB integration for seed facts
-- [ ] Question caching in SQLite
-- [ ] Host intro → question → reveal flow with voice at each step
-- [ ] Cost monitoring / logging for API usage
+- [x] Claude API integration with structured output (tool use)
+- [x] Question generation prompt engineering
+- [x] Host personality system prompt
+- [x] Personalized commentary generation (uses player names, scores, streaks)
+- [x] ElevenLabs TTS integration (pre-generation + live-buffered)
+- [x] Browser Speech Synthesis fallback (free, no API key needed)
+- [x] Web Audio API synthesized SFX (correct, wrong, timer, transitions, fanfares)
+- [x] Audio playback on client (Web Audio API)
+- [x] Voice pre-buffering strategy (batch-generate ~33 clips during loading)
+- [x] Text fallback when voice is unavailable or slow
+- [x] Open Trivia DB integration for seed facts
+- [x] Question caching in SQLite
+- [x] Host intro → question → reveal flow with voice at each step
+- [x] Cost monitoring / logging for API usage
 
 ### Key Decisions
-- ElevenLabs voice selection: test 3-4 voices, pick one that fits the character
-- Streaming vs. batch TTS: streaming for long intros, batch for short reactions
-- Pre-generation: batch generate all 12 questions at game start (during intro)
+- ElevenLabs voice: ID `1t1EeRixsJrKbiF1zwM6`, eleven_turbo_v2 model
+- Two-tier audio: Tier 1 pre-generates ~33 clips during 18s loading; Tier 2 live AI commentary as bonus
 - Personalization frequency: every question gets a personalized host line
+- **ElevenLabs on Railway:** Free tier is blocked by Railway's shared IPs (triggers abuse detection). Requires **paid plan** ($5+/mo) to work in production. Browser Speech Synthesis is the current fallback.
 
 ### Technical Risks
-- ElevenLabs latency may cause awkward pauses (mitigate with pre-buffering)
-- Claude structured output may occasionally break schema (need validation + retry)
-- Cost per game needs monitoring to stay within budget
+- ~~ElevenLabs latency may cause awkward pauses~~ — mitigated with pre-buffering
+- ~~Claude structured output may occasionally break schema~~ — validation + retry in place
+- ElevenLabs on Railway free tier: shared IP triggers 401. Use paid plan or self-host.
 
 ---
 
@@ -191,17 +193,30 @@
   - [ ] Jack Attack: words zooming in/out
   - [ ] Power-up activation effects
   - [ ] Easter egg discovery celebration
-- [ ] Audio implementation
-  - [ ] Audio manager (handles music, SFX, voice simultaneously)
-  - [ ] Background music: lobby, thinking, tension, victory (chiptune)
-  - [ ] SFX: correct, wrong, timer tick, buzz, power-up, join/leave
-  - [ ] Music transitions between game states
-  - [ ] Volume control (separate for music, SFX, voice)
-  - [ ] Source/commission chiptune tracks (or use royalty-free)
+- [x] Sound effects (Web Audio API — no external service needed)
+  - [x] Correct answer chime (ascending two-note)
+  - [x] Wrong answer buzzer (sawtooth)
+  - [x] Timer tick + warning tick
+  - [x] Question transition whoosh
+  - [x] Game start fanfare
+  - [x] Round transition sweep
+  - [x] Score reveal shimmer
+  - [x] Game over finale
+  - [x] Button tap
+- [x] Host voice (browser Speech Synthesis — free fallback)
+  - [x] Browser TTS wired to all host scripts (game_starting, question_intro, question_reveal, round_transition, game_over)
+  - [x] `speakText()` / `stopSpeaking()` in sound-system.ts
+  - [x] Prefers high-quality English voice (Google, Samantha, Daniel) if available
+- [ ] Background music (chiptune loops — not yet implemented)
+  - [ ] Lobby waiting loop
+  - [ ] Question thinking loop
+  - [ ] Last-5-seconds tension loop
+  - [ ] Victory fanfare
+- [ ] Volume control (separate for music, SFX, voice)
 - [ ] Mobile optimization
+  - [x] Audio autoplay handling (user gesture requirement — initAudio() on Start button)
   - [ ] Touch target sizes (min 48px)
   - [ ] Viewport handling (avoid iOS Safari issues)
-  - [ ] Audio autoplay handling (user gesture requirement)
   - [ ] Performance optimization (60fps animations)
 
 ### Key Decisions
@@ -281,7 +296,8 @@ Not scoped for initial release, but ideas for later:
 ### M3: The Host Lives (End of Phase 3) ✅ COMPLETE
 **Demo:** Play a game where the AI host generates unique questions and speaks them aloud.
 - [x] Question pipeline: Open Trivia DB seeds → Claude rewrites in YDKJ style → validate → fallback to seed bank
-- [x] Host voice plays via ElevenLabs for question intros and reactions
+- [x] Host voice plays via browser Speech Synthesis (free fallback; ElevenLabs needs paid plan on Railway)
+- [x] Web Audio API SFX on all game events (correct, wrong, transitions, fanfares, etc.)
 - [x] Two-tier audio: Tier 1 pre-generates ~33 clips during loading, Tier 2 live AI commentary as bonus
 - [x] Host uses player names in commentary (Claude AI personalization)
 - [x] Voice doesn't cause noticeable delays (pre-buffered during loading phase)
@@ -289,6 +305,9 @@ Not scoped for initial release, but ideas for later:
 - [x] Different questions each game (200 seed bank + AI generation + dedup tracking)
 - [x] Loading screen with progress bar and quirky messages
 - [x] Deployed on Railway
+- [x] Reconnection: disconnect on screen lock marks player disconnected (not removed); rejoin_room event restores state
+- [x] Fixed: Q2+ never showing (questionIndex wasn't synced from server to client)
+- [x] Fixed: mobile freeze after answering (Wimp Mode race condition — client ignores stale question_active events)
 
 ### M4: Full Variety (End of Phase 4)
 **Demo:** Play a game with all 5 question types including Jack Attack finale.
@@ -312,8 +331,8 @@ Not scoped for initial release, but ideas for later:
 - [ ] Pixel art UI theme throughout (fonts, buttons, cards, backgrounds)
 - [ ] Animations for all game events (correct, wrong, transitions, etc.)
 - [ ] Background music plays and transitions between game states
-- [ ] SFX play for key moments (answers, timer, power-ups)
-- [ ] Voice, music, and SFX play simultaneously without issues
+- [x] SFX play for key moments (answers, timer, power-ups) — Web Audio API
+- [x] Host voice works (browser TTS) and SFX play on all game events
 - [ ] Volume controls work
 - [ ] Mobile performance is smooth (no janky animations)
 

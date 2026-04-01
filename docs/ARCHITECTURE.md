@@ -84,7 +84,13 @@
 - Most natural-sounding AI voices available
 - **Low latency streaming** — can start playing audio before full generation completes
 - Voice cloning could let us create a unique host voice
-- Websocket streaming API for real-time synthesis
+- **⚠️ Railway limitation:** Free tier blocked by shared IP abuse detection. Requires paid plan ($5+/mo).
+- **Current fallback:** Browser Speech Synthesis API (free, built into all modern browsers) via `speakText()` in `sound-system.ts`
+
+### Web Audio API for SFX
+- All sound effects synthesized in `src/lib/audio/sound-system.ts` using oscillators + gain envelopes
+- No external files or services — pure synthesized audio
+- Works in all modern browsers; requires user gesture to initialize AudioContext
 
 ### SQLite (better-sqlite3)
 - Zero configuration, file-based
@@ -308,36 +314,52 @@ CREATE TABLE player_groups (
 
 ## Audio Delivery Architecture
 
-Voice and audio are delivered to clients via two channels:
+Audio is delivered via three layers:
 
 ```
 ┌─────────────────────────────────────────────────┐
-│  Voice Audio (ElevenLabs TTS)                    │
+│  Layer 1: Host Voice                             │
 │                                                   │
-│  Server generates TTS → stores as buffer →        │
-│  sends audio URL or base64 via Socket.io event    │
+│  Option A (ElevenLabs — requires paid plan):      │
+│    Server pre-generates ~33 TTS clips during      │
+│    loading → sends as base64 data URLs via        │
+│    Socket.io → client plays via HTMLAudioElement  │
 │                                                   │
-│  Client receives → decodes → plays via Web Audio  │
-│  API with AudioContext for precise timing          │
+│  Option B (Browser TTS — free fallback):          │
+│    Client calls window.speechSynthesis.speak()    │
+│    directly on hostScript text received via       │
+│    Socket.io. No server involvement.              │
+│    Implemented in: src/lib/audio/sound-system.ts  │
 └─────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────┐
-│  Music & SFX (Static Assets)                      │
+│  Layer 2: Sound Effects (Web Audio API)           │
 │                                                   │
-│  Pre-loaded on client during lobby phase          │
-│  Stored in /public/audio/ as MP3/OGG files        │
-│  Managed by AudioManager singleton:               │
-│  - Music channel (looping, crossfade)             │
-│  - SFX channel (one-shot, overlapping OK)         │
-│  - Voice channel (queued, exclusive)              │
-│  Each channel has independent volume control      │
+│  Fully synthesized on the client — no files.      │
+│  Oscillators + gain envelopes via AudioContext.   │
+│  Implemented in: src/lib/audio/sound-system.ts   │
+│                                                   │
+│  Events: correct, wrong, timer tick, transition,  │
+│          game start fanfare, round transition,    │
+│          score reveal, game over, button tap      │
+│                                                   │
+│  Called from: src/hooks/useSocket.ts              │
+└─────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────┐
+│  Layer 3: Background Music (NOT YET IMPLEMENTED) │
+│                                                   │
+│  Plan: chiptune loops stored in /public/audio/   │
+│  as MP3/OGG, managed by an AudioManager singleton│
+│  with crossfade between game states.             │
 └─────────────────────────────────────────────────┘
 ```
 
 Key constraints:
-- iOS Safari requires a user gesture before any audio plays (handle in lobby with "tap to start")
-- Voice audio takes priority — SFX duck (reduce volume) when host is speaking
-- Music crossfades between states (e.g., thinking loop → tension loop at 5 seconds)
+- iOS Safari requires a user gesture before any audio plays — `initAudio()` is called on the "Start Game" button tap
+- ElevenLabs free tier is blocked on Railway (shared IPs trigger abuse detection). Paid plan required.
+- Browser TTS quality varies by device; Google/Samantha/Daniel voices preferred when available
+- Web Audio API SFX work everywhere (no autoplay restriction once AudioContext is created)
 
 ## Game State Machine
 
@@ -541,9 +563,11 @@ const useGameStore = create<GameStore>((set) => ({
 
 | Risk | Impact | Mitigation |
 |------|--------|-----------|
-| AI latency at game start | Players wait too long | Parallel question generation + entertaining loading screen. Start Q1-5 while Q6-11 still generating. |
-| ElevenLabs cost overrun | Budget blown in a month | Track character usage per game, implement character budget, fall back to text-only if exhausted. Cache common phrases. |
-| WebSocket disconnections | Player drops mid-game | Client auto-reconnects with exponential backoff. Server holds player slot for 30s. Player state survives disconnect. |
+| AI latency at game start | Players wait too long | Parallel question generation + entertaining loading screen. Questions load synchronously first; AI is best-effort background work. |
+| ElevenLabs cost overrun | Budget blown in a month | Track character usage per game, implement character budget, fall back to browser TTS if exhausted. Cache common phrases. |
+| ElevenLabs free tier on Railway | No voice at all | Session-level `voiceDisabledByError` flag stops 401 spam. Browser TTS plays host scripts as free fallback. |
+| WebSocket disconnections | Player drops mid-game | Client auto-reconnects. Server marks player disconnected (not removed) during active game. `rejoin_room` event restores state. Redirect timeout extended to 3s. |
 | AI generates bad/offensive Qs | Bad player experience | Content guidelines in system prompt + lightweight output filter. Host personality prompt specifies "edgy but not offensive." |
-| SQLite on Railway/Fly.io | Data loss on redeploy | Use persistent volume. Single instance only (no horizontal scaling). Historical results are nice-to-have, not critical. |
-| iOS Safari audio restrictions | Voice doesn't play | Require user gesture in lobby ("Tap to start"). AudioContext created on first tap. |
+| SQLite on Railway | Data loss on redeploy | Use persistent volume. Single instance only (no horizontal scaling). Historical results are nice-to-have, not critical. |
+| iOS Safari audio restrictions | Voice / SFX don't play | `initAudio()` called on "Start Game" button tap. AudioContext created on first user gesture. Browser TTS also requires gesture (handled same way). |
+| Wimp Mode race condition | Mobile frozen after answering | Client ignores `question_active` events if already in `question_reveal` or `scores_update` state. |

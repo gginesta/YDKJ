@@ -48,11 +48,13 @@ Game Start
 | Open Trivia DB integration (with session tokens) | ✅ Done | `src/lib/ai/trivia-api.ts` |
 | Question pipeline orchestration | ✅ Done | `src/lib/ai/question-pipeline.ts` |
 | Host commentary service (text + voice) | ✅ Done | `src/lib/ai/host-commentary-service.ts` |
-| ElevenLabs TTS client | ✅ Done | `src/lib/voice/elevenlabs-client.ts` |
+| ElevenLabs TTS client | ✅ Done (⚠️ paid plan required on Railway) | `src/lib/voice/elevenlabs-client.ts` |
 | Client audio playback | ✅ Done | `src/hooks/useSocket.ts` (playAudio helper) |
-| Audio pre-generation cache (Tier 1) | 🔨 Building | `src/lib/voice/audio-cache.ts` |
+| Audio pre-generation cache (Tier 1) | ✅ Done | `src/lib/voice/audio-cache.ts` |
 | Live-buffered commentary (Tier 2) | ✅ Done | (non-blocking pattern in game-engine.ts) |
-| Loading screen with progress | 🔨 Building | `src/components/game/GameStarting.tsx` |
+| Loading screen with progress | ✅ Done | `src/components/game/GameStarting.tsx` |
+| Web Audio API SFX (no external service) | ✅ Done | `src/lib/audio/sound-system.ts` |
+| Browser TTS fallback | ✅ Done | `src/lib/audio/sound-system.ts` (`speakText`) |
 
 ## Question Generation Pipeline
 
@@ -337,11 +339,13 @@ Output: MP3, sent as base64 data URLs via Socket.io
 
 | Scenario | Behavior |
 |----------|----------|
-| ElevenLabs API key set | Full voice: Tier 1 pre-gen + Tier 2 live |
-| API key set but ElevenLabs down | Text-only, Tier 1 cache empty, 5s loading |
-| No API key | Text-only, 5s loading (original behavior) |
-| Some audio clips fail | Play what cached, text for the rest |
-| Claude + ElevenLabs both slow | Static text + Tier 1 cached audio (no Tier 2) |
+| ElevenLabs API key set (paid plan) | Full voice: Tier 1 pre-gen + Tier 2 live + Web Audio SFX |
+| ElevenLabs free tier on Railway | 401 errors — session-level flag disables TTS after first failure; browser TTS + Web Audio SFX still play |
+| API key set but ElevenLabs down | Browser TTS fallback + Web Audio SFX; 5s loading |
+| No API key | Browser TTS fallback + Web Audio SFX; 5s loading |
+| Some audio clips fail | Play what cached, browser TTS for the rest |
+| Claude + ElevenLabs both slow | Browser TTS + Tier 1 cached audio (no Tier 2) |
+| Browser doesn't support Speech Synthesis | Text displayed on screen; Web Audio SFX still play |
 
 **Principle: The game NEVER freezes. Audio is always a bonus on top of working text.**
 

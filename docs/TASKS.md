@@ -96,8 +96,10 @@ Granular tasks organized by phase. Each task is a single unit of work.
 
 ### 2.6 Reconnection
 - [x] Detect player disconnect (socket close)
-- [x] Mark player as disconnected (don't remove from game)
-- [ ] On reconnect: rejoin room, restore state, sync to current question
+- [x] Mark player as disconnected during active game (don't remove from game)
+- [x] `rejoin_room` socket event: find disconnected player by name, restore socket ID, emit full room state
+- [x] Lobby disconnect: permanent removal (expected behavior)
+- [x] Client extends redirect timeout to 3s to allow reconnection to complete
 - [ ] Timeout: if disconnected >60s during active game, auto-skip their answers
 
 ### 2.7 Play Again
@@ -170,6 +172,8 @@ Granular tasks organized by phase. Each task is a single unit of work.
 - [x] Voice configuration (voice ID: 1t1EeRixsJrKbiF1zwM6, eleven_turbo_v2 model)
 - [x] 8s timeout, graceful fallback to text-only
 - [x] `isVoiceEnabled()` check for graceful degradation
+- [x] Session-level `voiceDisabledByError` flag — first 401/403 disables all subsequent TTS calls (prevents Railway shared-IP log spam)
+- **Known issue:** ElevenLabs free tier is blocked on Railway (shared IPs trigger abuse detection). Requires paid plan ($5+/mo) for production voice.
 
 ### 3.7 Two-Tier Audio System
 - [x] Create `src/lib/voice/audio-cache.ts` — Tier 1 batch pre-generation
@@ -189,6 +193,27 @@ Granular tasks organized by phase. Each task is a single unit of work.
 - [x] Handles autoplay restrictions silently (text fallback)
 - [x] `host_audio` socket event for late-arriving audio updates
 - [x] Audio plays on: game_starting, question_intro, question_reveal, round_transition, game_over
+
+### 3.9 Sound Effects System (Web Audio API)
+- [x] Create `src/lib/audio/sound-system.ts`
+- [x] Correct answer chime (ascending two-note sine)
+- [x] Wrong answer buzzer (sawtooth)
+- [x] Timer tick + warning tick (for last 5s countdown)
+- [x] Question transition whoosh
+- [x] Game start fanfare (G4–C5–E5)
+- [x] Round transition sweep (four-note ascending)
+- [x] Score reveal shimmer
+- [x] Game over finale (descending then ascending)
+- [x] Button tap (subtle click)
+- [x] `initAudio()` — called on user gesture (required by browsers)
+- [x] Wire all sounds to socket events in `useSocket.ts`
+
+### 3.10 Browser TTS Fallback
+- [x] `speakText(text)` in `sound-system.ts` — uses `window.speechSynthesis`
+- [x] `stopSpeaking()` — cancels current speech on phase change
+- [x] Prefers high-quality English voice (Google, Samantha, Daniel)
+- [x] Falls back silently if speech synthesis unavailable (SSR, old browser)
+- [x] Browser TTS wired as fallback in all socket event handlers (if no `audioUrl`, call `speakText(hostScript)`)
 
 ---
 
@@ -313,32 +338,35 @@ Granular tasks organized by phase. Each task is a single unit of work.
 - [ ] Game over: winner spotlight, scores rain down
 
 ### 6.4 Audio System
-- [ ] Create `src/lib/audio/audio-manager.ts` — central audio controller
-- [ ] Separate volume channels: music, SFX, voice
+- [x] Sound effects via Web Audio API (`src/lib/audio/sound-system.ts`) — no external service
+- [x] Browser TTS for host voice (free fallback)
+- [x] `initAudio()` called on user gesture (Start button)
+- [ ] Create `src/lib/audio/audio-manager.ts` — central audio controller with separate volume channels
 - [ ] Volume controls accessible during game
-- [ ] Handle Web Audio API context (user gesture requirement)
 - [ ] Crossfade between music tracks
 
 ### 6.5 Music & SFX Assets
-- [ ] Source/create chiptune tracks:
+- [x] Synthesized SFX (Web Audio API — no asset files needed):
+  - [x] Button tap
+  - [x] Correct answer sting
+  - [x] Wrong answer sting
+  - [x] Timer tick (final 5 seconds) — `playTickSound` / `playWarningTick` exist but not yet called from Timer.tsx
+  - [x] Game start fanfare
+  - [x] Round transition
+  - [x] Score reveal
+  - [x] Game over
+- [ ] Chiptune background music tracks (not yet implemented):
   - [ ] Lobby waiting loop
-  - [ ] Game intro fanfare
   - [ ] Question thinking loop (medium tension)
   - [ ] Last 5 seconds (accelerated tension)
   - [ ] Round transition bridge
   - [ ] Jack Attack fast-paced track
-  - [ ] Victory fanfare
-  - [ ] Game over (loser version)
-- [ ] Source/create SFX:
-  - [ ] Button tap
-  - [ ] Correct answer sting
-  - [ ] Wrong answer sting
-  - [ ] Timer tick (final 5 seconds)
-  - [ ] Buzz-in sound
-  - [ ] Power-up activation (unique per type)
-  - [ ] Score counting up/down
-  - [ ] Player join lobby
-  - [ ] Easter egg jingle
+  - [ ] Victory fanfare / game over
+- [ ] Power-up activation sounds (unique per type)
+- [ ] Player join lobby sound
+- [ ] Easter egg jingle
+
+> **Note:** Timer tick sounds are wired in `sound-system.ts` but `Timer.tsx` still needs to call them on countdown.
 
 ### 6.6 Mobile Optimization
 - [ ] Test and fix iOS Safari viewport issues (100vh, notch)
@@ -352,11 +380,12 @@ Granular tasks organized by phase. Each task is a single unit of work.
 ## Phase 7: Deployment & Testing
 
 ### 7.1 Railway Deployment
-- [ ] Create `Dockerfile` (Node.js, build Next.js, run custom server)
-- [ ] Create `railway.toml` or configure via dashboard
-- [ ] Set up persistent volume for SQLite database file
-- [ ] Configure environment variables (API keys, etc.)
-- [ ] Test deployment with WebSocket connectivity
+- [x] Create `Dockerfile` (Node.js, build Next.js, run custom server)
+- [x] Create `railway.toml`
+- [x] Set up persistent volume for SQLite database file
+- [x] Configure environment variables (API keys, etc.)
+- [x] Test deployment with WebSocket connectivity
+- [ ] Auto-deploy via GitHub webhook (GitHub repo connection was lost — needs reconnection in Railway dashboard)
 - [ ] Set up custom domain (optional)
 
 ### 7.2 Production Hardening
@@ -432,9 +461,13 @@ Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4
 The game is **playable end-to-end** with:
 - 200 seed questions + AI-generated questions via Claude
 - AI host commentary (personalized, uses player names/scores)
-- ElevenLabs TTS voice with two-tier audio (pre-generated + live-buffered)
-- Deployed on Railway
+- Browser Speech Synthesis for host voice (free, works everywhere)
+- Web Audio API synthesized SFX on all game events (no external service)
+- ElevenLabs TTS architecture in place — requires **paid plan** to work on Railway (free tier blocked by shared IP abuse detection)
+- Deployed on Railway (manual deploys; GitHub auto-deploy needs reconnection)
 - 2-10 player multiplayer via Socket.io
+- Reconnection handling: screen lock / network drop restores player without removal
+- Bug fixes: Q2+ client display, Wimp Mode race condition, timer bar animation
 
 ## MVP Shortcut
 
