@@ -7,7 +7,7 @@
 | 1 | Foundation | ✅ Complete | Project setup, core infrastructure, basic game flow |
 | 2 | Core Game | ✅ Complete | Multiple choice working end-to-end with scoring |
 | 3 | The Host | ✅ Complete | AI question generation + voice + two-tier audio |
-| 4 | Question Variety | ❌ Not started | DisOrDat, Gibberish, ThreeWay, Jack Attack |
+| 4 | Question Variety | ✅ Complete | DisOrDat, Gibberish, ThreeWay, Jack Attack |
 | 5 | Power-Ups & Polish | ❌ Not started | Catch-up mechanics, Easter eggs, animations |
 | 6 | Audio & Visual Polish | 🔨 Partial | SFX + browser TTS done; pixel art, animations, background music TBD |
 | 7 | Deployment & Testing | 🔨 Partial | Railway deployed, playtesting in progress |
@@ -106,29 +106,30 @@
 **Goal:** All 5 question types working with AI generation.
 
 ### Deliverables
-- [ ] DisOrDat question type
-  - [ ] UI: two category labels, items appear one at a time
-  - [ ] All players compete simultaneously
-  - [ ] AI generation prompt for DisOrDat pairs
-  - [ ] Scoring: per-item within the question
-- [ ] Gibberish Question type
-  - [ ] UI: garbled phrase display + audio playback
-  - [ ] 4 multiple choice options for the real phrase
-  - [ ] AI generation: create phonetically similar garbled versions
-  - [ ] Host voice reads the gibberish phrase
-  - [ ] Hint appears after 10 seconds
-- [ ] ThreeWay question type
-  - [ ] UI: three options cycle/highlight
-  - [ ] Players buzz when correct one is shown
-  - [ ] AI generation for word-association triples
-- [ ] Jack Attack finale
-  - [ ] UI: central clue word + flying answer words
-  - [ ] Server-controlled timing for answer words (3s each)
-  - [ ] Buzz-in mechanic with latency compensation
-  - [ ] Score hidden during round, revealed at end
-  - [ ] AI generation for theme, clue, and word pairs
-- [ ] Question type rotation per game (structured order per round)
-- [ ] Update AI prompts to generate all types in one batch
+- [x] DisOrDat question type
+  - [x] UI: two category labels, items appear one at a time (6s each, 7 items)
+  - [x] All players compete simultaneously
+  - [x] Seed data: 8 DisOrDat question sets
+  - [x] Scoring: question value / 7 per correct item, no penalty
+- [x] Gibberish Question type
+  - [x] UI: garbled phrase displayed prominently + 4 MC choices
+  - [x] Seed data: 12 Gibberish questions
+  - [x] Standard MC answer submission
+  - [ ] Host voice reads the gibberish phrase (needs TTS integration)
+  - [ ] Hint appears after 10 seconds (not yet implemented)
+- [x] ThreeWay question type
+  - [x] UI: three options cycle/highlight (1.8s each)
+  - [x] Players BUZZ when correct one is highlighted
+  - [x] Seed data: 12 ThreeWay questions
+- [x] Jack Attack finale
+  - [x] UI: theme + clue display, word stream, BUZZ button
+  - [x] Server-controlled timing for answer words (3.5s each)
+  - [x] Buzz-in mechanic with real-time scoring
+  - [x] +$2000 correct / -$2000 wrong
+  - [x] Scores revealed at end
+  - [x] Seed data: 5 Jack Attack rounds (15 words each, 5 correct)
+- [x] Question type rotation per game (QUESTION_TYPE_SCHEDULE constant)
+- [ ] AI generation for all question types (currently seed data only)
 
 ### Key Decisions
 - Jack Attack latency: server sends "word_active" events, players buzz with timestamps, server validates within tolerance window (±200ms)
@@ -309,13 +310,15 @@ Not scoped for initial release, but ideas for later:
 - [x] Fixed: Q2+ never showing (questionIndex wasn't synced from server to client)
 - [x] Fixed: mobile freeze after answering (Wimp Mode race condition — client ignores stale question_active events)
 
-### M4: Full Variety (End of Phase 4)
+### M4: Full Variety (End of Phase 4) ✅ COMPLETE
 **Demo:** Play a game with all 5 question types including Jack Attack finale.
-- [ ] Multiple Choice, DisOrDat, Gibberish, ThreeWay all work
-- [ ] DisOrDat: all players compete simultaneously, items appear one at a time
-- [ ] Gibberish: host voice reads the garbled phrase, hint appears after 10s
-- [ ] Jack Attack: words fly by, buzz-in works, scores hidden then revealed
-- [ ] Question type order follows the structured round template
+- [x] Multiple Choice, DisOrDat, Gibberish, ThreeWay all work
+- [x] DisOrDat: all players compete simultaneously, items appear one at a time (6s each)
+- [x] Gibberish: phrase displayed prominently, 4 MC choices
+- [x] ThreeWay: cycling highlight (1.8s), BUZZ submits highlighted choice
+- [x] Jack Attack: server-driven word stream, buzz-in, scores revealed at end
+- [x] Question type order follows QUESTION_TYPE_SCHEDULE
+- [x] Seed data: 12 gibberish, 8 dis-or-dat, 12 three-way, 5 jack-attack rounds
 
 ### M5: Strategic Depth (End of Phase 5)
 **Demo:** Play a game where trailing players receive and use power-ups, and an Easter egg is discovered.

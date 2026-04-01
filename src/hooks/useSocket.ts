@@ -110,6 +110,7 @@ export function useSocket() {
     });
 
     socket.on('game_starting', ({ hostScript, audioUrl }) => {
+      console.log('[Socket] game_starting');
       const store = useGameStore.getState();
       store.setGameState('game_starting');
       if (hostScript) store.setHostDialogue(hostScript);
@@ -122,6 +123,7 @@ export function useSocket() {
     socket.on('question_intro', ({ question, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
       const q = question as Record<string, unknown>;
+      console.log(`[Socket] question_intro — Q${(q.questionIndex as number) + 1}, type=${q.type}, prev_state=${store.gameState}`);
       store.setGameState('question_intro');
       store.setCurrentQuestion(q as unknown as import('@/stores/gameStore').UIQuestion);
       store.clearAnsweredPlayers();
@@ -141,7 +143,12 @@ export function useSocket() {
 
     socket.on('question_active', ({ question, timeLimit }) => {
       const store = useGameStore.getState();
-      if (store.gameState === 'question_reveal' || store.gameState === 'scores_update') return;
+      const qData = question as Record<string, unknown>;
+      console.log(`[Socket] question_active — Q${((qData.questionIndex as number) || 0) + 1}, prev_state=${store.gameState}`);
+      if (store.gameState === 'question_reveal' || store.gameState === 'scores_update') {
+        console.log(`[Socket] question_active — BLOCKED by guard (state=${store.gameState})`);
+        return;
+      }
       store.setGameState('question_active');
       store.setCurrentQuestion(question as unknown as import('@/stores/gameStore').UIQuestion);
       store.setQuestionEndsAt(Date.now() + timeLimit * 1000);
@@ -155,6 +162,8 @@ export function useSocket() {
 
     socket.on('question_reveal', ({ correctAnswer, disOrDatCorrect, playerResults, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
+      console.log(`[Socket] question_reveal — prev_state=${store.gameState}`);
+      stopSpeaking();
       store.setGameState('question_reveal');
       store.setCorrectAnswerIndex(correctAnswer);
       if (disOrDatCorrect) store.setDisOrDatCorrectAnswers(disOrDatCorrect);
@@ -173,6 +182,8 @@ export function useSocket() {
 
     socket.on('scores_update', ({ scores }) => {
       const store = useGameStore.getState();
+      console.log(`[Socket] scores_update — prev_state=${store.gameState}`);
+      stopSpeaking();
       store.setGameState('scores_update');
       store.setScores(scores);
       playScoreRevealSound();
@@ -180,6 +191,7 @@ export function useSocket() {
 
     socket.on('round_transition', ({ round, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
+      stopSpeaking();
       store.setGameState('round_transition');
       store.setCurrentRound(round);
       if (hostScript) store.setHostDialogue(hostScript);
@@ -222,6 +234,7 @@ export function useSocket() {
 
     socket.on('game_over', ({ finalScores, hostScript, audioUrl }) => {
       const store = useGameStore.getState();
+      stopSpeaking();
       store.setGameState('game_over');
       playGameOverSound();
       store.setFinalScores(finalScores);

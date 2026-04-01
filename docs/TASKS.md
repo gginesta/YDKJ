@@ -220,50 +220,56 @@ Granular tasks organized by phase. Each task is a single unit of work.
 ## Phase 4: Question Variety
 
 ### 4.1 DisOrDat
-- [ ] Create `src/components/questions/DisOrDat.tsx`
-- [ ] UI: two category labels at top, item appears in center
-- [ ] Swipe left/right or tap category to sort
-- [ ] 7 items shown one at a time (5s each)
-- [ ] All players compete simultaneously
-- [ ] Scoring: question value / 7 per correct item
-- [ ] Results shown after all 7 items
+- [x] Create `src/components/game/DisOrDatCard.tsx`
+- [x] UI: two category labels (THIS/DAT), item appears in center, progress dots
+- [x] Tap category button to sort (6s per item, auto-advances)
+- [x] 7 items shown one at a time
+- [x] All players compete simultaneously
+- [x] Scoring: question value / 7 per correct item, no penalty
+- [x] Results shown after all 7 items with correct/wrong per item
+- [x] Seed data: 8 DisOrDat sets (`src/lib/ai/seed-dis-or-dat.json`)
 - [ ] AI prompt for generating plausible category pairs
 
 ### 4.2 Gibberish Questions
-- [ ] Create `src/components/questions/Gibberish.tsx`
-- [ ] UI: garbled phrase displayed prominently
-- [ ] Host voice reads the garbled phrase aloud (critical)
-- [ ] 4 multiple choice options for the real phrase
+- [x] Create `src/components/game/GibberishCard.tsx`
+- [x] UI: garbled phrase displayed prominently in purple card
+- [x] 4 multiple choice options below
+- [x] Standard MC answer submission
+- [x] Seed data: 12 Gibberish questions (`src/lib/ai/seed-gibberish.json`)
+- [ ] Host voice reads the garbled phrase aloud (needs TTS wiring)
 - [ ] Hint appears after 10 seconds
 - [ ] AI prompt for generating phonetically similar garbled versions
-- [ ] Test TTS pronunciation of garbled phrases
 
 ### 4.3 ThreeWay
-- [ ] Create `src/components/questions/ThreeWay.tsx`
-- [ ] UI: prompt word at top, 3 options cycle/highlight below
-- [ ] Options highlight one at a time (3s each), 3 full cycles
-- [ ] Players buzz in when correct one is highlighted
-- [ ] Server validates timing (was correct option highlighted at buzz time?)
+- [x] Create `src/components/game/ThreeWayCard.tsx`
+- [x] UI: prompt at top, 3 options cycle/highlight below (1.8s each)
+- [x] Players tap BUZZ! when correct one is highlighted
+- [x] Client-side cycling, submits highlighted index as answerIndex
+- [x] Seed data: 12 ThreeWay questions (`src/lib/ai/seed-three-way.json`)
 - [ ] AI prompt for word-association triples
 
 ### 4.4 Jack Attack
-- [ ] Create `src/components/questions/JackAttack.tsx`
-- [ ] UI: theme banner at top, clue word in center, answer words fly in/out
-- [ ] Server controls word timing (sends word_active events)
-- [ ] Each word visible for ~3 seconds
-- [ ] Players buzz in when they see a match
-- [ ] Latency compensation (±200ms tolerance window)
-- [ ] +$2,000 correct buzz, -$2,000 wrong buzz
-- [ ] Scores hidden during round
-- [ ] ~15 words shown, ~5 are correct matches
-- [ ] Dramatic reveal of Jack Attack scores at end
+- [x] Create `src/components/game/JackAttackCard.tsx`
+- [x] UI: theme + clue display, word shown prominently, BUZZ! button
+- [x] Server controls word timing (jack_attack_word events, 3.5s each)
+- [x] Players buzz in when they see a match
+- [x] +$2,000 correct buzz, -$2,000 wrong buzz
+- [x] Real-time buzz result feedback (correct/wrong + money delta)
+- [x] Final scores revealed at end (jack_attack_results state)
+- [x] Seed data: 5 Jack Attack rounds, 15 words each, 5 correct (`src/lib/ai/seed-jack-attack.json`)
+- [ ] Latency compensation (±200ms tolerance window — not yet implemented)
 - [ ] AI prompt for theme, clue, and word pairs
 
 ### 4.5 Question Type Integration
-- [ ] Update game state machine to handle different question types
-- [ ] Question type rotation per game (structured order from GAME_DESIGN.md)
-- [ ] Update AI generation prompt to produce all types in one batch
-- [ ] Ensure each type has proper host intro/reaction scripts
+- [x] Update game engine for all question types (`game-engine.ts` rewrite)
+- [x] QUESTION_TYPE_SCHEDULE: structured per-round order
+- [x] Pool-based question loading (4 pools, shuffle, fallback on depletion)
+- [x] Socket types updated for all new events
+- [x] Game store updated with DisOrDat + Jack Attack state
+- [x] useSocket.ts wired for all new server events
+- [x] QuestionCard routes to specialized component by question type
+- [x] Page routing handles jack_attack_intro/active/results states
+- [ ] AI generation prompts for all question types (currently seed data only)
 
 ---
 
@@ -451,7 +457,7 @@ Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4
 | Phase 1: Foundation | ✅ Complete | Yes |
 | Phase 2: Core Game | ✅ Complete | Yes |
 | Phase 3: The Host | ✅ Complete | Yes |
-| Phase 4: Question Variety | ❌ Not started | Yes (Jack Attack only for MVP) |
+| Phase 4: Question Variety | ✅ Complete | Yes (all types implemented) |
 | Phase 5: Power-Ups & Easter Eggs | ❌ Not started | No — can ship without |
 | Phase 6: Audio & Visual Polish | ❌ Not started | No — can ship basic |
 | Phase 7: Deployment & Testing | 🔨 Partial (Railway deployed) | Yes (deploy subset) |

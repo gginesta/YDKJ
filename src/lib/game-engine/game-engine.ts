@@ -109,16 +109,16 @@ interface SeedJackAttack {
 
 // Phase durations in milliseconds
 const DURATIONS = {
-  GAME_STARTING: 5000,
-  QUESTION_INTRO: 6000,
+  GAME_STARTING: 6000,
+  QUESTION_INTRO: 8000,
   QUESTION_ACTIVE: 20000,
   DIS_OR_DAT_ACTIVE: 42000, // 6s per item × 7 items
-  QUESTION_REVEAL: 5000,
-  SCORES_UPDATE: 4000,
-  ROUND_TRANSITION: 5000,
-  JACK_ATTACK_INTRO: 6000,
+  QUESTION_REVEAL: 7000,
+  SCORES_UPDATE: 6000,
+  ROUND_TRANSITION: 6000,
+  JACK_ATTACK_INTRO: 8000,
   JACK_ATTACK_WORD_INTERVAL: 3500, // 3.5s per word
-  JACK_ATTACK_RESULTS: 6000,
+  JACK_ATTACK_RESULTS: 8000,
   GAME_OVER: 15000,
   WIMP_TIMER: 10000,
 };
@@ -174,7 +174,9 @@ export class GameEngine {
   // ============================================================
 
   start(): void {
+    console.log(`[GameEngine:${this.roomCode}] start() — loading questions`);
     this.loadQuestions();
+    console.log(`[GameEngine:${this.roomCode}] Loaded ${this.questions.length} questions, JA: ${!!this.jackAttackData}`);
     this.room.state = GameState.GAME_STARTING;
     this.room.round = 1;
     this.room.questionIndex = 0;
@@ -438,14 +440,20 @@ export class GameEngine {
   // ============================================================
 
   private startQuestionIntro(): void {
-    if (this.destroyed) return;
+    if (this.destroyed) {
+      console.log(`[GameEngine:${this.roomCode}] startQuestionIntro() — SKIPPED (destroyed)`);
+      return;
+    }
 
+    console.log(`[GameEngine:${this.roomCode}] startQuestionIntro() — questionIndex=${this.room.questionIndex}, questions.length=${this.questions.length}`);
     const q = this.questions[this.room.questionIndex];
     if (!q) {
+      console.log(`[GameEngine:${this.roomCode}] No question at index ${this.room.questionIndex}, starting Jack Attack`);
       this.startJackAttackIntro();
       return;
     }
 
+    console.log(`[GameEngine:${this.roomCode}] Q${this.room.questionIndex + 1}: type=${q.type}, id=${q.id}`);
     this.room.state = GameState.QUESTION_INTRO;
     this.currentAnswers.clear();
     this.disOrDatAnswers.clear();
@@ -471,11 +479,15 @@ export class GameEngine {
   }
 
   private startQuestionActive(): void {
-    if (this.destroyed) return;
+    if (this.destroyed) {
+      console.log(`[GameEngine:${this.roomCode}] startQuestionActive() — SKIPPED (destroyed)`);
+      return;
+    }
 
     const q = this.questions[this.room.questionIndex];
     if (!q) return;
 
+    console.log(`[GameEngine:${this.roomCode}] startQuestionActive() — Q${this.room.questionIndex + 1} type=${q.type}`);
     this.room.state = GameState.QUESTION_ACTIVE;
     this.questionStartTime = Date.now();
     this.questionTimeLimit = q.type === 'dis_or_dat'
@@ -595,6 +607,7 @@ export class GameEngine {
     const q = this.questions[this.room.questionIndex];
     if (!q) return;
 
+    console.log(`[GameEngine:${this.roomCode}] revealAnswer() — Q${this.room.questionIndex + 1}, answers=${this.currentAnswers.size}, dodAnswers=${this.disOrDatAnswers.size}`);
     this.room.state = GameState.QUESTION_REVEAL;
 
     if (q.type === 'dis_or_dat') {
@@ -757,6 +770,7 @@ export class GameEngine {
   private showScores(): void {
     if (this.destroyed) return;
 
+    console.log(`[GameEngine:${this.roomCode}] showScores() — after Q${this.room.questionIndex + 1}`);
     this.room.state = GameState.SCORES_UPDATE;
 
     const scores = this.room.players
@@ -768,9 +782,13 @@ export class GameEngine {
   }
 
   private advanceToNextQuestion(): void {
-    if (this.destroyed) return;
+    if (this.destroyed) {
+      console.log(`[GameEngine:${this.roomCode}] advanceToNextQuestion() — SKIPPED (destroyed)`);
+      return;
+    }
 
     this.room.questionIndex++;
+    console.log(`[GameEngine:${this.roomCode}] advanceToNextQuestion() — now questionIndex=${this.room.questionIndex}`);
 
     if (this.room.questionIndex === QUESTIONS_PER_ROUND && this.room.round === 1) {
       this.room.round = 2;

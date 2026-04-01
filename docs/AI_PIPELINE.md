@@ -40,7 +40,11 @@ Game Start
 
 | Component | Status | File |
 |-----------|--------|------|
-| Seed question bank (200 questions) | ✅ Done | `src/lib/ai/seed-questions.json` |
+| Seed question bank (200 MC questions) | ✅ Done | `src/lib/ai/seed-questions.json` |
+| Seed Gibberish questions (12) | ✅ Done | `src/lib/ai/seed-gibberish.json` |
+| Seed DisOrDat questions (8) | ✅ Done | `src/lib/ai/seed-dis-or-dat.json` |
+| Seed ThreeWay questions (12) | ✅ Done | `src/lib/ai/seed-three-way.json` |
+| Seed Jack Attack rounds (5) | ✅ Done | `src/lib/ai/seed-jack-attack.json` |
 | Question dedup per player group | ✅ Done | `src/lib/db/index.ts` |
 | Question generation prompt ("creative bible") | ✅ Done | `src/lib/ai/prompts/question-generation.ts` |
 | Host commentary prompts | ✅ Done | `src/lib/ai/prompts/host-commentary.ts` |
