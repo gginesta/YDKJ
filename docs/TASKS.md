@@ -96,8 +96,10 @@ Granular tasks organized by phase. Each task is a single unit of work.
 
 ### 2.6 Reconnection
 - [x] Detect player disconnect (socket close)
-- [x] Mark player as disconnected (don't remove from game)
-- [ ] On reconnect: rejoin room, restore state, sync to current question
+- [x] Mark player as disconnected during active game (don't remove from game)
+- [x] `rejoin_room` socket event: find disconnected player by name, restore socket ID, emit full room state
+- [x] Lobby disconnect: permanent removal (expected behavior)
+- [x] Client extends redirect timeout to 3s to allow reconnection to complete
 - [ ] Timeout: if disconnected >60s during active game, auto-skip their answers
 
 ### 2.7 Play Again
@@ -110,66 +112,108 @@ Granular tasks organized by phase. Each task is a single unit of work.
 ## Phase 3: The Host
 
 ### 3.1 Claude API Integration
-- [ ] Install `@anthropic-ai/sdk`
-- [ ] Create `src/lib/ai/claude-client.ts` — API wrapper
-- [ ] Implement structured output via tool use for question generation
-- [ ] Response validation (ensure schema compliance)
-- [ ] Retry logic (1 retry on parse failure)
-- [ ] Error handling (timeout, rate limit, bad response)
+- [x] Install `@anthropic-ai/sdk`
+- [x] Create `src/lib/ai/claude-client.ts` — API wrapper
+- [x] Implement structured output via tool use for question generation
+- [x] Response validation (ensure schema compliance)
+- [x] Retry logic (1 retry on parse failure)
+- [x] Error handling (timeout, rate limit, bad response)
 
 ### 3.2 Question Generation Prompts
-- [ ] Create `src/lib/ai/prompts/question-generation.ts` — main generation prompt
-- [ ] System prompt with YDKJ writing style rules
-- [ ] Tool schema for structured question output (all 5 types)
-- [ ] Include theme parameter (optional)
-- [ ] Include player names for personalization
+- [x] Create `src/lib/ai/prompts/question-generation.ts` — main generation prompt
+- [x] System prompt with YDKJ writing style rules (voice, misdirection, comedy)
+- [x] Tool schema for structured question output (multiple_choice)
+- [x] Include theme parameter (optional)
+- [x] Include player names for personalization
+- [x] Include round context and category variety tracking
+- [x] Seed fact transformation pipeline (Open Trivia DB → YDKJ style)
+- [x] 6 question styles defined (mashups, disguised facts, wordplay, modern reframing, reverse, absurd-but-true)
+- [x] Wrong answer quality rules (plausible + funny, not throwaways)
+- [x] Difficulty calibration guidelines (30% easy, 50% medium, 20% tricky)
 - [ ] Test prompt quality — iterate until questions are genuinely funny
+- [ ] Add tool schemas for additional question types (dis_or_dat, gibberish, three_way)
 
-### 3.3 Host Commentary Prompts
-- [ ] Create `src/lib/ai/prompts/host-commentary.ts`
-- [ ] Game intro prompt (greet players by name, set the tone)
-- [ ] Per-question reaction prompt (correct, wrong, timeout variants)
-- [ ] Transition commentary prompt (between questions)
-- [ ] Round transition prompt ("Values are doubled!")
-- [ ] Game outro prompt (crown winner, roast loser)
-- [ ] Include dynamic context: scores, streaks, answer history, power-ups
+### 3.3 Host Commentary Prompts & Service
+- [x] Create `src/lib/ai/prompts/host-commentary.ts`
+- [x] Host personality system prompt (sarcastic, warm, uses player names)
+- [x] Game intro prompt (greet players by name, set the tone)
+- [x] Transition commentary prompt (between questions, reacts to scores/streaks)
+- [x] Round transition prompt ("Values are doubled!" + standings commentary)
+- [x] Game outro prompt (crown winner, roast loser, make them want to play again)
+- [x] Dynamic context injection: scores, streaks, answer history, previous lines
+- [x] Create `src/lib/ai/host-commentary-service.ts` — orchestrates text + audio
+- [x] Race AI calls against 3.5s timeout with static fallback
+- [x] Track last 5 lines to avoid repetition
+- [x] WithAudio variants for all commentary methods (Tier 2)
 
 ### 3.4 Open Trivia DB Integration
-- [ ] Create `src/lib/ai/trivia-api.ts`
-- [ ] Fetch questions from Open Trivia DB API
-- [ ] Parse and normalize response format
-- [ ] Use as seed facts for Claude to riff on
-- [ ] Fallback if API is down (use curated seeds)
+- [x] Create `src/lib/ai/trivia-api.ts`
+- [x] Fetch questions from Open Trivia DB API
+- [x] Parse and normalize response format (HTML entity decoding)
+- [x] Use as seed facts for Claude to riff on
+- [x] Fallback if API is down (use curated seed bank)
+- [x] Session token system to avoid repeat questions across games
+- [x] Auto-reset token when exhausted, auto-request when expired
+- [x] Mixed difficulty fetching (30% easy, 50% medium, 20% hard)
+- [x] Rate limit awareness (1 req per 5s per IP)
 
 ### 3.5 Question Pipeline Orchestration
-- [ ] Create `src/lib/ai/question-pipeline.ts`
-- [ ] Fetch seed data (Open Trivia DB + curated bank)
-- [ ] Call Claude to generate 12 questions (10 + 2 backup)
-- [ ] Validate all generated questions
-- [ ] Cache in SQLite (7-day TTL, dedup per player group)
-- [ ] Trigger generation during GAME_STARTING state
-- [ ] Background generation: don't block game start
+- [x] Create `src/lib/ai/question-pipeline.ts`
+- [x] Fetch seed data (Open Trivia DB + curated bank)
+- [x] Call Claude to generate questions with YDKJ prompt
+- [x] Validate all generated questions (4 choices, host scripts, length)
+- [x] Cache in SQLite (7-day TTL, dedup per player group)
+- [x] Trigger generation during GAME_STARTING state
+- [x] Non-blocking: seed questions load instantly, AI is best-effort
 
 ### 3.6 ElevenLabs TTS Integration
-- [ ] Create `src/lib/voice/elevenlabs-client.ts`
-- [ ] Streaming TTS function (text → audio stream)
-- [ ] Voice selection and configuration
-- [ ] Audio format: MP3 44.1kHz 128kbps
-- [ ] Create `src/app/api/voice/tts/route.ts` — TTS proxy endpoint
-- [ ] Server-side audio caching (avoid re-generating same lines)
+- [x] Create `src/lib/voice/elevenlabs-client.ts`
+- [x] TTS function (text → base64 MP3 data URL)
+- [x] Voice configuration (voice ID: 1t1EeRixsJrKbiF1zwM6, eleven_turbo_v2 model)
+- [x] 8s timeout, graceful fallback to text-only
+- [x] `isVoiceEnabled()` check for graceful degradation
+- [x] Session-level `voiceDisabledByError` flag — first 401/403 disables all subsequent TTS calls (prevents Railway shared-IP log spam)
+- **Known issue:** ElevenLabs free tier is blocked on Railway (shared IPs trigger abuse detection). Requires paid plan ($5+/mo) for production voice.
 
-### 3.7 Client Audio Playback
-- [ ] Create `src/lib/audio/voice-player.ts`
-- [ ] Web Audio API setup for voice playback
-- [ ] Handle audio autoplay restrictions (require user gesture)
-- [ ] Queue system (don't overlap voice lines)
-- [ ] Text fallback display while voice loads or if voice fails
+### 3.7 Two-Tier Audio System
+- [x] Create `src/lib/voice/audio-cache.ts` — Tier 1 batch pre-generation
+- [x] Extended GAME_STARTING phase (18s when voice enabled, 5s without)
+- [x] Batch-generate ~33 audio clips during loading (all hostIntro/Correct/Wrong/Timeout)
+- [x] Bounded concurrency (5 parallel requests) to avoid ElevenLabs rate limits
+- [x] 16s master timeout — use whatever is cached by then
+- [x] Early start optimization: if all audio ready + 5s minimum, start game early
+- [x] Cache lookup per phase: `audioCache.get("q_{id}_intro")` — instant playback
+- [x] Tier 2 live-buffered: AI personalized reactions fire in background (bonus)
+- [x] Loading UX: progress bar + rotating quirky messages
+- [x] `loading_progress` socket event for client progress updates
 
-### 3.8 Voice Pre-Buffering
-- [ ] Generate next question's host intro during current question's reveal phase
-- [ ] Buffer audio on client before it's needed
-- [ ] Track buffer state (loading, ready, playing, done)
-- [ ] Sync state transitions to voice completion
+### 3.8 Client Audio Playback
+- [x] `playAudio()` helper in `useSocket.ts`
+- [x] Stops previous audio before playing new clip
+- [x] Handles autoplay restrictions silently (text fallback)
+- [x] `host_audio` socket event for late-arriving audio updates
+- [x] Audio plays on: game_starting, question_intro, question_reveal, round_transition, game_over
+
+### 3.9 Sound Effects System (Web Audio API)
+- [x] Create `src/lib/audio/sound-system.ts`
+- [x] Correct answer chime (ascending two-note sine)
+- [x] Wrong answer buzzer (sawtooth)
+- [x] Timer tick + warning tick (for last 5s countdown)
+- [x] Question transition whoosh
+- [x] Game start fanfare (G4–C5–E5)
+- [x] Round transition sweep (four-note ascending)
+- [x] Score reveal shimmer
+- [x] Game over finale (descending then ascending)
+- [x] Button tap (subtle click)
+- [x] `initAudio()` — called on user gesture (required by browsers)
+- [x] Wire all sounds to socket events in `useSocket.ts`
+
+### 3.10 Browser TTS Fallback
+- [x] `speakText(text)` in `sound-system.ts` — uses `window.speechSynthesis`
+- [x] `stopSpeaking()` — cancels current speech on phase change
+- [x] Prefers high-quality English voice (Google, Samantha, Daniel)
+- [x] Falls back silently if speech synthesis unavailable (SSR, old browser)
+- [x] Browser TTS wired as fallback in all socket event handlers (if no `audioUrl`, call `speakText(hostScript)`)
 
 ---
 
@@ -294,32 +338,35 @@ Granular tasks organized by phase. Each task is a single unit of work.
 - [ ] Game over: winner spotlight, scores rain down
 
 ### 6.4 Audio System
-- [ ] Create `src/lib/audio/audio-manager.ts` — central audio controller
-- [ ] Separate volume channels: music, SFX, voice
+- [x] Sound effects via Web Audio API (`src/lib/audio/sound-system.ts`) — no external service
+- [x] Browser TTS for host voice (free fallback)
+- [x] `initAudio()` called on user gesture (Start button)
+- [ ] Create `src/lib/audio/audio-manager.ts` — central audio controller with separate volume channels
 - [ ] Volume controls accessible during game
-- [ ] Handle Web Audio API context (user gesture requirement)
 - [ ] Crossfade between music tracks
 
 ### 6.5 Music & SFX Assets
-- [ ] Source/create chiptune tracks:
+- [x] Synthesized SFX (Web Audio API — no asset files needed):
+  - [x] Button tap
+  - [x] Correct answer sting
+  - [x] Wrong answer sting
+  - [x] Timer tick (final 5 seconds) — `playTickSound` / `playWarningTick` exist but not yet called from Timer.tsx
+  - [x] Game start fanfare
+  - [x] Round transition
+  - [x] Score reveal
+  - [x] Game over
+- [ ] Chiptune background music tracks (not yet implemented):
   - [ ] Lobby waiting loop
-  - [ ] Game intro fanfare
   - [ ] Question thinking loop (medium tension)
   - [ ] Last 5 seconds (accelerated tension)
   - [ ] Round transition bridge
   - [ ] Jack Attack fast-paced track
-  - [ ] Victory fanfare
-  - [ ] Game over (loser version)
-- [ ] Source/create SFX:
-  - [ ] Button tap
-  - [ ] Correct answer sting
-  - [ ] Wrong answer sting
-  - [ ] Timer tick (final 5 seconds)
-  - [ ] Buzz-in sound
-  - [ ] Power-up activation (unique per type)
-  - [ ] Score counting up/down
-  - [ ] Player join lobby
-  - [ ] Easter egg jingle
+  - [ ] Victory fanfare / game over
+- [ ] Power-up activation sounds (unique per type)
+- [ ] Player join lobby sound
+- [ ] Easter egg jingle
+
+> **Note:** Timer tick sounds are wired in `sound-system.ts` but `Timer.tsx` still needs to call them on countdown.
 
 ### 6.6 Mobile Optimization
 - [ ] Test and fix iOS Safari viewport issues (100vh, notch)
@@ -333,11 +380,12 @@ Granular tasks organized by phase. Each task is a single unit of work.
 ## Phase 7: Deployment & Testing
 
 ### 7.1 Railway Deployment
-- [ ] Create `Dockerfile` (Node.js, build Next.js, run custom server)
-- [ ] Create `railway.toml` or configure via dashboard
-- [ ] Set up persistent volume for SQLite database file
-- [ ] Configure environment variables (API keys, etc.)
-- [ ] Test deployment with WebSocket connectivity
+- [x] Create `Dockerfile` (Node.js, build Next.js, run custom server)
+- [x] Create `railway.toml`
+- [x] Set up persistent volume for SQLite database file
+- [x] Configure environment variables (API keys, etc.)
+- [x] Test deployment with WebSocket connectivity
+- [ ] Auto-deploy via GitHub webhook (GitHub repo connection was lost — needs reconnection in Railway dashboard)
 - [ ] Set up custom domain (optional)
 
 ### 7.2 Production Hardening
@@ -398,16 +446,28 @@ Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4
 
 ## Task Count Summary
 
-| Phase | Tasks | Critical Path? |
-|-------|-------|----------------|
-| Phase 1: Foundation | 28 | Yes |
-| Phase 2: Core Game | 27 | Yes |
-| Phase 3: The Host | 30 | Yes |
-| Phase 4: Question Variety | 22 | Yes (Jack Attack only for MVP) |
-| Phase 5: Power-Ups & Easter Eggs | 24 | No — can ship without |
-| Phase 6: Audio & Visual Polish | 33 | No — can ship basic |
-| Phase 7: Deployment & Testing | 22 | Yes (deploy subset) |
-| **Total** | **186 tasks** | |
+| Phase | Status | Critical Path? |
+|-------|--------|----------------|
+| Phase 1: Foundation | ✅ Complete | Yes |
+| Phase 2: Core Game | ✅ Complete | Yes |
+| Phase 3: The Host | ✅ Complete | Yes |
+| Phase 4: Question Variety | ❌ Not started | Yes (Jack Attack only for MVP) |
+| Phase 5: Power-Ups & Easter Eggs | ❌ Not started | No — can ship without |
+| Phase 6: Audio & Visual Polish | ❌ Not started | No — can ship basic |
+| Phase 7: Deployment & Testing | 🔨 Partial (Railway deployed) | Yes (deploy subset) |
+
+## Current State
+
+The game is **playable end-to-end** with:
+- 200 seed questions + AI-generated questions via Claude
+- AI host commentary (personalized, uses player names/scores)
+- Browser Speech Synthesis for host voice (free, works everywhere)
+- Web Audio API synthesized SFX on all game events (no external service)
+- ElevenLabs TTS architecture in place — requires **paid plan** to work on Railway (free tier blocked by shared IP abuse detection)
+- Deployed on Railway (manual deploys; GitHub auto-deploy needs reconnection)
+- 2-10 player multiplayer via Socket.io
+- Reconnection handling: screen lock / network drop restores player without removal
+- Bug fixes: Q2+ client display, Wimp Mode race condition, timer bar animation
 
 ## MVP Shortcut
 

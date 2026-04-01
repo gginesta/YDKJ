@@ -36,6 +36,26 @@ Game Start
 └──────────────────────────────────┘
 ```
 
+## Implementation Status
+
+| Component | Status | File |
+|-----------|--------|------|
+| Seed question bank (200 questions) | ✅ Done | `src/lib/ai/seed-questions.json` |
+| Question dedup per player group | ✅ Done | `src/lib/db/index.ts` |
+| Question generation prompt ("creative bible") | ✅ Done | `src/lib/ai/prompts/question-generation.ts` |
+| Host commentary prompts | ✅ Done | `src/lib/ai/prompts/host-commentary.ts` |
+| Claude API client | ✅ Done | `src/lib/ai/claude-client.ts` |
+| Open Trivia DB integration (with session tokens) | ✅ Done | `src/lib/ai/trivia-api.ts` |
+| Question pipeline orchestration | ✅ Done | `src/lib/ai/question-pipeline.ts` |
+| Host commentary service (text + voice) | ✅ Done | `src/lib/ai/host-commentary-service.ts` |
+| ElevenLabs TTS client | ✅ Done (⚠️ paid plan required on Railway) | `src/lib/voice/elevenlabs-client.ts` |
+| Client audio playback | ✅ Done | `src/hooks/useSocket.ts` (playAudio helper) |
+| Audio pre-generation cache (Tier 1) | ✅ Done | `src/lib/voice/audio-cache.ts` |
+| Live-buffered commentary (Tier 2) | ✅ Done | (non-blocking pattern in game-engine.ts) |
+| Loading screen with progress | ✅ Done | `src/components/game/GameStarting.tsx` |
+| Web Audio API SFX (no external service) | ✅ Done | `src/lib/audio/sound-system.ts` |
+| Browser TTS fallback | ✅ Done | `src/lib/audio/sound-system.ts` (`speakText`) |
+
 ## Question Generation Pipeline
 
 ### Step 1: Seed Data Collection
@@ -182,101 +202,152 @@ const cacheStrategy = {
 
 ## Voice Pipeline (ElevenLabs)
 
-### Architecture
+### Two-Tier Audio Architecture
+
+The voice system uses two tiers to ensure 90%+ of the game has spoken audio while keeping the game flow smooth.
 
 ```
-Host Script (text)
+GAME START
     │
     ▼
-┌──────────────────┐
-│ Text Preprocessing│
-│ - Insert SSML     │
-│   pauses          │
-│ - Normalize names  │
-│ - Add emphasis     │
-│   markers          │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐     ┌──────────────────┐
-│ ElevenLabs API   │────▶│ Audio Buffer      │
-│ - Streaming TTS  │     │ - Collect chunks  │
-│ - Voice ID       │     │ - Convert format  │
-│ - Model: eleven  │     │ - Queue playback  │
-│   _turbo_v2      │     └────────┬─────────┘
-└──────────────────┘              │
-                                  ▼
-                    ┌──────────────────┐
-                    │ Client Playback  │
-                    │ - Web Audio API  │
-                    │ - Sync with UI   │
-                    │ - Fallback: text │
-                    └──────────────────┘
+┌─────────────────────────────────────────────┐
+│  TIER 1: Pre-Generation (Loading Phase)     │
+│  Duration: 15-18 seconds                     │
+│                                              │
+│  Batch-generate TTS for ALL known scripts:   │
+│  • Game intro                                │
+│  • 10× question intros (hostIntro)           │
+│  • 10× correct reactions (hostCorrect)       │
+│  • 10× wrong reactions (hostWrong)           │
+│  • 10× timeout reactions (hostTimeout)       │
+│  • Round 2 transition                        │
+│  • Generic game over                         │
+│  = ~33 audio clips, 5-6 parallel requests    │
+│                                              │
+│  Player sees: progress bar + quirky messages  │
+│  "Calibrating sarcasm levels..."             │
+│  "Consulting the encyclopedia of useless     │
+│   knowledge..."                              │
+│                                              │
+│  Stored in: AudioCache (in-memory Map)       │
+│  Lookup: audioCache.get("q_42_intro")        │
+└────────────────┬────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────┐
+│  GAME FLOW (each phase)                      │
+│                                              │
+│  1. Emit static text + cached Tier 1 audio   │
+│     → Client shows text + plays audio        │
+│     → INSTANT, never blocks                  │
+│                                              │
+│  2. Schedule next phase timer immediately    │
+│     → Game flow never stalls                 │
+│                                              │
+│  3. Fire Tier 2 in background (optional):    │
+│     Claude AI → personalized line → TTS      │
+│     → If arrives before phase ends, send     │
+│       update event with upgraded text/audio  │
+│     → If not, Tier 1 audio already played    │
+└─────────────────────────────────────────────┘
 ```
 
-### ElevenLabs Integration
+### Tier 1: Pre-Generated Audio
 
-```typescript
-// Voice configuration
-const voiceConfig = {
-  // Use a consistent voice for the host character
-  voiceId: 'pNInz6obpgDQGcFmaJgB', // Example: "Adam" voice
-  modelId: 'eleven_turbo_v2',        // Fast, good quality
+**When:** During extended GAME_STARTING phase (15-18 seconds)
+**What:** All static host scripts from the loaded questions
+**How:** Batch TTS via ElevenLabs with concurrency limit (5-6 parallel)
+**Stored in:** In-memory Map (`AudioCache`), keyed by question ID + type
 
-  voiceSettings: {
-    stability: 0.6,        // Some variation for natural feel
-    similarity_boost: 0.8, // Stay close to base voice
-    style: 0.4,            // Moderate expressiveness
-    use_speaker_boost: true
-  },
+Cache key convention:
+- `"intro"` — game intro
+- `"q_{questionId}_intro"` — question hostIntro
+- `"q_{questionId}_correct"` — question hostCorrect
+- `"q_{questionId}_wrong"` — question hostWrong
+- `"q_{questionId}_timeout"` — question hostTimeout
+- `"round2_transition"` — round 2 announcement
+- `"game_over"` — generic game over line
 
-  outputFormat: 'mp3_44100_128' // Good quality, reasonable size
-};
+**Result:** Every question phase has instant audio playback from cache.
 
-// Streaming TTS function
-async function generateHostVoice(script: string): Promise<ReadableStream> {
-  const response = await fetch(
-    `https://api.elevenlabs.io/v1/text-to-speech/${voiceConfig.voiceId}/stream`,
-    {
-      method: 'POST',
-      headers: {
-        'xi-api-key': process.env.ELEVENLABS_API_KEY,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        text: script,
-        model_id: voiceConfig.modelId,
-        voice_settings: voiceConfig.voiceSettings,
-        output_format: voiceConfig.outputFormat
-      })
-    }
-  );
-  return response.body; // Streaming audio chunks
-}
-```
+### Tier 2: Live-Buffered Commentary
 
-### Voice Timing Strategy
+**When:** Between phases (during reveal + scores screens)
+**What:** Personalized AI reactions using live game state
+**How:** Claude generates text → ElevenLabs converts to audio (if time allows)
+**Timing budget:** ~4-5 seconds (reveal phase duration)
 
-The key challenge: voice generation takes 1-3 seconds, but must feel instant.
+Tier 2 is a **bonus** — if it arrives, the host feels alive and reactive. If it doesn't, Tier 1 static audio already covered the moment. Text fallback always works regardless.
+
+Example Tier 2 lines (generated live based on what just happened):
+- "GG answered in 1.2 seconds. Peque... buddy... that was painful."
+- "GG's on a 4-streak. One more and there's a bonus!"
+- "Peque just took the lead! The comeback is real!"
+
+### Timeline Per Question
 
 ```
-QUESTION_REVEAL state (5s)
-  │
-  │ ── Immediately: start generating voice for NEXT question intro
-  │
-  ▼
-SCORES_UPDATE state (3s)
-  │
-  │ ── Voice should be ready by now (buffered)
-  │
-  ▼
-QUESTION_INTRO state
-  │
-  │ ── Play pre-buffered audio immediately
-  │ ── While audio plays, generate post-answer commentary
+QUESTION_INTRO (6s)
+  ├─ Play Tier 1 cached audio (instant) ✅
+  └─ Tier 2: nothing to generate yet
+
+QUESTION_ACTIVE (20s)
+  ├─ Players answering
+  └─ Nothing happening audio-wise
+
+QUESTION_REVEAL (5s)
+  ├─ Play Tier 1 cached correct/wrong audio (instant) ✅
+  └─ Tier 2: start generating personalized reaction in background
+
+SCORES_UPDATE (4s)
+  ├─ Tier 2 audio arrives? Play it ✅ (bonus)
+  └─ Tier 2 too slow? Text already displayed, move on
+
+NEXT QUESTION (repeat)
 ```
 
-**Strategy:** Always generate voice 1-2 states ahead of when it's needed.
+### Loading Phase UX
+
+The extended loading phase (15-18s) shows:
+- Progress bar: "Generating voice 12/33..."
+- Rotating quirky messages:
+  - "Host is warming up..."
+  - "Shuffling the deck of useless knowledge..."
+  - "Calibrating sarcasm levels..."
+  - "Preparing personalized roasts..."
+  - "Loading obscure facts nobody asked for..."
+  - "Consulting the encyclopedia of things you should know but don't..."
+
+**Early start:** If all audio finishes before the timeout (minimum 5s loading), the game starts immediately.
+
+**No voice configured:** If `ELEVENLABS_API_KEY` is not set, loading phase stays at 5 seconds (original behavior). Text-only mode.
+
+### ElevenLabs Configuration
+
+```
+Voice ID: 1t1EeRixsJrKbiF1zwM6 (from ElevenLabs voice library)
+Model: eleven_turbo_v2 (fast, good quality)
+Settings:
+  stability: 0.6 (some variation for natural feel)
+  similarity_boost: 0.8 (stay close to base voice)
+  style: 0.4 (moderate expressiveness)
+  use_speaker_boost: true
+Output: MP3, sent as base64 data URLs via Socket.io
+```
+
+### Graceful Degradation
+
+| Scenario | Behavior |
+|----------|----------|
+| ElevenLabs API key set (paid plan) | Full voice: Tier 1 pre-gen + Tier 2 live + Web Audio SFX |
+| ElevenLabs free tier on Railway | 401 errors — session-level flag disables TTS after first failure; browser TTS + Web Audio SFX still play |
+| API key set but ElevenLabs down | Browser TTS fallback + Web Audio SFX; 5s loading |
+| No API key | Browser TTS fallback + Web Audio SFX; 5s loading |
+| Some audio clips fail | Play what cached, browser TTS for the rest |
+| Claude + ElevenLabs both slow | Browser TTS + Tier 1 cached audio (no Tier 2) |
+| Browser doesn't support Speech Synthesis | Text displayed on screen; Web Audio SFX still play |
+
+**Principle: The game NEVER freezes. Audio is always a bonus on top of working text.**
 
 ### Cost Estimation
 
