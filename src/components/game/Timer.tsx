@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { playTickSound, playWarningTick } from '@/lib/audio/sound-system';
 
 interface TimerProps {
   endsAt: number;
@@ -10,27 +11,43 @@ interface TimerProps {
 export default function Timer({ endsAt, totalDuration }: TimerProps) {
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [fraction, setFraction] = useState(1);
-  const rafRef = useRef<number | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const totalMs = useRef(0);
+  const prevSeconds = useRef(-1);
 
   useEffect(() => {
     const now = Date.now();
     totalMs.current = totalDuration
       ? totalDuration * 1000
       : Math.max(endsAt - now, 1);
+    prevSeconds.current = -1;
 
     const tick = () => {
       const remaining = Math.max(endsAt - Date.now(), 0);
-      setSecondsLeft(Math.ceil(remaining / 1000));
+      const secs = Math.ceil(remaining / 1000);
+      setSecondsLeft(secs);
       setFraction(remaining / totalMs.current);
-      if (remaining > 0) {
-        rafRef.current = requestAnimationFrame(tick);
+
+      // Fire tick sound once per second change
+      if (secs !== prevSeconds.current && secs > 0) {
+        if (secs <= 5) {
+          playWarningTick();
+        } else if (secs <= 10) {
+          playTickSound();
+        }
+        prevSeconds.current = secs;
+      }
+
+      if (remaining <= 0 && intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
     };
 
     tick();
+    intervalRef.current = setInterval(tick, 250);
     return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      if (intervalRef.current !== null) clearInterval(intervalRef.current);
     };
   }, [endsAt, totalDuration]);
 

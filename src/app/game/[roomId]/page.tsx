@@ -9,6 +9,7 @@ import QuestionCard from '@/components/game/QuestionCard';
 import Scoreboard from '@/components/game/Scoreboard';
 import RoundTransition from '@/components/game/RoundTransition';
 import GameOver from '@/components/game/GameOver';
+import JackAttackCard from '@/components/game/JackAttackCard';
 
 export default function GamePage() {
   const params = useParams();
@@ -62,6 +63,14 @@ export default function GamePage() {
 
   if (gameState === 'scores_update') {
     return <Scoreboard />;
+  }
+
+  if (
+    gameState === 'jack_attack_intro' ||
+    gameState === 'jack_attack_active' ||
+    gameState === 'jack_attack_results'
+  ) {
+    return <JackAttackCard />;
   }
 
   if (gameState === 'round_transition' || gameState === 'round_intro') {

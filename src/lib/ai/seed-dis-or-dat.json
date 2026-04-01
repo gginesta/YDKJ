@@ -1,0 +1,162 @@
+[
+  {
+    "id": "dod1",
+    "type": "dis_or_dat",
+    "category": "Dis or Dat",
+    "categoryA": "IKEA Product",
+    "categoryB": "Norse God",
+    "items": [
+      { "text": "KALLAX", "correct": "A" },
+      { "text": "ODIN", "correct": "B" },
+      { "text": "EKTORP", "correct": "A" },
+      { "text": "BALDR", "correct": "B" },
+      { "text": "MALM", "correct": "A" },
+      { "text": "FREYR", "correct": "B" },
+      { "text": "BILLY", "correct": "A" }
+    ],
+    "hostIntro": "This is Dis or Dat! I'm going to show you seven things, and you have to sort them into one of two categories. Today's categories: IKEA Product — or — Norse God. Some of these are going to feel uncomfortably similar.",
+    "hostCorrect": "Excellent sorting! You clearly know your flat-pack furniture from your ancient deities.",
+    "hostWrong": "Oof. Some of you got confused. KALLAX is where you store your records. ODIN is where you go after you die in battle. Different vibes.",
+    "hostTimeout": "Time's up. For the record: KALLAX, EKTORP, MALM, and BILLY are IKEA. ODIN, BALDR, and FREYR are Norse gods. Yes, BILLY is the bookcase."
+  },
+  {
+    "id": "dod2",
+    "type": "dis_or_dat",
+    "category": "Dis or Dat",
+    "categoryA": "Pasta Shape",
+    "categoryB": "James Bond Villain",
+    "items": [
+      { "text": "RIGATONI", "correct": "A" },
+      { "text": "JAWS", "correct": "B" },
+      { "text": "ORECCHIETTE", "correct": "A" },
+      { "text": "GOLDFINGER", "correct": "B" },
+      { "text": "CAVATAPPI", "correct": "A" },
+      { "text": "BLOFELD", "correct": "B" },
+      { "text": "FARFALLE", "correct": "A" }
+    ],
+    "hostIntro": "Pasta Shape. Or James Bond Villain. Seven items, two categories, zero room for error. Both involve twists, curves, and people who want to destroy you.",
+    "hostCorrect": "You sorted pasta from supervillains like a pro. That's genuinely impressive and slightly concerning.",
+    "hostWrong": "Some of these tripped you up? JAWS bites people. RIGATONI doesn't. That's how you tell them apart.",
+    "hostTimeout": "Pasta: RIGATONI, ORECCHIETTE, CAVATAPPI, FARFALLE. Villains: JAWS, GOLDFINGER, BLOFELD. Both scary in different ways."
+  },
+  {
+    "id": "dod3",
+    "type": "dis_or_dat",
+    "category": "Dis or Dat",
+    "categoryA": "Katy Perry Song",
+    "categoryB": "Famous Hurricane",
+    "items": [
+      { "text": "ROAR", "correct": "A" },
+      { "text": "KATRINA", "correct": "B" },
+      { "text": "FIREWORK", "correct": "A" },
+      { "text": "HARVEY", "correct": "B" },
+      { "text": "PEACOCK", "correct": "A" },
+      { "text": "IRMA", "correct": "B" },
+      { "text": "DARK HORSE", "correct": "A" }
+    ],
+    "hostIntro": "Katy Perry Song. Or Famous Hurricane. Both are forces of nature. Both have left a trail of destruction. Sort accordingly.",
+    "hostCorrect": "Nicely done. You know your pop anthems from your natural disasters.",
+    "hostWrong": "Look, HARVEY and IRMA are hurricanes. ROAR and FIREWORK are Katy Perry. Both equally powerful in their own way.",
+    "hostTimeout": "Katy Perry: ROAR, FIREWORK, PEACOCK, DARK HORSE. Hurricanes: KATRINA, HARVEY, IRMA. The storms made more mess."
+  },
+  {
+    "id": "dod4",
+    "type": "dis_or_dat",
+    "category": "Dis or Dat",
+    "categoryA": "Real Country",
+    "categoryB": "Made-Up Place (Movies & TV)",
+    "items": [
+      { "text": "WAKANDA", "correct": "B" },
+      { "text": "LATVIA", "correct": "A" },
+      { "text": "NARNIA", "correct": "B" },
+      { "text": "BHUTAN", "correct": "A" },
+      { "text": "GENOVIA", "correct": "B" },
+      { "text": "DJIBOUTI", "correct": "A" },
+      { "text": "AGRABAH", "correct": "B" }
+    ],
+    "hostIntro": "Real country. Or completely made up from a movie or TV show. Some of these real ones sound faker than the fake ones. That's the game.",
+    "hostCorrect": "Excellent geography! You know your real nations from your fictional kingdoms.",
+    "hostWrong": "DJIBOUTI is a real country in East Africa. WAKANDA is from Black Panther. We need to talk about your world knowledge.",
+    "hostTimeout": "Real: LATVIA, BHUTAN, DJIBOUTI. Fictional: WAKANDA (Black Panther), NARNIA (Narnia), GENOVIA (Princess Diaries), AGRABAH (Aladdin)."
+  },
+  {
+    "id": "dod5",
+    "type": "dis_or_dat",
+    "category": "Dis or Dat",
+    "categoryA": "Band Name",
+    "categoryB": "Medical Condition",
+    "items": [
+      { "text": "PHISH", "correct": "A" },
+      { "text": "SCABIES", "correct": "B" },
+      { "text": "STAIND", "correct": "A" },
+      { "text": "GOUT", "correct": "B" },
+      { "text": "BLUR", "correct": "A" },
+      { "text": "SHINGLES", "correct": "B" },
+      { "text": "TOOL", "correct": "A" }
+    ],
+    "hostIntro": "Band Name. Or Medical Condition. This is the category that separates the music fans from the hypochondriacs. PHISH. SCABIES. STAIND. You'll figure it out.",
+    "hostCorrect": "Fantastic. You know your rock bands from your dermatological issues.",
+    "hostWrong": "SCABIES and SHINGLES are things you go to the doctor for. PHISH and TOOL are things you go to a concert for.",
+    "hostTimeout": "Bands: PHISH, STAIND, BLUR, TOOL. Medical conditions: SCABIES, GOUT, SHINGLES. All equally unpleasant to deal with."
+  },
+  {
+    "id": "dod6",
+    "type": "dis_or_dat",
+    "category": "Dis or Dat",
+    "categoryA": "Classic Cocktail",
+    "categoryB": "Mario Kart Race Track",
+    "items": [
+      { "text": "GIMLET", "correct": "A" },
+      { "text": "RAINBOW ROAD", "correct": "B" },
+      { "text": "SIDECAR", "correct": "A" },
+      { "text": "KOOPA CAPE", "correct": "B" },
+      { "text": "TOM COLLINS", "correct": "A" },
+      { "text": "MUSHROOM GORGE", "correct": "B" },
+      { "text": "HIGHBALL", "correct": "A" }
+    ],
+    "hostIntro": "Classic Cocktail. Or Mario Kart Race Track. Both can ruin your evening if you're not careful. Sort them.",
+    "hostCorrect": "You sorted the drinks from the death tracks. Impressive. Rainbow Road has claimed far more victims than any cocktail.",
+    "hostWrong": "RAINBOW ROAD is the track that ends friendships. TOM COLLINS is a drink that starts conversations. These are different things.",
+    "hostTimeout": "Cocktails: GIMLET, SIDECAR, TOM COLLINS, HIGHBALL. Tracks: RAINBOW ROAD, KOOPA CAPE, MUSHROOM GORGE. One will make you crash, the other will too."
+  },
+  {
+    "id": "dod7",
+    "type": "dis_or_dat",
+    "category": "Dis or Dat",
+    "categoryA": "Famous Philosopher",
+    "categoryB": "Artisan Cheese",
+    "items": [
+      { "text": "PLATO", "correct": "A" },
+      { "text": "BRIE", "correct": "B" },
+      { "text": "DESCARTES", "correct": "A" },
+      { "text": "GOUDA", "correct": "B" },
+      { "text": "HUME", "correct": "A" },
+      { "text": "HAVARTI", "correct": "B" },
+      { "text": "KANT", "correct": "A" }
+    ],
+    "hostIntro": "Famous Philosopher. Or Artisan Cheese. Both will leave you questioning reality. The category: PLATO, BRIE, DESCARTES... take your time.",
+    "hostCorrect": "You told your Kant from your cheese. That's not something most people can do. Well done.",
+    "hostWrong": "BRIE and GOUDA go on a cheese board. KANT and PLATO go in a philosophy textbook. You might want to look into both.",
+    "hostTimeout": "Philosophers: PLATO, DESCARTES, HUME, KANT. Cheeses: BRIE, GOUDA, HAVARTI. Yes, I said KANT and I'll say it again."
+  },
+  {
+    "id": "dod8",
+    "type": "dis_or_dat",
+    "category": "Dis or Dat",
+    "categoryA": "Taylor Swift Album",
+    "categoryB": "Physics Phenomenon",
+    "items": [
+      { "text": "FOLKLORE", "correct": "A" },
+      { "text": "ENTROPY", "correct": "B" },
+      { "text": "REPUTATION", "correct": "A" },
+      { "text": "PARALLAX", "correct": "B" },
+      { "text": "1989", "correct": "A" },
+      { "text": "OSMOSIS", "correct": "B" },
+      { "text": "MIDNIGHTS", "correct": "A" }
+    ],
+    "hostIntro": "Taylor Swift Album. Or Physics Phenomenon. Both will make you feel things you don't fully understand. Sort them out.",
+    "hostCorrect": "You know your Swifties from your scientists. Or maybe you're both. The Swifties are doing great.",
+    "hostWrong": "ENTROPY is the tendency of systems to disorder. REPUTATION is Taylor Swift's sixth studio album. They're actually related, if you think about it.",
+    "hostTimeout": "Swift albums: FOLKLORE, REPUTATION, 1989, MIDNIGHTS. Physics: ENTROPY, PARALLAX, OSMOSIS. Both are forces you can't fully control."
+  }
+]

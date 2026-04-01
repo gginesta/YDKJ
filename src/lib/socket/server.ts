@@ -5,12 +5,14 @@ import {
   createRoom,
   joinRoom,
   leaveRoom,
+  markDisconnected,
   startGame,
   getRoom,
   getRoomBySocketId,
   toClientRoom,
 } from '../game-engine/room-manager';
 import { GameEngine } from '../game-engine/game-engine';
+import { GameState } from '../../types/game';
 
 export type AppSocket = SocketIOServer<ClientToServerEvents, ServerToClientEvents>;
 
@@ -19,9 +21,6 @@ let io: AppSocket | null = null;
 // Active game engines, keyed by room code
 const activeGames = new Map<string, GameEngine>();
 
-/**
- * Initialize Socket.io on the given HTTP server.
- */
 export function initSocketServer(httpServer: HttpServer): AppSocket {
   io = new SocketIOServer<ClientToServerEvents, ServerToClientEvents>(httpServer, {
     cors: {
@@ -59,31 +58,80 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
       }
     });
 
+    // ---- Rejoin Room (after disconnect) ----
+    socket.on('rejoin_room', ({ roomCode, playerName }) => {
+      try {
+        const room = getRoom(roomCode);
+        if (!room) throw new Error('Room not found');
+
+        // Find disconnected player by name
+        const player = room.players.find(
+          (p) => p.name.toLowerCase() === playerName.toLowerCase() && !p.connected
+        );
+        if (!player) {
+          // Player not found as disconnected — try joining fresh if in lobby
+          if (room.state === GameState.LOBBY) {
+            const result = joinRoom(roomCode, playerName, socket.id);
+            socket.join(room.id);
+            socket.emit('room_joined', { room: toClientRoom(result.room), player: result.player });
+          }
+          return;
+        }
+
+        // Restore player with new socket ID
+        const oldId = player.id;
+        player.id = socket.id;
+        player.connected = true;
+
+        // If this player was the host, update host reference
+        if (room.hostPlayerId === oldId) room.hostPlayerId = socket.id;
+
+        socket.join(room.id);
+        socket.emit('room_joined', { room: toClientRoom(room), player });
+        console.log(`[Socket] ${playerName} rejoined room ${room.id}`);
+      } catch (err) {
+        socket.emit('error', { message: (err as Error).message });
+      }
+    });
+
     // ---- Start Game ----
     socket.on('start_game', ({ roomCode }) => {
       try {
         const room = startGame(roomCode, socket.id);
-
-        // Create and start the game engine
         const engine = new GameEngine(io!, room, room.id);
         activeGames.set(room.id, engine);
         engine.start();
-
         console.log(`[Socket] Game started in room ${room.id}`);
       } catch (err) {
         socket.emit('error', { message: (err as Error).message });
       }
     });
 
-    // ---- Submit Answer ----
+    // ---- Submit Answer (MC / Gibberish / ThreeWay) ----
     socket.on('submit_answer', ({ questionId, answerIndex, timestamp }) => {
       const result = getRoomBySocketId(socket.id);
       if (!result) return;
-
       const engine = activeGames.get(result.roomCode);
       if (!engine) return;
-
       engine.submitAnswer(socket.id, questionId, answerIndex, timestamp);
+    });
+
+    // ---- Submit Dis or Dat Answers ----
+    socket.on('submit_dis_or_dat', ({ questionId, answers }) => {
+      const result = getRoomBySocketId(socket.id);
+      if (!result) return;
+      const engine = activeGames.get(result.roomCode);
+      if (!engine) return;
+      engine.submitDisOrDat(socket.id, questionId, answers);
+    });
+
+    // ---- Jack Attack Buzz ----
+    socket.on('jack_attack_buzz', ({ wordId }) => {
+      const result = getRoomBySocketId(socket.id);
+      if (!result) return;
+      const engine = activeGames.get(result.roomCode);
+      if (!engine) return;
+      engine.submitJackAttackBuzz(socket.id, wordId);
     });
 
     // ---- Play Again ----
@@ -97,7 +145,6 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
         activeGames.delete(result.roomCode);
       }
 
-      // Broadcast return to lobby
       const room = getRoom(result.roomCode);
       if (room) {
         io!.to(result.roomCode).emit('room_joined', {
@@ -109,13 +156,13 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
 
     // ---- Leave Room ----
     socket.on('leave_room', () => {
-      handleLeave(socket);
+      handleLeave(socket, true);
     });
 
     // ---- Disconnect ----
     socket.on('disconnect', (reason) => {
       console.log(`[Socket] Disconnected: ${socket.id} (${reason})`);
-      handleLeave(socket);
+      handleLeave(socket, false);
     });
   });
 
@@ -123,16 +170,32 @@ export function initSocketServer(httpServer: HttpServer): AppSocket {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleLeave(socket: any) {
-  const result = leaveRoom(socket.id);
-  if (result && result.room) {
+function handleLeave(socket: any, intentional: boolean) {
+  const result = getRoomBySocketId(socket.id);
+  if (!result) return;
+
+  const room = result.room;
+  const isInGame = room.state !== GameState.LOBBY;
+
+  if (isInGame && !intentional) {
+    // During a game: mark disconnected, don't remove
+    markDisconnected(socket.id);
+    const engine = activeGames.get(result.roomCode);
+    if (engine) engine.markPlayerDisconnected(socket.id);
+    console.log(`[Socket] Player ${socket.id} disconnected mid-game — marked disconnected`);
+    return;
+  }
+
+  // Lobby disconnect or intentional leave: remove permanently
+  const leaveResult = leaveRoom(socket.id);
+  if (leaveResult && leaveResult.room) {
     socket.to(result.roomCode).emit('player_left', {
       playerId: socket.id,
-      reason: 'left',
+      reason: intentional ? 'left' : 'disconnected',
     });
   }
-  // Clean up game engine if room was deleted
-  if (result && !result.room) {
+
+  if (leaveResult && !leaveResult.room) {
     const engine = activeGames.get(result.roomCode);
     if (engine) {
       engine.destroy();
@@ -141,9 +204,6 @@ function handleLeave(socket: any) {
   }
 }
 
-/**
- * Get the current Socket.io server instance.
- */
 export function getIO(): AppSocket | null {
   return io;
 }

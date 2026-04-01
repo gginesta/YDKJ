@@ -7,17 +7,22 @@ import type { GameRoom, Player, PowerUpType } from './game';
 export interface ClientToServerEvents {
   join_room: (data: { roomCode: string; playerName: string }) => void;
   create_room: (data: { playerName: string }) => void;
+  rejoin_room: (data: { roomCode: string; playerName: string }) => void;
   start_game: (data: { roomCode: string }) => void;
   submit_answer: (data: {
     questionId: string;
     answerIndex: number;
     timestamp: number;
   }) => void;
+  submit_dis_or_dat: (data: {
+    questionId: string;
+    answers: ('A' | 'B' | null)[];
+  }) => void;
   use_power_up: (data: {
     powerUpType: PowerUpType;
     targetPlayerId?: string;
   }) => void;
-  jack_attack_buzz: (data: { answerId: string; timestamp: number }) => void;
+  jack_attack_buzz: (data: { wordId: string; timestamp: number }) => void;
   play_again: () => void;
   leave_room: () => void;
 }
@@ -43,7 +48,8 @@ export interface ServerToClientEvents {
   }) => void;
   answer_received: (data: { playerId: string }) => void;
   question_reveal: (data: {
-    correctAnswer: number;
+    correctAnswer: number | null;
+    disOrDatCorrect?: ('A' | 'B')[];
     playerResults: Record<string, unknown>[];
     hostScript?: string;
     audioUrl?: string;
@@ -57,7 +63,12 @@ export interface ServerToClientEvents {
     hostScript?: string;
     audioUrl?: string;
   }) => void;
-  jack_attack_start: (data: { theme: string; clue: string }) => void;
+  jack_attack_intro: (data: {
+    theme: string;
+    clue: string;
+    hostScript?: string;
+    audioUrl?: string;
+  }) => void;
   jack_attack_word: (data: {
     wordId: string;
     word: string;
@@ -69,7 +80,10 @@ export interface ServerToClientEvents {
     correct: boolean;
     moneyDelta: number;
   }) => void;
-  jack_attack_end: (data: { results: Record<string, unknown> }) => void;
+  jack_attack_end: (data: {
+    scores: { playerId: string; name: string; money: number }[];
+    hostScript?: string;
+  }) => void;
   game_over: (data: {
     finalScores: { playerId: string; name: string; money: number }[];
     hostScript?: string;
@@ -81,6 +95,12 @@ export interface ServerToClientEvents {
     powerUpType: PowerUpType;
     effect: string;
   }) => void;
+  loading_progress: (data: {
+    stage: string;
+    percent: number;
+    message: string;
+  }) => void;
+  host_audio: (data: { audioUrl: string }) => void;
   error: (data: { message: string }) => void;
 }
 

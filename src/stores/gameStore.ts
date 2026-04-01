@@ -12,16 +12,17 @@ export interface UIQuestion {
   category: string;
   value: number;
   timeLimit: number;
+  // Multiple choice / Gibberish / ThreeWay
   prompt?: string;
   choices?: string[];
   hostIntro?: string;
-  // DisOrDat fields
+  // Gibberish-specific
+  gibberishPhrase?: string;
+  hint?: string;
+  // DisOrDat-specific
   categoryA?: string;
   categoryB?: string;
   items?: { text: string; correct: 'A' | 'B' }[];
-  // Gibberish fields
-  gibberishPhrase?: string;
-  hint?: string;
 }
 
 export interface PlayerResult {
@@ -37,6 +38,18 @@ export interface ScoreEntry {
   playerId: string;
   name: string;
   money: number;
+}
+
+export interface JackAttackWord {
+  wordId: string;
+  word: string;
+  expiresAt: number;
+}
+
+export interface JackAttackBuzzResult {
+  wordId: string;
+  correct: boolean;
+  moneyDelta: number;
 }
 
 interface GameStore {
@@ -73,9 +86,18 @@ interface GameStore {
   addAnsweredPlayer: (playerId: string) => void;
   clearAnsweredPlayers: () => void;
 
-  // My submitted answer (index)
+  // My submitted answer (index) — for MC / Gibberish / ThreeWay
   myAnswerIndex: number | null;
   setMyAnswerIndex: (idx: number | null) => void;
+
+  // DisOrDat: my answers for each item (null = not answered yet)
+  disOrDatMyAnswers: ('A' | 'B' | null)[];
+  setDisOrDatMyAnswers: (answers: ('A' | 'B' | null)[]) => void;
+  setDisOrDatItemAnswer: (itemIndex: number, answer: 'A' | 'B') => void;
+
+  // DisOrDat: correct answers revealed at reveal phase
+  disOrDatCorrectAnswers: ('A' | 'B')[] | null;
+  setDisOrDatCorrectAnswers: (answers: ('A' | 'B')[] | null) => void;
 
   // Question reveal data
   correctAnswerIndex: number | null;
@@ -99,6 +121,16 @@ interface GameStore {
   hostDialogue: string | null;
   setHostDialogue: (text: string | null) => void;
 
+  // Jack Attack state
+  jackAttack: { theme: string; clue: string } | null;
+  setJackAttack: (ja: { theme: string; clue: string } | null) => void;
+  jackAttackCurrentWord: JackAttackWord | null;
+  setJackAttackCurrentWord: (word: JackAttackWord | null) => void;
+  jackAttackBuzzResults: JackAttackBuzzResult[];
+  addJackAttackBuzzResult: (result: JackAttackBuzzResult) => void;
+  jackAttackFinalScores: ScoreEntry[];
+  setJackAttackFinalScores: (scores: ScoreEntry[]) => void;
+
   // Game over data
   finalScores: ScoreEntry[];
   setFinalScores: (scores: ScoreEntry[]) => void;
@@ -109,6 +141,10 @@ interface GameStore {
   error: string | null;
   setError: (error: string | null) => void;
   clearError: () => void;
+
+  // Loading progress
+  loadingProgress: { stage: string; percent: number; message: string } | null;
+  setLoadingProgress: (p: { stage: string; percent: number; message: string } | null) => void;
 
   // Reset
   reset: () => void;
@@ -123,6 +159,8 @@ const initialState = {
   questionEndsAt: null,
   answeredPlayerIds: [] as string[],
   myAnswerIndex: null,
+  disOrDatMyAnswers: [] as ('A' | 'B' | null)[],
+  disOrDatCorrectAnswers: null,
   correctAnswerIndex: null,
   playerResults: [] as PlayerResult[],
   scores: [] as ScoreEntry[],
@@ -130,9 +168,14 @@ const initialState = {
   questionIndex: 0,
   totalQuestions: 10,
   hostDialogue: null,
+  jackAttack: null,
+  jackAttackCurrentWord: null,
+  jackAttackBuzzResults: [] as JackAttackBuzzResult[],
+  jackAttackFinalScores: [] as ScoreEntry[],
   finalScores: [] as ScoreEntry[],
   gameOverHostScript: null,
   error: null,
+  loadingProgress: null,
 };
 
 export const useGameStore = create<GameStore>((set) => ({
@@ -147,7 +190,6 @@ export const useGameStore = create<GameStore>((set) => ({
   addPlayer: (player) =>
     set((state) => {
       if (!state.room) return state;
-      // Avoid duplicates
       const exists = state.room.players.some((p) => p.id === player.id);
       if (exists) return state;
       return {
@@ -175,15 +217,12 @@ export const useGameStore = create<GameStore>((set) => ({
       room: state.room ? { ...state.room, state: gameState } : null,
     })),
 
-  // Current question
   currentQuestion: null,
   setCurrentQuestion: (currentQuestion) => set({ currentQuestion }),
 
-  // Timer
   questionEndsAt: null,
   setQuestionEndsAt: (questionEndsAt) => set({ questionEndsAt }),
 
-  // Answer tracking
   answeredPlayerIds: [],
   addAnsweredPlayer: (playerId) =>
     set((state) => ({
@@ -191,23 +230,32 @@ export const useGameStore = create<GameStore>((set) => ({
         ? state.answeredPlayerIds
         : [...state.answeredPlayerIds, playerId],
     })),
-  clearAnsweredPlayers: () => set({ answeredPlayerIds: [], myAnswerIndex: null }),
+  clearAnsweredPlayers: () =>
+    set({ answeredPlayerIds: [], myAnswerIndex: null, disOrDatMyAnswers: [] }),
 
-  // My answer
   myAnswerIndex: null,
   setMyAnswerIndex: (myAnswerIndex) => set({ myAnswerIndex }),
 
-  // Reveal
+  disOrDatMyAnswers: [],
+  setDisOrDatMyAnswers: (disOrDatMyAnswers) => set({ disOrDatMyAnswers }),
+  setDisOrDatItemAnswer: (itemIndex, answer) =>
+    set((state) => {
+      const updated = [...state.disOrDatMyAnswers];
+      updated[itemIndex] = answer;
+      return { disOrDatMyAnswers: updated };
+    }),
+
+  disOrDatCorrectAnswers: null,
+  setDisOrDatCorrectAnswers: (disOrDatCorrectAnswers) => set({ disOrDatCorrectAnswers }),
+
   correctAnswerIndex: null,
   setCorrectAnswerIndex: (correctAnswerIndex) => set({ correctAnswerIndex }),
   playerResults: [],
   setPlayerResults: (playerResults) => set({ playerResults }),
 
-  // Scores
   scores: [],
   setScores: (scores) => set({ scores }),
 
-  // Round info
   currentRound: 1,
   setCurrentRound: (currentRound) => set({ currentRound }),
   questionIndex: 0,
@@ -215,11 +263,21 @@ export const useGameStore = create<GameStore>((set) => ({
   totalQuestions: 10,
   setTotalQuestions: (totalQuestions) => set({ totalQuestions }),
 
-  // Host dialogue
   hostDialogue: null,
   setHostDialogue: (hostDialogue) => set({ hostDialogue }),
 
-  // Game over
+  jackAttack: null,
+  setJackAttack: (jackAttack) => set({ jackAttack }),
+  jackAttackCurrentWord: null,
+  setJackAttackCurrentWord: (jackAttackCurrentWord) => set({ jackAttackCurrentWord }),
+  jackAttackBuzzResults: [],
+  addJackAttackBuzzResult: (result) =>
+    set((state) => ({
+      jackAttackBuzzResults: [...state.jackAttackBuzzResults, result],
+    })),
+  jackAttackFinalScores: [],
+  setJackAttackFinalScores: (jackAttackFinalScores) => set({ jackAttackFinalScores }),
+
   finalScores: [],
   setFinalScores: (finalScores) => set({ finalScores }),
   gameOverHostScript: null,
@@ -227,6 +285,9 @@ export const useGameStore = create<GameStore>((set) => ({
 
   setError: (error) => set({ error }),
   clearError: () => set({ error: null }),
+
+  loadingProgress: null,
+  setLoadingProgress: (loadingProgress) => set({ loadingProgress }),
 
   reset: () => set(initialState),
 }));

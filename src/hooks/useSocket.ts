@@ -76,8 +76,12 @@ export function useSocket() {
       store.setCurrentQuestion(question as unknown as import('@/stores/gameStore').UIQuestion);
       store.clearAnsweredPlayers();
       store.setCorrectAnswerIndex(null);
+      store.setDisOrDatCorrectAnswers(null);
       store.setPlayerResults([]);
       store.setQuestionEndsAt(null);
+      // Update question index if provided
+      const q = question as Record<string, unknown>;
+      if (typeof q.questionIndex === 'number') store.setQuestionIndex(q.questionIndex);
       if (hostScript) store.setHostDialogue(hostScript);
     });
 
@@ -92,10 +96,11 @@ export function useSocket() {
       useGameStore.getState().addAnsweredPlayer(playerId);
     });
 
-    socket.on('question_reveal', ({ correctAnswer, playerResults, hostScript }) => {
+    socket.on('question_reveal', ({ correctAnswer, disOrDatCorrect, playerResults, hostScript }) => {
       const store = useGameStore.getState();
       store.setGameState('question_reveal');
       store.setCorrectAnswerIndex(correctAnswer);
+      if (disOrDatCorrect) store.setDisOrDatCorrectAnswers(disOrDatCorrect);
       store.setPlayerResults(playerResults as unknown as import('@/stores/gameStore').PlayerResult[]);
       if (hostScript) store.setHostDialogue(hostScript);
     });
@@ -113,11 +118,46 @@ export function useSocket() {
       if (hostScript) store.setHostDialogue(hostScript);
     });
 
+    // ---- Jack Attack events ----
+    socket.on('jack_attack_intro', ({ theme, clue, hostScript }) => {
+      const store = useGameStore.getState();
+      store.setGameState('jack_attack_intro');
+      store.setJackAttack({ theme, clue });
+      store.setJackAttackCurrentWord(null);
+      // Clear any previous buzz results
+      store.setJackAttackFinalScores([]);
+      if (hostScript) store.setHostDialogue(hostScript);
+    });
+
+    socket.on('jack_attack_word', ({ wordId, word, expiresAt }) => {
+      const store = useGameStore.getState();
+      store.setGameState('jack_attack_active');
+      store.setJackAttackCurrentWord({ wordId, word, expiresAt });
+    });
+
+    socket.on('jack_attack_buzz_result', ({ playerId, wordId, correct, moneyDelta }) => {
+      const myPlayer = useGameStore.getState().myPlayer;
+      if (playerId === myPlayer?.id) {
+        useGameStore.getState().addJackAttackBuzzResult({ wordId, correct, moneyDelta });
+      }
+    });
+
+    socket.on('jack_attack_end', ({ scores, hostScript }) => {
+      const store = useGameStore.getState();
+      store.setGameState('jack_attack_results');
+      store.setJackAttackFinalScores(scores);
+      if (hostScript) store.setHostDialogue(hostScript);
+    });
+
     socket.on('game_over', ({ finalScores, hostScript }) => {
       const store = useGameStore.getState();
       store.setGameState('game_over');
       store.setFinalScores(finalScores);
       if (hostScript) store.setGameOverHostScript(hostScript);
+    });
+
+    socket.on('loading_progress', ({ stage, percent, message }) => {
+      useGameStore.getState().setLoadingProgress({ stage, percent, message });
     });
 
     socket.on('error', ({ message }) => {
@@ -138,7 +178,12 @@ export function useSocket() {
       socket.off('question_reveal');
       socket.off('scores_update');
       socket.off('round_transition');
+      socket.off('jack_attack_intro');
+      socket.off('jack_attack_word');
+      socket.off('jack_attack_buzz_result');
+      socket.off('jack_attack_end');
       socket.off('game_over');
+      socket.off('loading_progress');
       socket.off('error');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -170,6 +215,14 @@ export function useSocket() {
     useGameStore.getState().setMyAnswerIndex(answerIndex);
   }, []);
 
+  const submitDisOrDat = useCallback((questionId: string, answers: ('A' | 'B' | null)[]) => {
+    socketRef.current?.emit('submit_dis_or_dat', { questionId, answers });
+  }, []);
+
+  const submitJackAttackBuzz = useCallback((wordId: string) => {
+    socketRef.current?.emit('jack_attack_buzz', { wordId, timestamp: Date.now() });
+  }, []);
+
   const playAgain = useCallback(() => {
     socketRef.current?.emit('play_again');
   }, []);
@@ -181,6 +234,8 @@ export function useSocket() {
     startGame,
     leaveRoom,
     submitAnswer,
+    submitDisOrDat,
+    submitJackAttackBuzz,
     playAgain,
     connected,
   };

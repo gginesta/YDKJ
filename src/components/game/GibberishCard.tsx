@@ -4,14 +4,11 @@ import { useGameStore } from '@/stores/gameStore';
 import { useSocket } from '@/hooks/useSocket';
 import Timer from './Timer';
 import HostDialogue from './HostDialogue';
-import GibberishCard from './GibberishCard';
-import ThreeWayCard from './ThreeWayCard';
-import DisOrDatCard from './DisOrDatCard';
 
 const ANSWER_LABELS = ['1', '2', '3', '4'];
 const ANSWER_COLORS = ['text-accent-cyan', 'text-accent-yellow', 'text-accent-pink', 'text-accent-green'];
 
-export default function QuestionCard() {
+export default function GibberishCard() {
   const gameState = useGameStore((s) => s.gameState);
   const currentQuestion = useGameStore((s) => s.currentQuestion);
   const questionEndsAt = useGameStore((s) => s.questionEndsAt);
@@ -28,24 +25,17 @@ export default function QuestionCard() {
 
   if (!currentQuestion) return null;
 
-  // Route to specialized components by question type
-  if (currentQuestion.type === 'gibberish') return <GibberishCard />;
-  if (currentQuestion.type === 'three_way') return <ThreeWayCard />;
-  if (currentQuestion.type === 'dis_or_dat') return <DisOrDatCard />;
-
   const isIntro = gameState === 'question_intro';
   const isActive = gameState === 'question_active';
   const isReveal = gameState === 'question_reveal';
   const hasAnswered = myAnswerIndex !== null;
 
   const handleAnswer = (index: number) => {
-    if (hasAnswered || !isActive || !currentQuestion) return;
+    if (hasAnswered || !isActive) return;
     submitAnswer(currentQuestion.id, index);
   };
 
-  const formatValue = (val: number) =>
-    '$' + val.toLocaleString('en-US');
-
+  const formatValue = (val: number) => '$' + val.toLocaleString('en-US');
   const displayQuestionNum = questionIndex + 1;
 
   const getCardClass = (index: number) => {
@@ -56,63 +46,58 @@ export default function QuestionCard() {
       if (wasMyPick && !isCorrect) return 'answer-card wrong';
       return 'answer-card dimmed';
     }
-
     if (isActive) {
       if (hasAnswered) {
-        if (index === myAnswerIndex) return 'answer-card selected';
-        return 'answer-card dimmed';
+        return index === myAnswerIndex ? 'answer-card selected' : 'answer-card dimmed';
       }
       return 'answer-card';
     }
-
     return 'answer-card dimmed';
   };
 
   return (
     <main className="flex flex-1 flex-col min-h-screen">
-      {/* Host dialogue */}
-      {(isIntro || isReveal) && <HostDialogue />}
-
-      <div className="flex flex-col flex-1 items-center px-4 py-6 max-w-lg mx-auto w-full">
-        {/* Question header */}
-        <div className="text-center mb-4 w-full">
+      <div className="flex flex-col flex-1 items-center px-4 py-4 max-w-lg mx-auto w-full">
+        {/* Header */}
+        <div className="text-center mb-3 w-full">
           <p className="text-text-muted text-xs mb-1 uppercase tracking-wider">
-            Round {currentRound}
+            Round {currentRound} &mdash; Gibberish
           </p>
-          <p className="text-accent-yellow text-sm font-bold">
+          <p className="text-accent-yellow text-base font-bold">
             Question {displayQuestionNum} &mdash; {formatValue(currentQuestion.value)}
           </p>
         </div>
 
         {/* Timer */}
         {isActive && questionEndsAt && (
-          <div className="w-full mb-5">
+          <div className="w-full mb-4">
             <Timer endsAt={questionEndsAt} totalDuration={currentQuestion.timeLimit} />
           </div>
         )}
 
-        {/* Question prompt */}
-        {(isActive || isReveal) && currentQuestion.prompt && (
-          <div className="w-full mb-6">
-            <p className="text-text-primary text-lg sm:text-xl font-bold leading-relaxed text-center">
-              {currentQuestion.prompt}
+        {/* Host dialogue during intro/reveal */}
+        {(isIntro || isReveal) && <HostDialogue />}
+
+        {/* The gibberish phrase — prominent during intro and active */}
+        {(isIntro || isActive || isReveal) && currentQuestion.gibberishPhrase && (
+          <div className="w-full mb-5 px-4 py-5 rounded-xl bg-bg-card border-2 border-accent-purple/40 text-center">
+            <p className="text-text-muted text-xs uppercase tracking-widest mb-2">
+              Say it out loud...
+            </p>
+            <p className="text-accent-purple text-2xl sm:text-3xl font-extrabold leading-snug tracking-wide">
+              &ldquo;{currentQuestion.gibberishPhrase}&rdquo;
             </p>
           </div>
         )}
 
-        {/* Intro: category reveal */}
+        {/* Intro: just show the gibberish phrase — no choices yet */}
         {isIntro && (
-          <div className="flex flex-1 items-center justify-center">
-            <div className="text-center animate-scale-in">
-              <p className="text-text-muted text-xs uppercase tracking-wider mb-3">Category</p>
-              <p className="text-accent-purple text-2xl sm:text-3xl font-extrabold">
-                {currentQuestion.category}
-              </p>
-            </div>
-          </div>
+          <p className="text-text-muted text-sm text-center mt-2">
+            What phrase does this sound like?
+          </p>
         )}
 
-        {/* Answer cards */}
+        {/* Active/Reveal: show choices */}
         {(isActive || isReveal) && currentQuestion.choices && (
           <div className="w-full flex flex-col gap-3 mb-6">
             {currentQuestion.choices.map((choice, index) => (
@@ -122,10 +107,10 @@ export default function QuestionCard() {
                 disabled={hasAnswered || !isActive}
                 className={getCardClass(index)}
               >
-                <span className={`text-sm font-bold shrink-0 w-6 ${ANSWER_COLORS[index] || 'text-accent-cyan'}`}>
+                <span className={`text-base font-bold shrink-0 w-7 ${ANSWER_COLORS[index] || 'text-accent-cyan'}`}>
                   {ANSWER_LABELS[index]}
                 </span>
-                <span className="text-text-primary text-sm sm:text-base font-medium leading-relaxed flex-1">
+                <span className="text-text-primary text-base sm:text-lg font-medium leading-snug flex-1">
                   {choice}
                 </span>
                 {isReveal && index === correctAnswerIndex && (
@@ -147,9 +132,7 @@ export default function QuestionCard() {
                 Answer Locked In
               </p>
             ) : (
-              <p className="text-text-muted text-sm">
-                Pick your answer!
-              </p>
+              <p className="text-text-muted text-sm">Pick the real phrase!</p>
             )}
             <div className="flex justify-center gap-2 mt-3 flex-wrap">
               {room?.players.map((p) => {
@@ -174,7 +157,9 @@ export default function QuestionCard() {
         {/* Reveal: player results */}
         {isReveal && playerResults.length > 0 && (
           <div className="w-full mt-2">
-            <p className="text-text-muted text-xs uppercase tracking-wider text-center mb-3">Results</p>
+            <p className="text-text-muted text-xs uppercase tracking-wider text-center mb-3">
+              Results
+            </p>
             <div className="flex flex-col gap-2">
               {playerResults.map((result) => {
                 const isMe = result.playerId === myPlayer?.id;
@@ -188,32 +173,16 @@ export default function QuestionCard() {
                     } ${isMe ? 'ring-1 ring-accent-cyan' : ''}`}
                   >
                     <div className="flex items-center gap-2">
-                      <span
-                        className={`text-base ${
-                          result.isCorrect ? 'text-success' : 'text-error'
-                        }`}
-                      >
+                      <span className={`text-base ${result.isCorrect ? 'text-success' : 'text-error'}`}>
                         {result.isCorrect ? '\u2713' : '\u2717'}
                       </span>
                       <span className="text-text-primary text-sm font-medium">
                         {result.name}
-                        {isMe && (
-                          <span className="text-accent-cyan ml-1 text-xs">(you)</span>
-                        )}
+                        {isMe && <span className="text-accent-cyan ml-1 text-xs">(you)</span>}
                       </span>
                     </div>
-                    <span
-                      className={`text-sm font-bold ${
-                        result.moneyEarned >= 0 ? 'text-success' : 'text-error'
-                      }`}
-                    >
-                      {result.moneyEarned >= 0 ? '+' : ''}
-                      {formatValue(result.moneyEarned)}
-                      {result.speedBonus > 0 && (
-                        <span className="text-accent-yellow ml-1 text-xs">
-                          (+{formatValue(result.speedBonus)} speed)
-                        </span>
-                      )}
+                    <span className={`text-sm font-bold ${result.moneyEarned >= 0 ? 'text-success' : 'text-error'}`}>
+                      {result.moneyEarned >= 0 ? '+' : ''}{formatValue(result.moneyEarned)}
                     </span>
                   </div>
                 );
