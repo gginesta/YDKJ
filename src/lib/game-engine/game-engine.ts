@@ -254,6 +254,7 @@ export class GameEngine {
   }
 
   destroy(): void {
+    console.log(`[GameEngine:${this.roomCode}] destroy() called — state=${this.room.state}`);
     this.destroyed = true;
     this.clearTimer();
   }
@@ -949,14 +950,27 @@ export class GameEngine {
 
   private emit(event: string, data: unknown): void {
     if (this.destroyed) return;
+    const room = this.io.to(this.roomCode);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.io.to(this.roomCode) as any).emit(event, data);
+    const sockets = (this.io.sockets as any).adapter?.rooms?.get(this.roomCode);
+    console.log(`[GameEngine:${this.roomCode}] emit(${event}) — ${sockets?.size ?? 0} sockets in room`);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (room as any).emit(event, data);
   }
 
   private scheduleNext(delayMs: number, callback: () => void): void {
     this.clearTimer();
+    console.log(`[GameEngine:${this.roomCode}] scheduleNext(${delayMs}ms) — state=${this.room.state}`);
     this.phaseTimer = setTimeout(() => {
-      if (!this.destroyed) callback();
+      if (this.destroyed) {
+        console.log(`[GameEngine:${this.roomCode}] Timer fired but engine destroyed — skipping`);
+        return;
+      }
+      try {
+        callback();
+      } catch (err) {
+        console.error(`[GameEngine:${this.roomCode}] FATAL: Timer callback threw:`, err);
+      }
     }, delayMs);
   }
 
